@@ -1,8 +1,7 @@
 import { ArrowRight, Flame } from "lucide-react";
+import { Button, Card, TextField } from "@radix-ui/themes";
 
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
 import Link from "next/link";
 
 export const AppHero = () => {
@@ -13,7 +12,10 @@ export const AppHero = () => {
           <div className="flex flex-col justify-center space-y-4">
             <div className="space-y-2 flex flex-col">
               <div className="text-3xl flex">
-                <Flame className="h-8 w-8 text-red-600 sm:h-12 sm:w-12 xl:h-14 xl:w-14" />
+                <Flame
+                  color="#dc2626"
+                  className="h-8 w-8 sm:h-12 sm:w-12 xl:h-14 xl:w-14"
+                />
                 <span className="text-3xl font-bold sm:text-5xl xl:text-6xl/none">
                   Redline
                 </span>
@@ -30,22 +32,20 @@ export const AppHero = () => {
             </div>
 
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size="lg" className="gap-1 bg-red-600 hover:bg-red-700">
+              <Button size={"3"}>
                 Request Demo <ArrowRight className="h-4 w-4" />
               </Button>
 
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-red-600 text-red-600 hover:bg-red-50 bg-transparent"
-              >
+              <Button size={"3"} variant="outline">
                 Learn More
               </Button>
             </div>
+
+            <AppGetOnMobileButtons />
           </div>
 
           {/* Login Card */}
-          <Card className="p-6 shadow-lg border-0">
+          <Card>
             <div className="space-y-4">
               <div className="flex items-center justify-center">
                 <Flame className="h-8 w-8 text-red-600" />
@@ -57,7 +57,7 @@ export const AppHero = () => {
                   <label htmlFor="email" className="text-sm font-medium">
                     Email
                   </label>
-                  <Input
+                  <TextField.Root
                     id="email"
                     type="email"
                     placeholder="name@company.com"
@@ -76,7 +76,11 @@ export const AppHero = () => {
                       Forgot password?
                     </Link>
                   </div>
-                  <Input id="password" type="password" placeholder="••••••••" />
+                  <TextField.Root
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                  />
                 </div>
 
                 <Button className="w-full bg-red-600 hover:bg-red-700">

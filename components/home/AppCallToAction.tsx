@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@radix-ui/themes";
 
 export const AppCallToAction = () => {
   return (
@@ -18,14 +18,10 @@ export const AppCallToAction = () => {
           </div>
 
           <div className="flex flex-col gap-2 min-[400px]:flex-row">
-            <Button size="lg" className="gap-1 bg-red-600 hover:bg-red-700">
+            <Button size="3">
               Request a demo <ArrowRight className="h-4 w-4" />
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="border-red-600 text-red-600 hover:bg-red-50 bg-transparent"
-            >
+            <Button size="3" variant="outline">
               Contact sales
             </Button>
           </div>

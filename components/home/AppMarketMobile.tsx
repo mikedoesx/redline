@@ -1,5 +1,6 @@
 import { Bell, Clock, Shield, Smartphone } from "lucide-react";
 
+import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
 import Image from "next/image";
 
 export const AppMarketMobile = () => {
@@ -74,22 +75,8 @@ export const AppMarketMobile = () => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 mt-4">
-              <Image
-                src="/placeholder.svg?height=40&width=120"
-                width={120}
-                height={40}
-                alt="App Store"
-                className="h-10"
-              />
-              <Image
-                src="/placeholder.svg?height=40&width=135"
-                width={135}
-                height={40}
-                alt="Google Play"
-                className="h-10"
-              />
-            </div>
+
+            <AppGetOnMobileButtons />
           </div>
         </div>
       </div>

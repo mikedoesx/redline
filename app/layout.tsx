@@ -1,4 +1,5 @@
 import "./globals.css";
+import "@radix-ui/themes/styles.css";
 
 import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
