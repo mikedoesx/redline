@@ -1,27 +1,20 @@
-"use client";
+"use client"
 
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Link as RadixLink,
-  Section,
-} from "@radix-ui/themes";
-import { Menu, X } from "lucide-react";
+import { Box, Button, Container, Flex, Link as RadixLink } from "@radix-ui/themes"
+import { Menu, X } from "lucide-react"
 
-import Image from "next/image";
-import Link from "next/link";
-import { useIsMobile } from "@/hooks/use-mobile";
-import { useState } from "react";
+import Image from "next/image"
+import Link from "next/link"
+import { useIsMobile } from "@/hooks/use-mobile"
+import { useState } from "react"
 
 export function AppHeader() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const isMobile = useIsMobile();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const isMobile = useIsMobile()
 
   const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+    setIsMobileMenuOpen(!isMobileMenuOpen)
+  }
 
   return (
     <Box className="bg-white relative p-4 border-b">
@@ -40,34 +33,27 @@ export function AppHeader() {
           <Flex asChild gap="6">
             <nav>
               <RadixLink asChild>
-                <Link
-                  href="#features"
-                  className="text-sm font-medium hover:text-red-600"
-                >
+                <Link href="#features" className="text-sm font-medium hover:text-red-600">
                   Features
                 </Link>
               </RadixLink>
               <RadixLink asChild>
-                <Link
-                  href="#integrations"
-                  className="text-sm font-medium hover:text-red-600"
-                >
+                <Link href="#integrations" className="text-sm font-medium hover:text-red-600">
                   Integrations
                 </Link>
               </RadixLink>
               <RadixLink asChild>
-                <Link
-                  href="#mobile"
-                  className="text-sm font-medium hover:text-red-600"
-                >
+                <Link href="#mobile" className="text-sm font-medium hover:text-red-600">
                   App
                 </Link>
               </RadixLink>
               <RadixLink asChild>
-                <Link
-                  href="#contact"
-                  className="text-sm font-medium hover:text-red-600"
-                >
+                <Link href="#pricing" className="text-sm font-medium hover:text-red-600">
+                  Pricing
+                </Link>
+              </RadixLink>
+              <RadixLink asChild>
+                <Link href="#contact" className="text-sm font-medium hover:text-red-600">
                   Contact Us
                 </Link>
               </RadixLink>
@@ -117,6 +103,15 @@ export function AppHeader() {
               </RadixLink>
               <RadixLink asChild>
                 <Link
+                  href="#pricing"
+                  className="text-sm font-medium hover:text-red-600 py-2"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Pricing
+                </Link>
+              </RadixLink>
+              <RadixLink asChild>
+                <Link
                   href="#contact"
                   className="text-sm font-medium hover:text-red-600 py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -129,7 +124,7 @@ export function AppHeader() {
         )}
       </Flex>
     </Box>
-  );
+  )
 }
 
-export default AppHeader;
+export default AppHeader

@@ -3,6 +3,7 @@ import { AppFeatures } from "@/components/home/AppFeatures"
 import { AppHero } from "@/components/home/AppHero"
 import { AppIntegrations } from "@/components/home/AppIntegrations"
 import { AppMarketMobile } from "@/components/home/AppMarketMobile"
+import { AppPricing } from "@/components/home/AppPricing"
 import { AppContact } from "@/components/home/AppContact"
 
 export default function LandingPage() {
@@ -12,6 +13,7 @@ export default function LandingPage() {
       <AppFeatures />
       <AppMarketMobile />
       <AppIntegrations />
+      <AppPricing />
       <AppContact />
       <AppCallToAction />
     </main>
