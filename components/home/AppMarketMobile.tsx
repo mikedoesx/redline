@@ -1,7 +1,7 @@
 import { Bell, Clock, MapPin, Smartphone } from "lucide-react";
 import { Box, Container, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 
-import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
+import { AppGetOnMobileButtons } from "./AppGetOnMobileButtons";
 import Image from "next/image";
 
 export const AppMarketMobile = () => {

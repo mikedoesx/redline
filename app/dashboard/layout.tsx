@@ -1,47 +1,29 @@
-"use client"
+"use client";
 
-import type React from "react"
-
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar"
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import type React from "react";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
   useEffect(() => {
-    const checkAuth = () => {
-      const loggedIn = localStorage.getItem("isLoggedIn")
-      if (loggedIn === "true") {
-        setIsAuthenticated(true)
-      } else {
-        router.push("/login")
-      }
-      setIsLoading(false)
+    if (status === "unauthenticated") {
+      router.push("/login");
     }
+  }, [status, router]);
 
-    checkAuth()
-  }, [router])
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-600"></div>
-      </div>
-    )
+  if (status === "loading") {
+    return <p>Loading...</p>;
   }
-
-  if (!isAuthenticated) {
-    return null
-  }
-
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full">
@@ -49,5 +31,5 @@ export default function DashboardLayout({
         <main className="flex-1">{children}</main>
       </div>
     </SidebarProvider>
-  )
+  );
 }

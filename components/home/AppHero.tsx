@@ -12,7 +12,7 @@ import {
   TextField,
 } from "@radix-ui/themes";
 
-import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
+import { AppGetOnMobileButtons } from "./AppGetOnMobileButtons";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

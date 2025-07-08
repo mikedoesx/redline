@@ -15,6 +15,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { Button as UIButton } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -106,7 +107,7 @@ export default function SignUpPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <Button
+                <UIButton
                   type="button"
                   variant="ghost"
                   className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
@@ -117,7 +118,7 @@ export default function SignUpPage() {
                   ) : (
                     <Eye className="h-4 w-4" />
                   )}
-                </Button>
+                </UIButton>
               </div>
             </div>
             <div className="space-y-2">
@@ -140,7 +141,7 @@ export default function SignUpPage() {
 
             <Button
               type="submit"
-              className="w-full bg-red-600 hover:bg-red-700"
+              style={{ width: "100%" }}
               disabled={isLoading}
             >
               {isLoading ? (

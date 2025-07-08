@@ -30,10 +30,7 @@ export const authOptions: AuthOptions = {
           throw new Error("No user found");
         }
 
-        // Verify password
-        const hashedPassword = await hash(user.password, 12);
-        const isValid = await compare(credentials.password, hashedPassword);
-
+        const isValid = await compare(credentials.password, user.password);
         if (!isValid) {
           throw new Error("Invalid password");
         }

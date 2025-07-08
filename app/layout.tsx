@@ -1,7 +1,7 @@
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 
-import { AppFooter } from "@/components/AppFooter";
+import { AppFooter } from "@/components/home/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
 import type { Metadata } from "next";
 import { Providers } from "@/components/Providers";
@@ -67,11 +67,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <Providers>
-          <AppHeader />
-          {children}
-          <AppFooter />
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

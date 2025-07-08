@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import type React from "react";
 import { Button as UIButton } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -33,18 +34,19 @@ export default function LoginPage() {
     setIsLoading(true);
     setError("");
 
-    // Mock login process
-    setTimeout(() => {
-      if (email && password) {
-        // Simulate successful login
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userEmail", email);
-        router.push("/dashboard");
-      } else {
-        setError("Please enter both email and password");
-        setIsLoading(false);
-      }
-    }, 1500);
+    const res = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
+
+    if (res?.error) {
+      setError(res.error);
+      setIsLoading(false);
+    } else {
+      router.push("/dashboard");
+      router.refresh();
+    }
   };
 
   return (
