@@ -11,6 +11,7 @@ import {
 } from "@radix-ui/themes";
 
 import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
+import Image from "next/image";
 import Link from "next/link";
 
 export const AppHero = () => {
@@ -23,18 +24,15 @@ export const AppHero = () => {
       >
         <Flex direction="column" justify="center" className="space-y-6">
           <Flex direction="column" className="space-y-2">
-            <Flex align="center" className="text-3xl">
-              <Flame className="h-8 w-8 sm:h-12 sm:w-12 xl:h-14 xl:w-14 text-red-600" />
-              <Heading
-                size="9"
-                className="text-3xl font-bold sm:text-5xl xl:text-6xl/none ml-2"
-              >
-                REDLINE
-              </Heading>
-            </Flex>
+            <Image
+              src="/images/logo295x48.png"
+              height={48}
+              width={295}
+              alt="REDLINE: Fire Watch Staffing Solutions"
+            />
 
             <Heading size="7" className="font-bold tracking-tighter">
-              Fire Watch Staffing Made Simple
+              Fire Watch Staffing & Management
             </Heading>
 
             <Text size="4" className="max-w-[600px] text-muted-foreground">

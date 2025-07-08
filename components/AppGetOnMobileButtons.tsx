@@ -1,4 +1,4 @@
-import { AppStoreSVG } from "@/assets/svg/AppStore.svg";
+import { AppStoreSVG } from "@/components/svg/AppStore.svg";
 import { Flex } from "@radix-ui/themes";
 import Image from "next/image";
 

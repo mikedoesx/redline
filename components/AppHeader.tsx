@@ -6,10 +6,11 @@ import {
   Container,
   Flex,
   Link as RadixLink,
-  Text,
+  Section,
 } from "@radix-ui/themes";
-import { Flame, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
@@ -23,13 +24,15 @@ export function AppHeader() {
   };
 
   return (
-    <Container className="bg-white relative p-4 border-b">
-      <Flex align="center" justify="between">
+    <Box className="bg-white relative p-4 border-b">
+      <Flex className="max-w-7xl mx-auto" align="center" justify="between">
         <Link href="/" className="flex items-center">
-          <Flame className="text-red-600" />{" "}
-          <Text className="text-primary" weight="bold" size="6">
-            REDLINE
-          </Text>
+          <Image
+            src="/images/logo295x48.png"
+            height={48 / 1.25}
+            width={295 / 1.25}
+            alt="REDLINE: Fire Watch Staffing Solutions"
+          />
         </Link>
 
         {/* Desktop Navigation */}
@@ -125,7 +128,7 @@ export function AppHeader() {
           </Container>
         )}
       </Flex>
-    </Container>
+    </Box>
   );
 }
 

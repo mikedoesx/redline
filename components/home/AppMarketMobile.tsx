@@ -106,11 +106,11 @@ export const AppMarketMobile = () => {
 
         <Box className="flex justify-center">
           <Image
-            src="/placeholder.svg?height=600&width=300"
-            width={300}
-            height={600}
+            src="/images/phone.png"
+            width={427 / 1.5}
+            height={858 / 1.5}
             alt="Mobile App Screenshot"
-            className="mx-auto rounded-2xl shadow-2xl"
+            className="mx-auto"
           />
         </Box>
       </Grid>
