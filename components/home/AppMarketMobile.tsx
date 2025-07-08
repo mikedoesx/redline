@@ -5,7 +5,6 @@ import {
   Flex,
   Grid,
   Heading,
-  Section,
   Text,
 } from "@radix-ui/themes";
 import { Bell, Clock, MapPin, Smartphone } from "lucide-react";
@@ -15,7 +14,10 @@ import Image from "next/image";
 
 export const AppMarketMobile = () => {
   return (
-    <Container id="mobile" className="w-full px-4 py-12 md:py-24 lg:py-32">
+    <Container
+      id="mobile"
+      className="w-full px-4 py-12 md:py-24 lg:py-32 bg-red-100"
+    >
       <Flex
         direction="column"
         align="center"
@@ -28,7 +30,7 @@ export const AppMarketMobile = () => {
         <Heading size="8" className="font-bold tracking-tighter">
           Fire Watch Management On-the-Go
         </Heading>
-        <Text size="5" className="max-w-[900px] text-muted-foreground">
+        <Text size="5" className="max-w-[900px]">
           Empower your fire watch personnel with our mobile app. Real-time
           updates, instant alerts, and seamless communication keep everyone
           connected and compliant.
@@ -49,7 +51,7 @@ export const AppMarketMobile = () => {
               <Heading size="5" className="font-bold">
                 Real-time Updates
               </Heading>
-              <Text className="text-muted-foreground">
+              <Text>
                 Instant notifications for schedule changes, emergency alerts,
                 and important updates keep your team informed.
               </Text>
@@ -64,7 +66,7 @@ export const AppMarketMobile = () => {
               <Heading size="5" className="font-bold">
                 GPS Check-in
               </Heading>
-              <Text className="text-muted-foreground">
+              <Text>
                 Location-verified check-ins ensure personnel are on-site and
                 provide accurate time tracking for billing.
               </Text>
@@ -79,7 +81,7 @@ export const AppMarketMobile = () => {
               <Heading size="5" className="font-bold">
                 Mobile Time Clock
               </Heading>
-              <Text className="text-muted-foreground">
+              <Text>
                 Easy clock in/out functionality with photo verification and GPS
                 tracking for complete accountability.
               </Text>
@@ -94,7 +96,7 @@ export const AppMarketMobile = () => {
               <Heading size="5" className="font-bold">
                 Digital Inspections
               </Heading>
-              <Text className="text-muted-foreground">
+              <Text>
                 Complete fire watch inspections digitally with photo
                 documentation and instant report generation.
               </Text>

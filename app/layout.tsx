@@ -23,7 +23,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <AppHeader />
-          <Container className="w-full">{children}</Container>
+          {children}
           <AppFooter />
         </ThemeProvider>
       </body>

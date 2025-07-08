@@ -16,7 +16,7 @@ export function AppIntegrations() {
   return (
     <Container
       id="integrations"
-      className="w-full bg-muted px-4 py-12 md:py-24 lg:py-32"
+      className="w-full px-4 py-12 md:py-24 lg:py-32"
     >
       <Flex direction="column" align="center" className="text-center space-y-4">
         <Badge color="red" size="2">

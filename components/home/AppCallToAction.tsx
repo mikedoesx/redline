@@ -11,7 +11,7 @@ import { ArrowRight } from "lucide-react";
 
 export const AppCallToAction = () => {
   return (
-    <Container className="w-full px-4 py-12 md:py-24 lg:py-32">
+    <Container className="w-full px-4 py-12 md:py-24 lg:py-32 bg-red-600 text-white">
       <Flex
         direction="column"
         align="center"
@@ -22,7 +22,7 @@ export const AppCallToAction = () => {
           <Heading size="8" className="font-bold tracking-tighter">
             Ready to Transform Your Fire Watch Operations?
           </Heading>
-          <Text size="5" className="max-w-[600px] mx-auto">
+          <Text size="5" className="max-w-[600px] mx-auto text-red-100">
             Join hundreds of companies who trust REDLINE to manage their fire
             watch staffing with confidence and compliance.
           </Text>
@@ -32,12 +32,10 @@ export const AppCallToAction = () => {
           gap="2"
           className="min-[400px]:flex-row"
         >
-          <Button size="4">
+          <button className="flex items-center px-[24px] h-[48px] rounded-md bg-white text-red-600 hover:bg-red-100">
             Request Demo <ArrowRight className="h-4 w-4 ml-1" />
-          </Button>
-          <Button size="4" variant="outline">
-            Contact Sales
-          </Button>
+          </button>
+          <Button size="4">Contact Sales</Button>
         </Flex>
       </Flex>
     </Container>
