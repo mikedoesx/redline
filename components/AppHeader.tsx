@@ -1,9 +1,10 @@
+import { Box } from "@radix-ui/themes";
 import { Flame } from "lucide-react";
 import Link from "next/link";
 
 export function AppHeader() {
   return (
-    <header className="bg-white py-4 shadow-md">
+    <Box className="bg-white py-4 border">
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link
           href="/"
@@ -51,7 +52,7 @@ export function AppHeader() {
           </button>
         </div>
       </div>
-    </header>
+    </Box>
   );
 }
 
