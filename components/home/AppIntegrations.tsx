@@ -26,8 +26,8 @@ export function AppIntegrations() {
           Works Seamlessly with Your Existing Stack
         </Heading>
         <Text size="5" className="max-w-2xl text-muted-foreground">
-          REDLINE connects to industry-leading platforms so you can keep the
-          tools you love while centralising fire watch staffing operations.
+          REDLINE &trade; connects to industry-leading platforms so you can keep
+          the tools you love while centralising fire watch staffing operations.
         </Text>
       </Flex>
 
@@ -49,8 +49,8 @@ export function AppIntegrations() {
             </Flex>
             <Text className="text-muted-foreground">
               Sync employee records, certification status, and assignments
-              between Quicksuite and REDLINE in real-time—no double data entry
-              required.
+              between Quicksuite and REDLINE &trade; in real-time—no double data
+              entry required.
             </Text>
             <Image
               src="/placeholder.svg?height=220&width=400"

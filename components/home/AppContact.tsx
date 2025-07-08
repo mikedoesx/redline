@@ -66,7 +66,7 @@ export const AppContact = () => {
         </Heading>
         <Text size="5" className="text-muted-foreground max-w-2xl">
           Ready to streamline your fire watch operations? Contact our team to
-          learn how Redline can transform your staffing management.
+          learn how REDLINE &trade; can transform your staffing management.
         </Text>
       </Flex>
 

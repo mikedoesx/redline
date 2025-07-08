@@ -23,8 +23,8 @@ export const AppCallToAction = () => {
             Ready to Transform Your Fire Watch Operations?
           </Heading>
           <Text size="5" className="max-w-[600px] mx-auto text-red-100">
-            Join hundreds of companies who trust REDLINE to manage their fire
-            watch staffing with confidence and compliance.
+            Join hundreds of companies who trust REDLINE &trade; to manage their
+            fire watch staffing with confidence and compliance.
           </Text>
         </Flex>
         <Flex
