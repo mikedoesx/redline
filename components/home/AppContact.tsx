@@ -1,10 +1,21 @@
-"use client"
+"use client";
 
-import type React from "react"
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Grid,
+  Heading,
+  Section,
+  Text,
+  TextArea,
+  TextField,
+} from "@radix-ui/themes";
+import { Mail, MapPin, Phone } from "lucide-react";
 
-import { Box, Button, Container, Flex, Grid, Heading, Section, Text, TextField } from "@radix-ui/themes"
-import { Mail, MapPin, Phone } from "lucide-react"
-import { useState } from "react"
+import type React from "react";
+import { useState } from "react";
 
 export const AppContact = () => {
   const [formData, setFormData] = useState({
@@ -13,23 +24,25 @@ export const AppContact = () => {
     company: "",
     phone: "",
     message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }))
-  }
+    }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    await new Promise((resolve) => setTimeout(resolve, 2000));
 
     // Reset form
     setFormData({
@@ -38,189 +51,211 @@ export const AppContact = () => {
       company: "",
       phone: "",
       message: "",
-    })
-    setIsSubmitting(false)
+    });
+    setIsSubmitting(false);
 
     // You would typically send the data to your backend here
-    console.log("Form submitted:", formData)
-  }
+    console.log("Form submitted:", formData);
+  };
 
   return (
-    <Section className="py-16 md:py-24 bg-gray-50">
-      <Container>
-        <Flex direction="column" align="center" className="text-center mb-12">
-          <Heading size="8" className="mb-4">
-            Get in Touch
-          </Heading>
-          <Text size="5" className="text-muted-foreground max-w-2xl">
-            Ready to streamline your fire watch operations? Contact our team to learn how Redline can transform your
-            staffing management.
-          </Text>
+    <Container id="contact" className="py-16 md:py-24 bg-gray-50">
+      <Flex direction="column" align="center" className="text-center mb-12">
+        <Heading size="8" className="mb-4">
+          Get in Touch
+        </Heading>
+        <Text size="5" className="text-muted-foreground max-w-2xl">
+          Ready to streamline your fire watch operations? Contact our team to
+          learn how Redline can transform your staffing management.
+        </Text>
+      </Flex>
+
+      <Grid columns={{ initial: "1", lg: "2" }} gap="8">
+        {/* Contact Information */}
+        <Flex direction="column" className="space-y-8">
+          <Box>
+            <Heading size="6" className="mb-6">
+              Contact Information
+            </Heading>
+            <Flex direction="column" className="space-y-6">
+              <Flex align="center" gap="4">
+                <Box className="p-3 bg-red-100 rounded-lg">
+                  <Phone className="h-6 w-6 text-red-600" />
+                </Box>
+                <Box>
+                  <Text as="div" weight="medium" size="3">
+                    Phone
+                  </Text>
+                  <Text as="div" size="3" className="text-muted-foreground">
+                    +1 (555) 123-4567
+                  </Text>
+                </Box>
+              </Flex>
+
+              <Flex align="center" gap="4">
+                <Box className="p-3 bg-red-100 rounded-lg">
+                  <Mail className="h-6 w-6 text-red-600" />
+                </Box>
+                <Box>
+                  <Text as="div" weight="medium" size="3">
+                    Email
+                  </Text>
+                  <Text as="div" size="3" className="text-muted-foreground">
+                    contact@redlinestaff.com
+                  </Text>
+                </Box>
+              </Flex>
+
+              <Flex align="center" gap="4">
+                <Box className="p-3 bg-red-100 rounded-lg">
+                  <MapPin className="h-6 w-6 text-red-600" />
+                </Box>
+                <Box>
+                  <Text as="div" weight="medium" size="3">
+                    Address
+                  </Text>
+                  <Text as="div" size="3" className="text-muted-foreground">
+                    123 Safety Street
+                    <br />
+                    Fire Watch City, FW 12345
+                  </Text>
+                </Box>
+              </Flex>
+            </Flex>
+          </Box>
+
+          <Box>
+            <Heading size="5" className="mb-4">
+              Business Hours
+            </Heading>
+            <Flex direction="column" className="space-y-2">
+              <Flex justify="between">
+                <Text size="3">Monday - Friday</Text>
+                <Text size="3" className="text-muted-foreground">
+                  8:00 AM - 6:00 PM
+                </Text>
+              </Flex>
+              <Flex justify="between">
+                <Text size="3">Saturday</Text>
+                <Text size="3" className="text-muted-foreground">
+                  9:00 AM - 4:00 PM
+                </Text>
+              </Flex>
+              <Flex justify="between">
+                <Text size="3">Sunday</Text>
+                <Text size="3" className="text-muted-foreground">
+                  Emergency Only
+                </Text>
+              </Flex>
+            </Flex>
+          </Box>
         </Flex>
 
-        <Grid columns={{ initial: "1", lg: "2" }} gap="8">
-          {/* Contact Information */}
-          <Flex direction="column" className="space-y-8">
-            <Box>
-              <Heading size="6" className="mb-6">
-                Contact Information
-              </Heading>
-              <Flex direction="column" className="space-y-6">
-                <Flex align="center" gap="4">
-                  <Box className="p-3 bg-red-100 rounded-lg">
-                    <Phone className="h-6 w-6 text-red-600" />
-                  </Box>
-                  <Box>
-                    <Text weight="medium" size="3">
-                      Phone
-                    </Text>
-                    <Text size="3" className="text-muted-foreground">
-                      +1 (555) 123-4567
-                    </Text>
-                  </Box>
-                </Flex>
-
-                <Flex align="center" gap="4">
-                  <Box className="p-3 bg-red-100 rounded-lg">
-                    <Mail className="h-6 w-6 text-red-600" />
-                  </Box>
-                  <Box>
-                    <Text weight="medium" size="3">
-                      Email
-                    </Text>
-                    <Text size="3" className="text-muted-foreground">
-                      contact@redlinestaff.com
-                    </Text>
-                  </Box>
-                </Flex>
-
-                <Flex align="center" gap="4">
-                  <Box className="p-3 bg-red-100 rounded-lg">
-                    <MapPin className="h-6 w-6 text-red-600" />
-                  </Box>
-                  <Box>
-                    <Text weight="medium" size="3">
-                      Address
-                    </Text>
-                    <Text size="3" className="text-muted-foreground">
-                      123 Safety Street
-                      <br />
-                      Fire Watch City, FW 12345
-                    </Text>
-                  </Box>
-                </Flex>
-              </Flex>
-            </Box>
-
-            <Box>
-              <Heading size="5" className="mb-4">
-                Business Hours
-              </Heading>
-              <Flex direction="column" className="space-y-2">
-                <Flex justify="between">
-                  <Text size="3">Monday - Friday</Text>
-                  <Text size="3" className="text-muted-foreground">
-                    8:00 AM - 6:00 PM
-                  </Text>
-                </Flex>
-                <Flex justify="between">
-                  <Text size="3">Saturday</Text>
-                  <Text size="3" className="text-muted-foreground">
-                    9:00 AM - 4:00 PM
-                  </Text>
-                </Flex>
-                <Flex justify="between">
-                  <Text size="3">Sunday</Text>
-                  <Text size="3" className="text-muted-foreground">
-                    Emergency Only
-                  </Text>
-                </Flex>
-              </Flex>
-            </Box>
-          </Flex>
-
-          {/* Contact Form */}
-          <Box className="bg-white p-8 rounded-lg shadow-sm border">
-            <Heading size="6" className="mb-6">
-              Send us a Message
-            </Heading>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <Grid columns={{ initial: "1", sm: "2" }} gap="4">
-                <Box>
-                  <Text as="label" size="2" weight="medium" className="mb-2 block">
-                    Full Name *
-                  </Text>
-                  <TextField.Root
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    placeholder="John Doe"
-                    required
-                  />
-                </Box>
-                <Box>
-                  <Text as="label" size="2" weight="medium" className="mb-2 block">
-                    Email Address *
-                  </Text>
-                  <TextField.Root
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    placeholder="john@company.com"
-                    required
-                  />
-                </Box>
-              </Grid>
-
-              <Grid columns={{ initial: "1", sm: "2" }} gap="4">
-                <Box>
-                  <Text as="label" size="2" weight="medium" className="mb-2 block">
-                    Company
-                  </Text>
-                  <TextField.Root
-                    name="company"
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    placeholder="Your Company"
-                  />
-                </Box>
-                <Box>
-                  <Text as="label" size="2" weight="medium" className="mb-2 block">
-                    Phone Number
-                  </Text>
-                  <TextField.Root
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleInputChange}
-                    placeholder="+1 (555) 123-4567"
-                  />
-                </Box>
-              </Grid>
-
+        {/* Contact Form */}
+        <Box className="bg-white p-8 rounded-lg shadow-sm border">
+          <Heading size="6" className="mb-6">
+            Send us a message
+          </Heading>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <Grid columns={{ initial: "1", sm: "2" }} gap="4">
               <Box>
-                <Text as="label" size="2" weight="medium" className="mb-2 block">
-                  Message *
+                <Text
+                  as="label"
+                  size="2"
+                  weight="medium"
+                  className="mb-2 block"
+                >
+                  Full Name *
                 </Text>
-                <textarea
-                  name="message"
-                  value={formData.message}
+                <TextField.Root
+                  name="name"
+                  value={formData.name}
                   onChange={handleInputChange}
-                  placeholder="Tell us about your fire watch staffing needs..."
+                  placeholder="John Doe"
                   required
-                  rows={5}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent resize-none"
                 />
               </Box>
+              <Box>
+                <Text
+                  as="label"
+                  size="2"
+                  weight="medium"
+                  className="mb-2 block"
+                >
+                  Email Address *
+                </Text>
+                <TextField.Root
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="john@company.com"
+                  required
+                />
+              </Box>
+            </Grid>
 
-              <Button type="submit" size="3" className="w-full bg-red-600 hover:bg-red-700" disabled={isSubmitting}>
-                {isSubmitting ? "Sending..." : "Send Message"}
-              </Button>
-            </form>
-          </Box>
-        </Grid>
-      </Container>
-    </Section>
-  )
-}
+            <Grid columns={{ initial: "1", sm: "2" }} gap="4">
+              <Box>
+                <Text
+                  as="label"
+                  size="2"
+                  weight="medium"
+                  className="mb-2 block"
+                >
+                  Company
+                </Text>
+                <TextField.Root
+                  name="company"
+                  value={formData.company}
+                  onChange={handleInputChange}
+                  placeholder="Your Company"
+                />
+              </Box>
+              <Box>
+                <Text
+                  as="label"
+                  size="2"
+                  weight="medium"
+                  className="mb-2 block"
+                >
+                  Phone Number
+                </Text>
+                <TextField.Root
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="+1 (555) 123-4567"
+                />
+              </Box>
+            </Grid>
+
+            <Box>
+              <Text as="label" size="2" weight="medium" className="mb-2 block">
+                Message *
+              </Text>
+              <TextArea
+                name="message"
+                value={formData.message}
+                onChange={handleInputChange}
+                placeholder="Tell us about your fire watch staffing needs..."
+                required
+                rows={5}
+              />
+            </Box>
+
+            <Button
+              type="submit"
+              size="3"
+              className="w-full bg-red-600 hover:bg-red-700"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Sending..." : "Send Message"}
+            </Button>
+          </form>
+        </Box>
+      </Grid>
+    </Container>
+  );
+};

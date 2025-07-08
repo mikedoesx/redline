@@ -3,13 +3,12 @@ import "@radix-ui/themes/styles.css";
 
 import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
-import { Container } from "@radix-ui/themes";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
+  title: "REDLINE | Firewatch Staffing Solutions",
+  description: "Full staffing solutions for REDLINE fire watch.",
   generator: "v0.dev",
 };
 

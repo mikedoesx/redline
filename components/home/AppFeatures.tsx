@@ -34,8 +34,8 @@ export const AppFeatures = () => {
       >
         <Flex direction="column" gap="6">
           <Flex gap="4" align="start">
-            <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-              <Shield className="h-5 w-5" />
+            <Box className="p-3 bg-red-100 rounded-lg">
+              <Shield className="h-5 w-5 text-red-600" />
             </Box>
             <Box>
               <Heading size="5" className="font-bold">
@@ -49,8 +49,8 @@ export const AppFeatures = () => {
           </Flex>
 
           <Flex gap="4" align="start">
-            <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-              <Calendar className="h-5 w-5" />
+            <Box className="p-3 bg-red-100 rounded-lg">
+              <Calendar className="h-5 w-5 text-red-600" />
             </Box>
             <Box>
               <Heading size="5" className="font-bold">
@@ -64,8 +64,8 @@ export const AppFeatures = () => {
           </Flex>
 
           <Flex gap="4" align="start">
-            <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-              <Users2 className="h-5 w-5" />
+            <Box className="p-3 bg-red-100 rounded-lg">
+              <Users2 className="h-5 w-5 text-red-600" />
             </Box>
             <Box>
               <Heading size="5" className="font-bold">
@@ -79,8 +79,8 @@ export const AppFeatures = () => {
           </Flex>
 
           <Flex gap="4" align="start">
-            <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-              <Clock className="h-5 w-5" />
+            <Box className="p-3 bg-red-100 rounded-lg">
+              <Clock className="h-5 w-5 text-red-600" />
             </Box>
             <Box>
               <Heading size="5" className="font-bold">
