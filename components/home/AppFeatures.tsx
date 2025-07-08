@@ -16,7 +16,7 @@ export const AppFeatures = () => {
         className="space-y-4 text-center"
       >
         <Box className="space-y-2">
-          <Heading size="8" className="font-bold tracking-tighter">
+          <Heading size="8" className="mb-4 font-bold tracking-tighter">
             Specialized for Fire Watch Management
           </Heading>
           <Text size="5" className="max-w-[900px] text-muted-foreground">

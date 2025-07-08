@@ -67,9 +67,6 @@ export const AppPricing = () => {
       className="w-full px-4 py-12 md:py-24 lg:py-32 bg-red-100"
     >
       <Flex direction="column" align="center" className="text-center mb-12">
-        <Badge color="red" size="2" className="mb-4">
-          Pricing
-        </Badge>
         <Heading size="8" className="mb-4">
           Choose Your Plan
         </Heading>
