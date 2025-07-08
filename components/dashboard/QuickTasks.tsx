@@ -2,7 +2,7 @@ import { AlertTriangle, CheckSquare, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button } from "@radix-ui/themes";
 
 export function QuickTasks() {
   const tasks = [
@@ -96,7 +96,6 @@ export function QuickTasks() {
                   Due: {task.dueTime}
                 </span>
                 <Button
-                  size="sm"
                   variant="outline"
                   className="text-xs h-6 bg-transparent"
                 >

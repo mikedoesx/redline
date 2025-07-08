@@ -4,7 +4,7 @@ import "@radix-ui/themes/styles.css";
 import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
 import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/theme-provider";
+import { Providers } from "@/components/Providers";
 
 export const metadata: Metadata = {
   title: "REDLINE | Firewatch Staffing Solutions",
@@ -67,11 +67,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>
+        <Providers>
           <AppHeader />
           {children}
           <AppFooter />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

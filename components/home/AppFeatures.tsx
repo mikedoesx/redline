@@ -96,7 +96,7 @@ export const AppFeatures = () => {
         </Flex>
 
         <Image
-          src="/placeholder.svg?height=550&width=550"
+          src="/images/extinguisher.png"
           width={550}
           height={550}
           alt="Fire Watch Management Features"

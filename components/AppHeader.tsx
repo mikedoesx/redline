@@ -12,6 +12,8 @@ import { usePathname, useRouter } from "next/navigation";
 
 import Image from "next/image";
 import Link from "next/link";
+import { Button as UIButton } from "./ui/button";
+import { signOut } from "next-auth/react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 
@@ -89,6 +91,9 @@ export function AppHeader() {
           </Flex>
         )}
         <Flex gap="4" align="center">
+          <Button onClick={() => router.push("/signup")} variant="outline">
+            Sign Up
+          </Button>
           <Button onClick={() => router.push("/login")}>Login</Button>
 
           {isMobile && (

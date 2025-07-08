@@ -105,8 +105,8 @@ export const AppHero = () => {
                 <Text className="text-muted-foreground">
                   Don't have an account?{" "}
                 </Text>
-                <Link href="#" className="text-red-600 hover:underline">
-                  Contact sales
+                <Link href="/signup" className="text-red-600 hover:underline">
+                  Sign up{" "}
                 </Link>
               </Text>
             </Flex>
