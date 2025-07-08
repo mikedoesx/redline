@@ -59,12 +59,12 @@ export const AppContact = () => {
   };
 
   return (
-    <Container id="contact" className="py-16 md:py-24 bg-gray-50">
+    <Container id="contact" className="py-16 md:py-24 bg-red-100">
       <Flex direction="column" align="center" className="text-center mb-12">
         <Heading size="8" className="mb-4">
           Get in Touch
         </Heading>
-        <Text size="5" className="text-muted-foreground max-w-2xl">
+        <Text size="5" className="max-w-2xl">
           Ready to streamline your fire watch operations? Contact our team to
           learn how REDLINE &trade; can transform your staffing management.
         </Text>
@@ -79,42 +79,42 @@ export const AppContact = () => {
             </Heading>
             <Flex direction="column" className="space-y-6">
               <Flex align="center" gap="4">
-                <Box className="p-3 bg-red-100 rounded-lg">
+                <Box className="p-3 bg-white rounded-lg">
                   <Phone className="h-6 w-6 text-red-600" />
                 </Box>
                 <Box>
                   <Text as="div" weight="medium" size="3">
                     Phone
                   </Text>
-                  <Text as="div" size="3" className="text-muted-foreground">
+                  <Text as="div" size="3">
                     +1 (555) 123-4567
                   </Text>
                 </Box>
               </Flex>
 
               <Flex align="center" gap="4">
-                <Box className="p-3 bg-red-100 rounded-lg">
+                <Box className="p-3 bg-white rounded-lg">
                   <Mail className="h-6 w-6 text-red-600" />
                 </Box>
                 <Box>
                   <Text as="div" weight="medium" size="3">
                     Email
                   </Text>
-                  <Text as="div" size="3" className="text-muted-foreground">
+                  <Text as="div" size="3">
                     contact@redlinestaff.com
                   </Text>
                 </Box>
               </Flex>
 
               <Flex align="center" gap="4">
-                <Box className="p-3 bg-red-100 rounded-lg">
+                <Box className="p-3 bg-white rounded-lg">
                   <MapPin className="h-6 w-6 text-red-600" />
                 </Box>
                 <Box>
                   <Text as="div" weight="medium" size="3">
                     Address
                   </Text>
-                  <Text as="div" size="3" className="text-muted-foreground">
+                  <Text as="div" size="3">
                     123 Safety Street
                     <br />
                     Fire Watch City, FW 12345
@@ -131,21 +131,15 @@ export const AppContact = () => {
             <Flex direction="column" className="space-y-2">
               <Flex justify="between">
                 <Text size="3">Monday - Friday</Text>
-                <Text size="3" className="text-muted-foreground">
-                  8:00 AM - 6:00 PM
-                </Text>
+                <Text size="3">8:00 AM - 6:00 PM</Text>
               </Flex>
               <Flex justify="between">
                 <Text size="3">Saturday</Text>
-                <Text size="3" className="text-muted-foreground">
-                  9:00 AM - 4:00 PM
-                </Text>
+                <Text size="3">9:00 AM - 4:00 PM</Text>
               </Flex>
               <Flex justify="between">
                 <Text size="3">Sunday</Text>
-                <Text size="3" className="text-muted-foreground">
-                  Emergency Only
-                </Text>
+                <Text size="3">Emergency Only</Text>
               </Flex>
             </Flex>
           </Box>

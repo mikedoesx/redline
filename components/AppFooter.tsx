@@ -4,7 +4,6 @@ import {
   Grid,
   Heading,
   Link as RadixLink,
-  Section,
   Text,
 } from "@radix-ui/themes";
 import { Facebook, Flame, Linkedin, Twitter } from "lucide-react";
@@ -13,7 +12,7 @@ import Link from "next/link";
 
 export const AppFooter = () => {
   return (
-    <Container className="w-full border-t bg-background px-4 py-6 md:py-12">
+    <Container className="w-full border-t bg-background px-4 py-6 md:py-24">
       <Grid columns={{ initial: "2", md: "4" }} gap="8">
         <Flex direction="column" className="space-y-4">
           <Flex align="center" gap="1">

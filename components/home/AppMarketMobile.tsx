@@ -1,32 +1,18 @@
-import {
-  Badge,
-  Box,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-} from "@radix-ui/themes";
 import { Bell, Clock, MapPin, Smartphone } from "lucide-react";
+import { Box, Container, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 
 import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
 import Image from "next/image";
 
 export const AppMarketMobile = () => {
   return (
-    <Container
-      id="mobile"
-      className="w-full px-4 py-12 md:py-24 lg:py-32 bg-red-100"
-    >
+    <Container id="mobile" className="w-full px-4 py-12 md:py-24 lg:py-32">
       <Flex
         direction="column"
         align="center"
         justify="center"
         className="space-y-4 text-center"
       >
-        <Badge color="red" size="2">
-          Mobile App
-        </Badge>
         <Heading size="8" className="font-bold tracking-tighter">
           Fire Watch Management On-the-Go
         </Heading>
@@ -40,10 +26,11 @@ export const AppMarketMobile = () => {
       <Grid
         columns={{ initial: "1", lg: "2" }}
         gap="6"
-        className="mx-auto max-w-5xl items-center py-12"
+        align="center"
+        className="mx-auto max-w-5xl py-12"
       >
         <Flex direction="column" gap="6">
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
               <Bell className="h-5 w-5" />
             </Box>
@@ -58,7 +45,7 @@ export const AppMarketMobile = () => {
             </Box>
           </Flex>
 
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
               <MapPin className="h-5 w-5" />
             </Box>
@@ -73,7 +60,7 @@ export const AppMarketMobile = () => {
             </Box>
           </Flex>
 
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
               <Clock className="h-5 w-5" />
             </Box>
@@ -88,7 +75,7 @@ export const AppMarketMobile = () => {
             </Box>
           </Flex>
 
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="flex p-3 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
               <Smartphone className="h-5 w-5" />
             </Box>

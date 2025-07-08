@@ -1,5 +1,15 @@
-import { Badge, Box, Button, Card, Container, Flex, Grid, Heading, Text } from "@radix-ui/themes"
-import { Check, Star } from "lucide-react"
+import {
+  Badge,
+  Box,
+  Button,
+  Card,
+  Container,
+  Flex,
+  Grid,
+  Heading,
+  Text,
+} from "@radix-ui/themes";
+import { Check, Star } from "lucide-react";
 
 export const AppPricing = () => {
   const plans = [
@@ -49,10 +59,13 @@ export const AppPricing = () => {
       ],
       popular: false,
     },
-  ]
+  ];
 
   return (
-    <Container id="pricing" className="w-full px-4 py-12 md:py-24 lg:py-32 bg-muted">
+    <Container
+      id="pricing"
+      className="w-full px-4 py-12 md:py-24 lg:py-32 bg-red-100"
+    >
       <Flex direction="column" align="center" className="text-center mb-12">
         <Badge color="red" size="2" className="mb-4">
           Pricing
@@ -60,17 +73,27 @@ export const AppPricing = () => {
         <Heading size="8" className="mb-4">
           Choose Your Plan
         </Heading>
-        <Text size="5" className="text-muted-foreground max-w-2xl">
-          Flexible pricing options designed to scale with your fire watch staffing needs. Contact us for custom pricing
-          based on your requirements.
+        <Text size="5" className="max-w-2xl">
+          Flexible pricing options designed to scale with your fire watch
+          staffing needs. Contact us for custom pricing based on your
+          requirements.
         </Text>
       </Flex>
 
-      <Grid columns={{ initial: "1", md: "3" }} gap="6" className="max-w-6xl mx-auto">
+      <Grid
+        columns={{ initial: "1", md: "3" }}
+        gap="6"
+        className="max-w-6xl mx-auto"
+      >
         {plans.map((plan, index) => (
-          <Card key={index} className={`relative ${plan.popular ? "border-red-600 border-2" : ""}`}>
+          <Card
+            key={index}
+            className={`relative ${
+              plan.popular ? "border-red-600 border-2" : ""
+            }`}
+          >
             {plan.popular && (
-              <Box className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+              <Box className="absolute left-1/2 transform -translate-x-1/2">
                 <Badge color="red" size="2" className="flex items-center gap-1">
                   <Star className="h-3 w-3" />
                   Most Popular
@@ -111,7 +134,11 @@ export const AppPricing = () => {
 
               <Button
                 size="3"
-                className={`w-full ${plan.popular ? "bg-red-600 hover:bg-red-700" : "bg-gray-900 hover:bg-gray-800"}`}
+                className={`w-full ${
+                  plan.popular
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-gray-900 hover:bg-gray-800"
+                }`}
               >
                 Get Started
               </Button>
@@ -122,12 +149,13 @@ export const AppPricing = () => {
 
       <Flex direction="column" align="center" className="text-center mt-12">
         <Text size="3" className="text-muted-foreground mb-4">
-          Need a custom solution? We offer tailored packages for unique requirements.
+          Need a custom solution? We offer tailored packages for unique
+          requirements.
         </Text>
         <Button variant="outline" size="3">
           Contact Sales for Custom Pricing
         </Button>
       </Flex>
     </Container>
-  )
-}
+  );
+};

@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export const AppGetOnMobileButtons = () => {
   return (
-    <Flex gap="2" mt="4">
+    <Flex gap="4" mt="4">
       <button className="flex flex-col sm:flex-row gap-4">
         <AppStoreSVG />
       </button>

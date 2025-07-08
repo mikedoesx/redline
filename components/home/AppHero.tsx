@@ -22,7 +22,7 @@ export const AppHero = () => {
         gap="6"
         className="max-w-6xl mx-auto"
       >
-        <Flex direction="column" justify="center" className="space-y-6">
+        <Flex direction="column" justify="center" className="space-y-4">
           <Flex direction="column" className="space-y-2">
             <Image
               src="/images/logo295x48.png"
@@ -41,7 +41,7 @@ export const AppHero = () => {
             </Text>
           </Flex>
 
-          <Flex direction={{ initial: "column", sm: "row" }} gap="2">
+          <Flex direction={{ initial: "column", sm: "row" }} gap="4">
             <Button size="4">
               Request Demo <ArrowRight className="h-4 w-4 ml-1" />
             </Button>

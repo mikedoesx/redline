@@ -30,10 +30,11 @@ export const AppFeatures = () => {
       <Grid
         columns={{ initial: "1", lg: "2" }}
         gap="6"
-        className="mx-auto max-w-5xl items-center py-12"
+        align="center"
+        className="mx-auto max-w-5xl py-12"
       >
         <Flex direction="column" gap="6">
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="p-3 bg-red-100 rounded-lg">
               <Shield className="h-5 w-5 text-red-600" />
             </Box>
@@ -48,7 +49,7 @@ export const AppFeatures = () => {
             </Box>
           </Flex>
 
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="p-3 bg-red-100 rounded-lg">
               <Calendar className="h-5 w-5 text-red-600" />
             </Box>
@@ -63,7 +64,7 @@ export const AppFeatures = () => {
             </Box>
           </Flex>
 
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="p-3 bg-red-100 rounded-lg">
               <Users2 className="h-5 w-5 text-red-600" />
             </Box>
@@ -78,7 +79,7 @@ export const AppFeatures = () => {
             </Box>
           </Flex>
 
-          <Flex gap="4" align="start">
+          <Flex gap="4" align="center">
             <Box className="p-3 bg-red-100 rounded-lg">
               <Clock className="h-5 w-5 text-red-600" />
             </Box>
