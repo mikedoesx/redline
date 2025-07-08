@@ -1,7 +1,8 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { CheckSquare, Clock, AlertTriangle } from "lucide-react"
+import { AlertTriangle, CheckSquare, Clock } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export function QuickTasks() {
   const tasks = [
@@ -37,36 +38,36 @@ export function QuickTasks() {
       dueTime: "6:00 PM",
       type: "monitoring",
     },
-  ]
+  ];
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800"
+        return "bg-red-100 text-red-800";
       case "medium":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow-100 text-yellow-800";
       case "low":
-        return "bg-green-100 text-green-800"
+        return "bg-green-100 text-green-800";
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-gray-100 text-gray-800";
     }
-  }
+  };
 
   const getPriorityIcon = (priority: string) => {
     switch (priority) {
       case "high":
-        return <AlertTriangle className="h-3 w-3" />
+        return <AlertTriangle className="h-3 w-3" />;
       case "medium":
-        return <Clock className="h-3 w-3" />
+        return <Clock className="h-3 w-3" />;
       case "low":
-        return <CheckSquare className="h-3 w-3" />
+        return <CheckSquare className="h-3 w-3" />;
       default:
-        return <CheckSquare className="h-3 w-3" />
+        return <CheckSquare className="h-3 w-3" />;
     }
-  }
+  };
 
   return (
-    <Card className="h-[400px]">
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <CheckSquare className="h-5 w-5" />
@@ -94,7 +95,11 @@ export function QuickTasks() {
                   <Clock className="h-3 w-3" />
                   Due: {task.dueTime}
                 </span>
-                <Button size="sm" variant="outline" className="text-xs h-6 bg-transparent">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-xs h-6 bg-transparent"
+                >
                   Complete
                 </Button>
               </div>
@@ -103,5 +108,5 @@ export function QuickTasks() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import { ArrowRight, Flame } from "lucide-react";
 import {
   Button,
@@ -13,8 +15,11 @@ import {
 import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export const AppHero = () => {
+  const router = useRouter();
+
   return (
     <Container className="w-full px-4 py-12 md:py-24 lg:py-32 xl:py-48">
       <Grid
@@ -87,7 +92,12 @@ export const AppHero = () => {
                 <TextField.Root type="password" placeholder="••••••••" />
               </Flex>
 
-              <Button className="w-full">Sign In</Button>
+              <Button
+                className="w-full"
+                onClick={() => router.push("/dashboard")}
+              >
+                Sign In
+              </Button>
             </Flex>
 
             <Flex justify="center" className="text-center">

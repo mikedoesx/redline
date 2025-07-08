@@ -52,6 +52,7 @@
     "react-day-picker": "latest",
     "react-dom": "^19",
     "react-hook-form": "latest",
+    "react-is": "^19.1.0",
     "react-mobile-app-button": "^1.2.19",
     "react-resizable-panels": "latest",
     "recharts": "latest",

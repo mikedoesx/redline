@@ -8,6 +8,7 @@ import {
   Link as RadixLink,
 } from "@radix-ui/themes";
 import { Menu, X } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -15,12 +16,18 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 
 export function AppHeader() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const router = useRouter();
+  const pathName = usePathname();
   const isMobile = useIsMobile();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
+
+  if (pathName !== "/") {
+    return <></>;
+  }
 
   return (
     <Box className="bg-white relative p-4 border-b">
@@ -82,7 +89,7 @@ export function AppHeader() {
           </Flex>
         )}
         <Flex gap="4" align="center">
-          <Button>Get Started</Button>
+          <Button onClick={() => router.push("/login")}>Login</Button>
 
           {isMobile && (
             <Button onClick={toggleMobileMenu} variant="ghost">

@@ -150,6 +150,7 @@ export const AppFooter = () => {
         <Text size="1" className="text-muted-foreground">
           © {new Date().getFullYear()} REDLINE &trade;. All rights reserved.
         </Text>
+
         <Flex gap="4">
           <RadixLink asChild>
             <Link

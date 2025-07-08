@@ -1,20 +1,27 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
-  Clock,
-  Calendar,
-  CheckSquare,
-  MessageCircle,
   Bell,
   BookOpen,
-  HelpCircle,
+  Calendar,
   CalendarIcon,
-  GraduationCap,
+  CheckSquare,
+  Clock,
   FileText,
+  GraduationCap,
+  HelpCircle,
   LogOut,
+  MessageCircle,
   User,
-} from "lucide-react"
+} from "lucide-react";
+import { Box, Text } from "@radix-ui/themes";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -27,10 +34,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import Image from "next/image"
+} from "@/components/ui/sidebar";
+
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const navigationItems = [
   {
@@ -87,6 +94,11 @@ const navigationItems = [
         icon: CalendarIcon,
       },
       {
+        title: "Onboarding",
+        url: "/dashboard/onboarding",
+        icon: CalendarIcon,
+      },
+      {
         title: "Training",
         url: "/dashboard/training",
         icon: GraduationCap,
@@ -98,40 +110,45 @@ const navigationItems = [
       },
     ],
   },
-]
+];
 
 export function DashboardSidebar() {
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogout = () => {
-    localStorage.removeItem("isLoggedIn")
-    localStorage.removeItem("userEmail")
-    router.push("/login")
-  }
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userEmail");
+    router.push("/login");
+  };
 
   const userEmail =
-    typeof window !== "undefined" ? localStorage.getItem("userEmail") || "user@example.com" : "user@example.com"
+    typeof window !== "undefined"
+      ? localStorage.getItem("userEmail") || "user@example.com"
+      : "user@example.com";
 
   return (
     <Sidebar>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-            >
-              <div className="flex aspect-square size-8 items-center justify-center rounded-lg">
-                <Image src="/images/logo48.png" alt="Redline" width={32} height={32} className="h-8 w-8" />
-              </div>
-              <div className="flex flex-col gap-0.5 leading-none">
-                <span className="font-semibold">Redline</span>
-                <span className="text-xs">Fire Watch Management</span>
-              </div>
+            <SidebarMenuButton size="lg" onClick={() => router.push("/")}>
+              <Image
+                src="/images/logo48.png"
+                alt="Redline"
+                width={48}
+                height={48}
+              />
+              <Box className="flex flex-col gap-0.5">
+                <Text as="div" className="font-bold text-lg">
+                  REDLINE
+                </Text>
+                <Text>Fire Watch Management</Text>
+              </Box>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
         {navigationItems.map((group) => (
           <SidebarGroup key={group.title}>
@@ -153,6 +170,7 @@ export function DashboardSidebar() {
           </SidebarGroup>
         ))}
       </SidebarContent>
+
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -169,7 +187,9 @@ export function DashboardSidebar() {
                     </AvatarFallback>
                   </Avatar>
                   <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">Fire Watch User</span>
+                    <span className="truncate font-semibold">
+                      Fire Watch User
+                    </span>
                     <span className="truncate text-xs">{userEmail}</span>
                   </div>
                 </SidebarMenuButton>
@@ -191,5 +211,5 @@ export function DashboardSidebar() {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }
