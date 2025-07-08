@@ -1,105 +1,90 @@
-import { ArrowRight, Flame } from "lucide-react";
-import { Button, Card, TextField } from "@radix-ui/themes";
-
-import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
-import Link from "next/link";
+import { ArrowRight, Flame } from "lucide-react"
+import { Button, Card, Container, Flex, Grid, Heading, Section, Text, TextField } from "@radix-ui/themes"
+import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons"
+import Link from "next/link"
 
 export const AppHero = () => {
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
-      <div className="px-4 md:px-6">
-        <div className="max-w-6xl mx-auto grid gap-6 lg:grid-cols-[400px] lg:gap-12 xl:grid-cols-[1fr_450px]">
-          <div className="flex flex-col justify-center space-y-4">
-            <div className="space-y-2 flex flex-col">
-              <div className="text-3xl flex">
-                <Flame
-                  color="#dc2626"
-                  className="h-8 w-8 sm:h-12 sm:w-12 xl:h-14 xl:w-14"
-                />
-                <span className="text-3xl font-bold sm:text-5xl xl:text-6xl/none">
+    <Section className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+      <Container>
+        <Grid columns={{ initial: "1", lg: "2" }} gap="6" className="max-w-6xl mx-auto">
+          <Flex direction="column" justify="center" className="space-y-4">
+            <Flex direction="column" className="space-y-2">
+              <Flex align="center" className="text-3xl">
+                <Flame color="#dc2626" className="h-8 w-8 sm:h-12 sm:w-12 xl:h-14 xl:w-14" />
+                <Heading size="9" className="text-3xl font-bold sm:text-5xl xl:text-6xl/none ml-2">
                   Redline
-                </span>
-              </div>
+                </Heading>
+              </Flex>
 
-              <h1 className="text-xl font-bold tracking-tighter sm:text-3xl xl:text-4xl/none">
+              <Heading size="7" className="font-bold tracking-tighter">
                 Fire Watch Staffing Made Simple
-              </h1>
+              </Heading>
 
-              <p className="max-w-[600px] text-muted-foreground md:text-lg">
-                The specialized platform that helps you recruit, deploy, and
-                manage fire watch personnel with confidence and compliance.
-              </p>
-            </div>
+              <Text size="4" className="max-w-[600px] text-muted-foreground">
+                The specialized platform that helps you recruit, deploy, and manage fire watch personnel with confidence
+                and compliance.
+              </Text>
+            </Flex>
 
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
-              <Button size={"3"}>
-                Request Demo <ArrowRight className="h-4 w-4" />
+            <Flex direction={{ initial: "column", sm: "row" }} gap="2">
+              <Button size="4">
+                Request Demo <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
 
-              <Button size={"3"} variant="outline">
+              <Button size="4" variant="outline">
                 Learn More
               </Button>
-            </div>
+            </Flex>
 
             <AppGetOnMobileButtons />
-          </div>
+          </Flex>
 
           {/* Login Card */}
-          <Card>
-            <div className="space-y-4">
-              <div className="flex items-center justify-center">
+          <Card size="3">
+            <Flex direction="column" className="space-y-4">
+              <Flex align="center" justify="center">
                 <Flame className="h-8 w-8 text-red-600" />
-                <h2 className="text-2xl font-bold ml-2">Login</h2>
-              </div>
+                <Heading size="6" className="ml-2">
+                  Login
+                </Heading>
+              </Flex>
 
-              <div className="space-y-3">
-                <div className="space-y-1">
-                  <label htmlFor="email" className="text-sm font-medium">
+              <Flex direction="column" className="space-y-3">
+                <Flex direction="column" className="space-y-1">
+                  <Text as="label" size="2" weight="medium">
                     Email
-                  </label>
-                  <TextField.Root
-                    id="email"
-                    type="email"
-                    placeholder="name@company.com"
-                  />
-                </div>
+                  </Text>
+                  <TextField.Root type="email" placeholder="name@company.com" />
+                </Flex>
 
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="password" className="text-sm font-medium">
+                <Flex direction="column" className="space-y-1">
+                  <Flex align="center" justify="between">
+                    <Text as="label" size="2" weight="medium">
                       Password
-                    </label>
-                    <Link
-                      href="#"
-                      className="text-xs text-red-600 hover:underline"
-                    >
+                    </Text>
+                    <Link href="#" className="text-xs text-red-600 hover:underline">
                       Forgot password?
                     </Link>
-                  </div>
-                  <TextField.Root
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                  />
-                </div>
+                  </Flex>
+                  <TextField.Root type="password" placeholder="••••••••" />
+                </Flex>
 
-                <Button className="w-full bg-red-600 hover:bg-red-700">
-                  Sign In
-                </Button>
-              </div>
+                <Button className="w-full">Sign In</Button>
+              </Flex>
 
-              <div className="text-center text-sm">
-                <span className="text-muted-foreground">
-                  Don't have an account?{" "}
-                </span>
-                <Link href="#" className="text-red-600 hover:underline">
-                  Contact sales
-                </Link>
-              </div>
-            </div>
+              <Flex justify="center" className="text-center">
+                <Text size="2">
+                  <Text className="text-muted-foreground">Don't have an account? </Text>
+                  <Link href="#" className="text-red-600 hover:underline">
+                    Contact sales
+                  </Link>
+                </Text>
+              </Flex>
+            </Flex>
           </Card>
-        </div>
-      </div>
-    </section>
-  );
-};
+        </Grid>
+      </Container>
+    </Section>
+  )
+}

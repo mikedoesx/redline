@@ -1,85 +1,109 @@
-import { Bell, Clock, Shield, Smartphone } from "lucide-react";
-
-import { AppGetOnMobileButtons } from "../AppGetOnMobileButtons";
-import Image from "next/image";
+import { Bell, Clock, MapPin, Smartphone } from "lucide-react"
+import { Badge, Box, Container, Flex, Grid, Heading, Section, Text } from "@radix-ui/themes"
+import Image from "next/image"
 
 export const AppMarketMobile = () => {
   return (
-    <section id="mobile" className="w-full py-12 md:py-24 lg:py-32">
-      <div className="px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-              Automated Tracking, Reporting, Tasks, and more
-            </h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl">
-              Access all Redline features from anywhere with our powerful mobile
-              application, available for iOS and Android.
-            </p>
-          </div>
-        </div>
-        <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
-          <Image
-            src="/placeholder.svg?height=600&width=300"
-            width={300}
-            height={600}
-            alt="Redline Mobile App"
-            className="mx-auto rounded-[2.5rem] shadow-xl border-8 border-gray-800"
-          />
-          <div className="grid gap-6">
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-                <Smartphone className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Real-time Updates</h3>
-                <p className="text-muted-foreground">
-                  Receive instant notifications about schedule changes,
-                  certification expirations, and assignment updates.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-                <Bell className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Alert Management</h3>
-                <p className="text-muted-foreground">
-                  Quickly respond to emergency situations with our integrated
-                  alert system and communication tools.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-                <Clock className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Mobile Time Clock</h3>
-                <p className="text-muted-foreground">
-                  Clock in and out directly from your mobile device with GPS
-                  verification for accurate time tracking.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
-                <Shield className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Digital Inspections</h3>
-                <p className="text-muted-foreground">
-                  Complete fire watch inspection forms digitally, with photo
-                  documentation and timestamp verification.
-                </p>
-              </div>
-            </div>
+    <Section id="mobile" className="w-full py-12 md:py-24 lg:py-32">
+      <Container>
+        <Flex direction="column" align="center" justify="center" className="space-y-4 text-center">
+          <Badge color="red" size="2">
+            Mobile App
+          </Badge>
+          <Heading size="8" className="font-bold tracking-tighter">
+            Fire Watch Management On-the-Go
+          </Heading>
+          <Text size="5" className="max-w-[900px] text-muted-foreground">
+            Empower your fire watch personnel with our mobile app. Real-time updates, instant alerts, and seamless
+            communication keep everyone connected and compliant.
+          </Text>
+        </Flex>
 
-            <AppGetOnMobileButtons />
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+        <Grid columns={{ initial: "1", lg: "2" }} gap="6" className="mx-auto max-w-5xl items-center py-12">
+          <Flex direction="column" gap="6">
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+                <Bell className="h-5 w-5" />
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  Real-time Updates
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Instant notifications for schedule changes, emergency alerts, and important updates keep your team
+                  informed.
+                </Text>
+              </Box>
+            </Flex>
+
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+                <MapPin className="h-5 w-5" />
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  GPS Check-in
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Location-verified check-ins ensure personnel are on-site and provide accurate time tracking for
+                  billing.
+                </Text>
+              </Box>
+            </Flex>
+
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+                <Clock className="h-5 w-5" />
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  Mobile Time Clock
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Easy clock in/out functionality with photo verification and GPS tracking for complete accountability.
+                </Text>
+              </Box>
+            </Flex>
+
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+                <Smartphone className="h-5 w-5" />
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  Digital Inspections
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Complete fire watch inspections digitally with photo documentation and instant report generation.
+                </Text>
+              </Box>
+            </Flex>
+          </Flex>
+
+          <Box className="flex justify-center">
+            <Image
+              src="/placeholder.svg?height=600&width=300"
+              width={300}
+              height={600}
+              alt="Mobile App Screenshot"
+              className="mx-auto rounded-2xl shadow-2xl"
+            />
+          </Box>
+        </Grid>
+
+        <Flex justify="center" className="mt-8">
+          <Flex gap="4">
+            <Image
+              src="/placeholder.svg?height=60&width=180"
+              width={180}
+              height={60}
+              alt="Download on App Store"
+              className="h-15"
+            />
+            <Image src="/images/playstore.png" width={180} height={60} alt="Get it on Google Play" className="h-15" />
+          </Flex>
+        </Flex>
+      </Container>
+    </Section>
+  )
+}

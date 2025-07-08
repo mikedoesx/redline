@@ -1,74 +1,84 @@
-import { Calendar, Clock, Shield, Users2 } from "lucide-react";
-
-import Image from "next/image";
+import { Calendar, Clock, Shield, Users2 } from "lucide-react"
+import { Box, Container, Flex, Grid, Heading, Section, Text } from "@radix-ui/themes"
+import Image from "next/image"
 
 export const AppFeatures = () => {
   return (
-    <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-      <div className="px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
+    <Section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+      <Container>
+        <Flex direction="column" align="center" justify="center" className="space-y-4 text-center">
+          <Box className="space-y-2">
+            <Heading size="8" className="font-bold tracking-tighter">
               Specialized for Fire Watch Management
-            </h2>
-            <p className="max-w-[900px] text-muted-foreground md:text-xl">
-              Our platform provides all the tools you need to manage fire watch
-              personnel efficiently, ensuring safety compliance and operational
-              excellence.
-            </p>
-          </div>
-        </div>
-        <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
-          <div className="grid gap-6">
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+            </Heading>
+            <Text size="5" className="max-w-[900px] text-muted-foreground">
+              Our platform provides all the tools you need to manage fire watch personnel efficiently, ensuring safety
+              compliance and operational excellence.
+            </Text>
+          </Box>
+        </Flex>
+
+        <Grid columns={{ initial: "1", lg: "2" }} gap="6" className="mx-auto max-w-5xl items-center py-12">
+          <Flex direction="column" gap="6">
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
                 <Shield className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Certification Tracking</h3>
-                <p className="text-muted-foreground">
-                  Automatically track and manage fire safety certifications,
-                  ensuring all personnel are compliant with regulations.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  Certification Tracking
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Automatically track and manage fire safety certifications, ensuring all personnel are compliant with
+                  regulations.
+                </Text>
+              </Box>
+            </Flex>
+
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
                 <Calendar className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Shift Scheduling</h3>
-                <p className="text-muted-foreground">
-                  Create and manage complex 24/7 fire watch schedules with ease,
-                  ensuring proper coverage at all times.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  Shift Scheduling
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Create and manage complex 24/7 fire watch schedules with ease, ensuring proper coverage at all times.
+                </Text>
+              </Box>
+            </Flex>
+
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
                 <Users2 className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Personnel Management</h3>
-                <p className="text-muted-foreground">
-                  Comprehensive tools for recruiting, vetting, and managing
-                  qualified fire watch personnel.
-                </p>
-              </div>
-            </div>
-            <div className="flex gap-4 items-start">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  Personnel Management
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Comprehensive tools for recruiting, vetting, and managing qualified fire watch personnel.
+                </Text>
+              </Box>
+            </Flex>
+
+            <Flex gap="4" align="start">
+              <Box className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-600 text-white">
                 <Clock className="h-5 w-5" />
-              </div>
-              <div>
-                <h3 className="text-xl font-bold">Time & Attendance</h3>
-                <p className="text-muted-foreground">
-                  Track time on site with GPS verification, ensuring
-                  accountability and accurate billing for fire watch services.
-                </p>
-              </div>
-            </div>
-          </div>
+              </Box>
+              <Box>
+                <Heading size="5" className="font-bold">
+                  Time & Attendance
+                </Heading>
+                <Text className="text-muted-foreground">
+                  Track time on site with GPS verification, ensuring accountability and accurate billing for fire watch
+                  services.
+                </Text>
+              </Box>
+            </Flex>
+          </Flex>
+
           <Image
             src="/placeholder.svg?height=550&width=550"
             width={550}
@@ -76,8 +86,8 @@ export const AppFeatures = () => {
             alt="Fire Watch Management Features"
             className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
           />
-        </div>
-      </div>
-    </section>
-  );
-};
+        </Grid>
+      </Container>
+    </Section>
+  )
+}

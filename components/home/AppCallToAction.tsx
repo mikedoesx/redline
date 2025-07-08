@@ -1,32 +1,34 @@
-import { ArrowRight } from "lucide-react";
-import { Button } from "@radix-ui/themes";
+import { ArrowRight } from "lucide-react"
+import { Button, Container, Flex, Heading, Section, Text } from "@radix-ui/themes"
 
 export const AppCallToAction = () => {
   return (
-    <section id="cta" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-      <div className="px-4 md:px-6">
-        <div className="flex flex-col items-center justify-center space-y-4 text-center">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-              Ready to transform your fire watch operations?
-            </h2>
-            <p className="max-w-[600px] mx-auto text-muted-foreground md:text-xl">
-              Join safety-conscious organizations already using Redline to
-              improve compliance, efficiency, and safety in their fire watch
-              operations.
-            </p>
-          </div>
-
-          <div className="flex flex-col gap-2 min-[400px]:flex-row">
-            <Button size="3">
-              Request a demo <ArrowRight className="h-4 w-4" />
+    <Section className="w-full py-12 md:py-24 lg:py-32 bg-red-600 text-white">
+      <Container>
+        <Flex direction="column" align="center" justify="center" className="space-y-4 text-center">
+          <Flex direction="column" className="space-y-2">
+            <Heading size="8" className="font-bold tracking-tighter text-white">
+              Ready to Transform Your Fire Watch Operations?
+            </Heading>
+            <Text size="5" className="max-w-[600px] text-red-100">
+              Join hundreds of companies who trust Redline to manage their fire watch staffing with confidence and
+              compliance.
+            </Text>
+          </Flex>
+          <Flex direction={{ initial: "column", sm: "row" }} gap="2" className="min-[400px]:flex-row">
+            <Button size="4" variant="solid" className="bg-white text-red-600 hover:bg-gray-100">
+              Request Demo <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
-            <Button size="3" variant="outline">
-              Contact sales
+            <Button
+              size="4"
+              variant="outline"
+              className="border-white text-white hover:bg-white hover:text-red-600 bg-transparent"
+            >
+              Contact Sales
             </Button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
+          </Flex>
+        </Flex>
+      </Container>
+    </Section>
+  )
+}

@@ -1,167 +1,129 @@
-import { Facebook, Flame, Linkedin, Twitter } from "lucide-react";
-
-import Link from "next/link";
+import { Facebook, Flame, Linkedin, Twitter } from "lucide-react"
+import { Container, Flex, Grid, Heading, Link as RadixLink, Section, Text } from "@radix-ui/themes"
+import Link from "next/link"
 
 export const AppFooter = () => {
   return (
-    <footer className="w-full border-t bg-background py-6 md:py-12">
-      <div className="px-4 md:px-6">
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <Flame className="h-6 w-6 text-red-600" />
-              <span className="text-xl font-bold">Redline</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Specialized employment management for fire watch staffing,
-              ensuring safety and compliance.
-            </p>
-          </div>
+    <Section asChild className="w-full border-t bg-background py-6 md:py-12">
+      <footer>
+        <Container>
+          <Grid columns={{ initial: "2", md: "4" }} gap="8">
+            <Flex direction="column" className="space-y-4">
+              <Flex align="center" gap="2">
+                <Flame className="h-6 w-6 text-red-600" />
+                <Heading size="5">Redline</Heading>
+              </Flex>
+              <Text size="2" className="text-muted-foreground">
+                Specialized employment management for fire watch staffing, ensuring safety and compliance.
+              </Text>
+            </Flex>
 
-          <div className="space-y-4">
-            <h4 className="text-sm font-medium">Product</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Features
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Mobile App
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Integrations
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Compliance
-                </Link>
-              </li>
-            </ul>
-          </div>
+            <Flex direction="column" className="space-y-4">
+              <Heading size="3">Product</Heading>
+              <Flex direction="column" className="space-y-2">
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Features
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Mobile App
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Integrations
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Compliance
+                  </Link>
+                </RadixLink>
+              </Flex>
+            </Flex>
 
-          <div className="space-y-4">
-            <h4 className="text-sm font-medium">Resources</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Documentation
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Fire Safety Guides
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Support
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Certification Resources
-                </Link>
-              </li>
-            </ul>
-          </div>
+            <Flex direction="column" className="space-y-4">
+              <Heading size="3">Resources</Heading>
+              <Flex direction="column" className="space-y-2">
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Documentation
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Fire Safety Guides
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Support
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Certification Resources
+                  </Link>
+                </RadixLink>
+              </Flex>
+            </Flex>
 
-          <div className="space-y-4">
-            <h4 className="text-sm font-medium">Company</h4>
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  About
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Blog
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Careers
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-foreground"
-                >
-                  Contact
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
+            <Flex direction="column" className="space-y-4">
+              <Heading size="3">Company</Heading>
+              <Flex direction="column" className="space-y-2">
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    About
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Blog
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Careers
+                  </Link>
+                </RadixLink>
+                <RadixLink asChild size="2">
+                  <Link href="#" className="text-muted-foreground hover:text-foreground">
+                    Contact
+                  </Link>
+                </RadixLink>
+              </Flex>
+            </Flex>
+          </Grid>
 
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Redline. All rights reserved.
-          </p>
-          <div className="flex gap-4">
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Twitter className="h-5 w-5" />
-              <span className="sr-only">Twitter</span>
-            </Link>
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Linkedin className="h-5 w-5" />
-              <span className="sr-only">LinkedIn</span>
-            </Link>
-            <Link
-              href="#"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Facebook className="h-5 w-5" />
-              <span className="sr-only">Facebook</span>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-};
+          <Flex direction={{ initial: "column", sm: "row" }} align="center" justify="between" gap="4" className="mt-8">
+            <Text size="1" className="text-muted-foreground">
+              © {new Date().getFullYear()} Redline. All rights reserved.
+            </Text>
+            <Flex gap="4">
+              <RadixLink asChild>
+                <Link href="#" className="text-muted-foreground hover:text-foreground">
+                  <Twitter className="h-5 w-5" />
+                  <span className="sr-only">Twitter</span>
+                </Link>
+              </RadixLink>
+              <RadixLink asChild>
+                <Link href="#" className="text-muted-foreground hover:text-foreground">
+                  <Linkedin className="h-5 w-5" />
+                  <span className="sr-only">LinkedIn</span>
+                </Link>
+              </RadixLink>
+              <RadixLink asChild>
+                <Link href="#" className="text-muted-foreground hover:text-foreground">
+                  <Facebook className="h-5 w-5" />
+                  <span className="sr-only">Facebook</span>
+                </Link>
+              </RadixLink>
+            </Flex>
+          </Flex>
+        </Container>
+      </footer>
+    </Section>
+  )
+}
