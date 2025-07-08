@@ -3,6 +3,7 @@ import "@radix-ui/themes/styles.css";
 
 import { AppFooter } from "@/components/AppFooter";
 import { AppHeader } from "@/components/AppHeader";
+import { Container } from "@radix-ui/themes";
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -22,7 +23,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
           <AppHeader />
-          {children}
+          <Container className="w-full">{children}</Container>
           <AppFooter />
         </ThemeProvider>
       </body>

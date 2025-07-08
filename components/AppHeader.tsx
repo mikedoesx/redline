@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export function AppHeader() {
   return (
-    <Box className="bg-white py-4 border">
+    <Box className="bg-white p-4 border">
       <Container>
         <Flex align="center" justify="between">
           <Link

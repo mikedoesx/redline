@@ -15,7 +15,7 @@ import Link from "next/link";
 
 export const AppHero = () => {
   return (
-    <Container className="w-full py-12 md:py-24 lg:py-32 xl:py-48">
+    <Container className="w-full px-4 py-12 md:py-24 lg:py-32 xl:py-48">
       <Grid
         columns={{ initial: "1", lg: "2" }}
         gap="6"

@@ -11,7 +11,7 @@ import { ArrowRight } from "lucide-react";
 
 export const AppCallToAction = () => {
   return (
-    <Container className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+    <Container className="w-full px-4 py-12 md:py-24 lg:py-32">
       <Flex
         direction="column"
         align="center"
