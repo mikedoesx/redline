@@ -1,6 +1,6 @@
 import { AppStoreSVG } from "@/assets/svg/AppStore.svg";
 import Image from "next/image";
-import PlayStore from "@/assets/images/PlayStore.png";
+import PlayStore from "../assets/images/PlayStore.png";
 
 export const AppGetOnMobileButtons = () => {
   return (
