@@ -12,7 +12,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useState } from "react";
 
 export function AppHeader() {

@@ -1,8 +1,8 @@
 "use client";
 
-import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { DashboardSidebar } from "@/lib/components/dashboard/DashboardSidebar";
 import type React from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/lib/components/ui/sidebar";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";

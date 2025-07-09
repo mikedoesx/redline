@@ -1,7 +1,12 @@
 import { AlertTriangle, CheckSquare, Clock } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/lib/components/ui/card";
 
-import { Badge } from "@/components/ui/badge";
+import { Badge } from "@/lib/components/ui/badge";
 import { Button } from "@radix-ui/themes";
 
 export function QuickTasks() {

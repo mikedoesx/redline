@@ -1,5 +1,10 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { AlertTriangle, Clock, Calendar } from "lucide-react"
+import { AlertTriangle, Calendar, Clock } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/lib/components/ui/card";
 
 export function StatCards() {
   const stats = [
@@ -27,7 +32,7 @@ export function StatCards() {
       color: "text-blue-600",
       bgColor: "bg-blue-50",
     },
-  ]
+  ];
 
   return (
     <div className="grid gap-4 md:grid-cols-3">
@@ -46,5 +51,5 @@ export function StatCards() {
         </Card>
       ))}
     </div>
-  )
+  );
 }

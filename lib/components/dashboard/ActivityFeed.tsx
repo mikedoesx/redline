@@ -1,6 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Clock, MapPin, AlertTriangle, CheckCircle } from "lucide-react"
+import { AlertTriangle, CheckCircle, Clock, MapPin } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/lib/components/ui/card";
+
+import { ScrollArea } from "@/lib/components/ui/scroll-area";
 
 export function ActivityFeed() {
   const activities = [
@@ -52,7 +58,7 @@ export function ActivityFeed() {
       icon: AlertTriangle,
       color: "text-orange-600",
     },
-  ]
+  ];
 
   return (
     <Card className="h-[400px]">
@@ -77,5 +83,5 @@ export function ActivityFeed() {
         </ScrollArea>
       </CardContent>
     </Card>
-  )
+  );
 }

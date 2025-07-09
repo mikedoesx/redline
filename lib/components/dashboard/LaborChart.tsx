@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/lib/components/ui/card";
 import {
   CartesianGrid,
   Line,
@@ -19,7 +19,7 @@ import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "@/lib/components/ui/chart";
 
 const chartData = [
   { month: "Jan", cost: 45000 },

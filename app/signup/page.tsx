@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/lib/components/ui/alert";
 import { Box, Button, Flex, TextField } from "@radix-ui/themes";
 import {
   Card,
@@ -8,12 +8,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/lib/components/ui/card";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Input } from "@/lib/components/ui/input";
+import { Label } from "@/lib/components/ui/label";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

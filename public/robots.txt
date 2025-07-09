@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://redlinefirewatch.com
+
+# Sitemaps
+Sitemap: https://redlinefirewatch.com/sitemap.xml

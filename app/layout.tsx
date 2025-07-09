@@ -1,10 +1,10 @@
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 
-import { AppFooter } from "@/components/home/AppFooter";
-import { AppHeader } from "@/components/AppHeader";
+import { AppFooter } from "@/lib/components/home/AppFooter";
+import { AppHeader } from "@/lib/components/AppHeader";
 import type { Metadata } from "next";
-import { Providers } from "@/components/Providers";
+import { Providers } from "@/lib/components/Providers";
 
 export const metadata: Metadata = {
   title: "REDLINE | Firewatch Staffing Solutions",

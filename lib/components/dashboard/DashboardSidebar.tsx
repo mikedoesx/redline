@@ -1,6 +1,10 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/lib/components/ui/avatar";
 import {
   Bell,
   BookOpen,
@@ -21,7 +25,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/lib/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -34,7 +38,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar";
+} from "@/lib/components/ui/sidebar";
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
