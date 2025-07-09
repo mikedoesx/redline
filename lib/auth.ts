@@ -27,8 +27,46 @@ export interface User {
 }
 
 export class AuthService {
-  static async getUserByEmail(email: string): Promise<User | null> {
+  private static instance: AuthService;
+  private _user!: User;
+
+  private constructor() {}
+
+  get user(): User {
+    return this._user;
+  }
+
+  static getInstance(): AuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService();
+    }
+
+    return AuthService.instance;
+  }
+
+  async getUserByEmail(email: string): Promise<User | null> {
     return await prisma.user.findUnique({ where: { email } });
+  }
+
+  async authorize(credentials?: Record<"email" | "password", string>) {
+    if (!credentials?.email || !credentials.password) {
+      throw new Error("Missing credentials");
+    }
+
+    const authService = AuthService.getInstance();
+    const user = await authService.getUserByEmail(credentials.email);
+    if (!user || !user.password) {
+      throw new Error("No user found");
+    }
+
+    const isValid = await compare(credentials.password, user.password);
+    if (!isValid) {
+      throw new Error("Invalid password");
+    }
+
+    this._user = user;
+
+    return user;
   }
 }
 
@@ -42,26 +80,8 @@ export const authOptions: AuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          throw new Error("Missing credentials");
-        }
-
-        const user = await AuthService.getUserByEmail(credentials.email);
-        if (!user || !user.password) {
-          throw new Error("No user found");
-        }
-
-        const isValid = await compare(credentials.password, user.password);
-        if (!isValid) {
-          throw new Error("Invalid password");
-        }
-
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          roles: [Role.USER],
-        };
+        const authService = AuthService.getInstance();
+        return authService.authorize(credentials);
       },
     }),
   ],
