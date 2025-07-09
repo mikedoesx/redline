@@ -157,7 +157,7 @@ export default function SignUpPage() {
 
           <Flex className="my-2" justify={"center"}>
             <RadixLink asChild>
-              <Link href="/">Go back</Link>
+              <Link href="/">Home</Link>
             </RadixLink>
           </Flex>
         </CardContent>

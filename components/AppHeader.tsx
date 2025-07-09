@@ -12,8 +12,6 @@ import { usePathname, useRouter } from "next/navigation";
 
 import Image from "next/image";
 import Link from "next/link";
-import { Button as UIButton } from "./ui/button";
-import { signOut } from "next-auth/react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState } from "react";
 

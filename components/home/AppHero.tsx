@@ -36,7 +36,7 @@ export const AppHero = () => {
               alt="REDLINE: Fire Watch Staffing Solutions"
             />
 
-            <Heading size="7" className="font-bold tracking-tighter">
+            <Heading as="h1" size="7" className="font-bold tracking-tighter">
               Fire Watch Staffing & Management
             </Heading>
 
