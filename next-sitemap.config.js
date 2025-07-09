@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: "https://redlinefirewatch.com",
+  siteUrl: "https://redlinefirewatch.vercel.app",
   generateRobotsTxt: true, // Will generate robots.txt as well
   sitemapSize: 5000,
   changefreq: "weekly",
