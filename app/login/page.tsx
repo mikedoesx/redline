@@ -14,10 +14,24 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import { Label } from "@/lib/components/ui/label";
 import Link from "next/link";
+import { Metadata } from "next";
 import type React from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Login | REDLINE Fire Watch Staffing",
+    description:
+      "Login to your REDLINE account to manage fire watch schedules, staffing, and safety compliance.",
+    openGraph: {
+      title: "Login | REDLINE Fire Watch Staffing",
+      description:
+        "Sign in securely to your REDLINE fire watch staffing dashboard.",
+    },
+  };
+}
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

@@ -1,8 +1,6 @@
 import "./globals.css";
 import "@radix-ui/themes/styles.css";
 
-import { AppFooter } from "@/lib/components/home/AppFooter";
-import { AppHeader } from "@/lib/components/AppHeader";
 import type { Metadata } from "next";
 import { Providers } from "@/lib/components/Providers";
 

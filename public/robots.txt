@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://redlinefirewatch.com
+Host: https://redlinefirewatch.vercel.app
 
 # Sitemaps
-Sitemap: https://redlinefirewatch.com/sitemap.xml
+Sitemap: https://redlinefirewatch.vercel.app/sitemap.xml

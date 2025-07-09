@@ -12,11 +12,24 @@ import {
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import Image from "next/image";
-import { Input } from "@/lib/components/ui/input";
 import { Label } from "@/lib/components/ui/label";
 import Link from "next/link";
+import { Metadata } from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Sign Up | REDLINE Fire Watch Staffing",
+    description:
+      "Create a REDLINE account to get professional fire watch staffing solutions and protect your business with ease.",
+    openGraph: {
+      title: "Sign Up | REDLINE Fire Watch Staffing",
+      description:
+        "Join REDLINE today and ensure your fire watch staffing and safety compliance needs are covered.",
+    },
+  };
+}
 
 export default function SignUpPage() {
   const router = useRouter();
