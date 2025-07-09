@@ -93,3 +93,13 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+Button,
+button {
+  cursor: pointer !important;
+}
+
+Button:disabled,
+button:disabled {
+  cursor: not-allowed;
+}

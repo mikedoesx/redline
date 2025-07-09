@@ -1,11 +1,36 @@
-import { compare, hash } from "bcryptjs"; // assuming you store hashed passwords
+import { $Enums, PrismaClient } from "@prisma/client";
 
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import { compare } from "bcryptjs"; // assuming you store hashed passwords
 
 const prisma = new PrismaClient();
+
+export enum Role {
+  ADMIN = "ADMIN",
+  CLIENT = "CLIENT",
+  USER = "USER",
+  AHJ = "AHJ",
+}
+
+export interface User {
+  id: string;
+  name: string;
+  email: string | null;
+  password: string | null;
+  emailVerified: Date | null;
+  image: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  roles: $Enums.Role[];
+}
+
+export class AuthService {
+  static async getUserByEmail(email: string): Promise<User | null> {
+    return await prisma.user.findUnique({ where: { email } });
+  }
+}
 
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -21,11 +46,7 @@ export const authOptions: AuthOptions = {
           throw new Error("Missing credentials");
         }
 
-        // Find user in DB
-        const user = await prisma.user.findUnique({
-          where: { email: credentials.email },
-        });
-
+        const user = await AuthService.getUserByEmail(credentials.email);
         if (!user || !user.password) {
           throw new Error("No user found");
         }
@@ -39,6 +60,7 @@ export const authOptions: AuthOptions = {
           id: user.id,
           name: user.name,
           email: user.email,
+          roles: [Role.USER],
         };
       },
     }),

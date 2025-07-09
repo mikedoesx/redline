@@ -24,7 +24,7 @@ export const AppFeatureBanner = () => {
   ];
 
   return (
-    <Section className="bg-red-600 py-16 md:py-20 md:border-t-8 md:border-white">
+    <Section className="bg-black py-16 md:py-20 md:border-t-8 md:border-white">
       <Container size="4">
         <Grid columns={{ initial: "1", md: "3" }} gap="6" align="center">
           {features.map((feature, index) => {
@@ -44,7 +44,7 @@ export const AppFeatureBanner = () => {
                   <Text
                     size="5"
                     weight="bold"
-                    className="text-white mb-2 block"
+                    className="text-red-600 mb-2 block"
                   >
                     {feature.name}
                   </Text>

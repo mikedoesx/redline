@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button, Flex, Link as RadixLink } from "@radix-ui/themes";
+import { Box, Button, Flex, TextField } from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -12,11 +12,9 @@ import {
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 import type React from "react";
-import { Button as UIButton } from "@/components/ui/button";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -71,9 +69,9 @@ export default function LoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
-            <div className="space-y-2">
+            <Box>
               <Label htmlFor="email">Email address</Label>
-              <Input
+              <TextField.Root
                 id="email"
                 type="email"
                 placeholder="Enter your email"
@@ -81,12 +79,12 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-            </div>
+            </Box>
 
-            <div className="space-y-2">
+            <Box>
               <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Input
+                <TextField.Root
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
@@ -94,20 +92,21 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <UIButton
-                  type="button"
-                  variant="ghost"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </UIButton>
+                <div className="absolute right-0 top-0 h-full px-3 py-2">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </div>
-            </div>
+            </Box>
 
             {error && (
               <Alert variant="destructive">
@@ -115,27 +114,26 @@ export default function LoginPage() {
               </Alert>
             )}
 
-            <Button
-              type="submit"
-              style={{ width: "100%" }}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign in"
-              )}
-            </Button>
+            <Flex direction="column" gap="2">
+              <Button
+                type="submit"
+                style={{ width: "100%" }}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing in...
+                  </>
+                ) : (
+                  "Sign in"
+                )}
+              </Button>
+              <Button asChild type="button" variant="outline">
+                <Link href="/">Home</Link>
+              </Button>
+            </Flex>
           </form>
-
-          <Flex className="my-2" justify={"center"}>
-            <RadixLink asChild>
-              <Link href="/">Home</Link>
-            </RadixLink>
-          </Flex>
         </CardContent>
       </Card>
     </div>

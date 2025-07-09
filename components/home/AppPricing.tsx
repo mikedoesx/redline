@@ -129,16 +129,7 @@ export const AppPricing = () => {
                 </Flex>
               </Flex>
 
-              <Button
-                size="3"
-                className={`w-full ${
-                  plan.popular
-                    ? "bg-red-600 hover:bg-red-700"
-                    : "bg-gray-900 hover:bg-gray-800"
-                }`}
-              >
-                Get Started
-              </Button>
+              <Button className="w-full">Get Started</Button>
             </Flex>
           </Card>
         ))}
@@ -149,7 +140,7 @@ export const AppPricing = () => {
           Need a custom solution? We offer tailored packages for unique
           requirements.
         </Text>
-        <Button variant="outline" size="3">
+        <Button variant="surface" size="3">
           Contact Sales for Custom Pricing
         </Button>
       </Flex>

@@ -16,8 +16,8 @@ export default function LandingPage() {
       <main>
         <AppHero />
         <AppFeatureBanner />
-        <AppFeatures />
         <AppPricing />
+        <AppFeatures />
         <AppMarketMobile />
         <AppCallToAction />
         <AppIntegrations />

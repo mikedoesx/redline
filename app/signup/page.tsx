@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button, Flex, Link as RadixLink } from "@radix-ui/themes";
+import { Box, Button, Flex, TextField } from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -15,7 +15,6 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import { Button as UIButton } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -67,16 +66,19 @@ export default function SignUpPage() {
               className="h-8 w-auto"
             />
           </div>
+
           <CardTitle className="text-2xl font-bold">
             Create an account
           </CardTitle>
+
           <CardDescription>Sign up to get started</CardDescription>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSignup} className="space-y-4">
-            <div className="space-y-2">
+            <Box>
               <Label htmlFor="name">Name</Label>
-              <Input
+              <TextField.Root
                 id="name"
                 type="text"
                 placeholder="Your name"
@@ -84,10 +86,11 @@ export default function SignUpPage() {
                 onChange={(e) => setName(e.target.value)}
                 required
               />
-            </div>
-            <div className="space-y-2">
+            </Box>
+
+            <Box>
               <Label htmlFor="email">Email address</Label>
-              <Input
+              <TextField.Root
                 id="email"
                 type="email"
                 placeholder="you@example.com"
@@ -95,11 +98,12 @@ export default function SignUpPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-            </div>
-            <div className="space-y-2">
+            </Box>
+
+            <Box>
               <Label htmlFor="password">Password</Label>
               <div className="relative">
-                <Input
+                <TextField.Root
                   id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter a password"
@@ -107,23 +111,25 @@ export default function SignUpPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
-                <UIButton
-                  type="button"
-                  variant="ghost"
-                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </UIButton>
+                <div className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className="space-y-2">
+            </Box>
+
+            <Box>
               <Label htmlFor="confirm">Confirm Password</Label>
-              <Input
+              <TextField.Root
                 id="confirm"
                 type={showPassword ? "text" : "password"}
                 placeholder="Re-enter your password"
@@ -131,7 +137,7 @@ export default function SignUpPage() {
                 onChange={(e) => setConfirm(e.target.value)}
                 required
               />
-            </div>
+            </Box>
 
             {error && (
               <Alert variant="destructive">
@@ -139,27 +145,27 @@ export default function SignUpPage() {
               </Alert>
             )}
 
-            <Button
-              type="submit"
-              style={{ width: "100%" }}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing up...
-                </>
-              ) : (
-                "Create account"
-              )}
-            </Button>
-          </form>
+            <Flex direction="column" gap="2">
+              <Button
+                type="submit"
+                style={{ width: "100%" }}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Signing up...
+                  </>
+                ) : (
+                  "Create account"
+                )}
+              </Button>
 
-          <Flex className="my-2" justify={"center"}>
-            <RadixLink asChild>
-              <Link href="/">Home</Link>
-            </RadixLink>
-          </Flex>
+              <Button asChild type="button" variant="outline">
+                <Link href="/">Home</Link>
+              </Button>
+            </Flex>
+          </form>
         </CardContent>
       </Card>
     </div>

@@ -241,8 +241,7 @@ export const AppContact = () => {
 
             <Button
               type="submit"
-              size="3"
-              className="w-full bg-red-600 hover:bg-red-700"
+              style={{ width: "100%" }}
               disabled={isSubmitting}
             >
               {isSubmitting ? "Sending..." : "Send Message"}
