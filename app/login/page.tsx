@@ -1,7 +1,3 @@
-"use client";
-
-import { Alert, AlertDescription } from "@/lib/components/ui/alert";
-import { Box, Button, Flex, TextField } from "@radix-ui/themes";
 import {
   Card,
   CardContent,
@@ -9,22 +5,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/lib/components/ui/card";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 import Image from "next/image";
-import { Label } from "@/lib/components/ui/label";
-import Link from "next/link";
+import { LoginForm } from "@/lib/components/pages/login/LoginForm";
 import { Metadata } from "next";
 import type React from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Login | REDLINE Fire Watch Staffing",
     description:
       "Login to your REDLINE account to manage fire watch schedules, staffing, and safety compliance.",
+    icons: {
+      icon: "/images/favicon.ico",
+      shortcut: "/images/favicon.png",
+      apple: "/images/logo180.png",
+    },
     openGraph: {
       title: "Login | REDLINE Fire Watch Staffing",
       description:
@@ -34,44 +30,16 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const router = useRouter();
-
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
-
-    const res = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (res?.error) {
-      setError(res.error);
-      setIsLoading(false);
-    } else {
-      router.push("/dashboard");
-      router.refresh();
-    }
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-md -mt-40">
         <CardHeader className="space-y-1 text-center">
           <div className="flex justify-center mb-4">
             <Image
-              src="/images/logo295x48.png"
+              src="/images/logo220x48.png"
               alt="Redline Logo"
-              width={200}
-              height={32}
-              className="h-8 w-auto"
+              width={220}
+              height={48}
             />
           </div>
           <CardTitle className="text-2xl font-bold">
@@ -82,74 +50,9 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <Box>
-              <Label htmlFor="email">Email address</Label>
-              <TextField.Root
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </Box>
-
-            <Box>
-              <Label htmlFor="password">Password</Label>
-              <div className="relative">
-                <TextField.Root
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <div className="absolute right-0 top-0 h-full px-3 py-2">
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </Box>
-
-            {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <Flex direction="column" gap="2">
-              <Button
-                type="submit"
-                style={{ width: "100%" }}
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  "Sign in"
-                )}
-              </Button>
-              <Button asChild type="button" variant="outline">
-                <Link href="/">Home</Link>
-              </Button>
-            </Flex>
-          </form>
+          <LoginForm />
         </CardContent>
       </Card>
-    </div>
+    </main>
   );
 }

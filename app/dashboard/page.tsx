@@ -1,19 +1,24 @@
 import { Box, Flex, Grid } from "@radix-ui/themes";
 
-import { ActivityFeed } from "@/lib/components/dashboard/ActivityFeed";
-import { DashboardHeader } from "@/lib/components/dashboard/DashboardHeader";
-import { LaborChart } from "@/lib/components/dashboard/LaborChart";
-import { MapView } from "@/lib/components/dashboard/MapView";
+import { DashboardActivityFeed } from "@/lib/components/pages/dashboard/DashboardActivityFeed";
+import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader";
+import { DashboardLaborChart } from "@/lib/components/pages/dashboard/DashboardLaborChart";
+import { DashboardMapView } from "@/lib/components/pages/dashboard/DashboardMapView";
+import { DashboardQuickTasks } from "@/lib/components/pages/dashboard/DashboardQuickTasks";
 import { Metadata } from "next";
-import { QuickTasks } from "@/lib/components/dashboard/QuickTasks";
 import { SidebarInset } from "@/lib/components/ui/sidebar";
-import { StatCards } from "@/lib/components/dashboard/StatCards";
+import { StatCards } from "@/lib/components/pages/dashboard/DashboardStatCards";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Dashboard | REDLINE Fire Watch Staffing",
     description:
       "View and manage your fire watch staffing schedules, site reports, and compliance tasks with REDLINE's secure dashboard.",
+    icons: {
+      icon: "/images/favicon.ico",
+      shortcut: "/images/favicon.png",
+      apple: "/images/logo180.png",
+    },
     openGraph: {
       title: "Dashboard | REDLINE Fire Watch Staffing",
       description:
@@ -32,19 +37,19 @@ export default function DashboardPage() {
 
           <Grid gap="4" columns={{ md: "2", lg: "3" }}>
             <Box className="lg:col-span-1">
-              <ActivityFeed />
+              <DashboardActivityFeed />
             </Box>
 
             <Box className="lg:col-span-2">
-              <LaborChart />
+              <DashboardLaborChart />
             </Box>
 
             <Box className="lg:col-span-2">
-              <MapView />
+              <DashboardMapView />
             </Box>
 
             <Box className="lg:col-span-1">
-              <QuickTasks />
+              <DashboardQuickTasks />
             </Box>
           </Grid>
         </Flex>
