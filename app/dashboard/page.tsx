@@ -1,11 +1,5 @@
-import { DashboardActivityFeed } from "@/lib/components/pages/dashboard/DashboardActivityFeed"
-import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader"
-import { DashboardLaborChart } from "@/lib/components/pages/dashboard/DashboardLaborChart"
-import { DashboardMapView } from "@/lib/components/pages/dashboard/DashboardMapView"
-import { DashboardQuickTasks } from "@/lib/components/pages/dashboard/DashboardQuickTasks"
-import type { Metadata } from "next"
-import { SidebarInset } from "@/lib/components/ui/sidebar"
-import { StatCards } from "@/lib/components/pages/dashboard/DashboardStatCards"
+import { DashboardPage } from "@/lib/components/pages/dashboard/DashboardPage";
+import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -19,38 +13,12 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     openGraph: {
       title: "Dashboard | REDLINE Fire Watch Staffing",
-      description: "Access your REDLINE dashboard to manage staffing, reports, and site safety.",
+      description:
+        "Access your REDLINE dashboard to manage staffing, reports, and site safety.",
     },
-  }
+  };
 }
 
-export default function DashboardPage() {
-  return (
-    <SidebarInset>
-      <DashboardHeader />
-      <main>
-        <section className="flex flex-col flex-1 gap-4 p-4">
-          <StatCards />
-
-          <section className="grid md:grid-cols-3 lg:grid-cols-3 gap-4">
-            <aside className="lg:col-span-1">
-              <DashboardActivityFeed />
-            </aside>
-
-            <aside className="lg:col-span-2">
-              <DashboardLaborChart />
-            </aside>
-
-            <aside className="lg:col-span-2">
-              <DashboardMapView />
-            </aside>
-
-            <aside className="lg:col-span-1">
-              <DashboardQuickTasks />
-            </aside>
-          </section>
-        </section>
-      </main>
-    </SidebarInset>
-  )
+export default function Dashboard() {
+  return <DashboardPage />;
 }

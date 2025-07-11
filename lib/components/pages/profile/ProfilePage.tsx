@@ -1,109 +1,125 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/lib/components/ui/card"
-import { type FormStep, getStepsForUserType, type StepStatus } from "@/lib/form-validators/form-steps"
-import { useEffect, useState } from "react"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/lib/components/ui/card";
+import {
+  type FormStep,
+  getStepsForUserType,
+  type StepStatus,
+} from "@/lib/form-validators/form-steps";
+import { useEffect, useState } from "react";
 
-import { ProfileForm } from "./ProfileForm"
-import { ProfileNeedToLogin } from "./ProfileNeedToLogin"
-import { ProfilePageLoading } from "./ProfilePageLoading"
-import { ProfileProgressHeader } from "./ProfileProgressHeader"
-import { useAuth } from "@/lib/providers/auth-context"
-import { getUserProfile, type UserProfile } from "@/lib/services/user-profile"
-import { z } from "zod"
+import { ProfileForm } from "./ProfileForm";
+import { ProfileNeedToLogin } from "./ProfileNeedToLogin";
+import { ProfilePageLoading } from "./ProfilePageLoading";
+import { ProfileProgressHeader } from "./ProfileProgressHeader";
+import { useAuth } from "@/lib/providers/auth-context";
+import {
+  UserProfileService,
+  type UserProfile,
+} from "@/lib/services/user-profile";
+import { z } from "zod";
 
 export const ProfilePage = () => {
-  const { user, loading } = useAuth()
-  const [steps, setSteps] = useState<FormStep[]>([])
-  const [currentStepIndex, setCurrentStepIndex] = useState(0)
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
+  const { user, loading } = useAuth();
+  const [steps, setSteps] = useState<FormStep[]>([]);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const userProfileService = UserProfileService.getInstance();
 
   // Initialize with default steps
   useEffect(() => {
     if (!steps.length) {
-      setSteps(getStepsForUserType("fire-watch"))
+      setSteps(getStepsForUserType("fire-watch"));
     }
-  }, [steps.length])
+  }, [steps.length]);
 
   // Load user profile to get step statuses
   useEffect(() => {
     const loadProfile = async () => {
-      if (!user) return
+      if (!user) return;
 
       try {
-        const profile = await getUserProfile(user.uid)
-        setUserProfile(profile)
+        const profile = await userProfileService.getUserProfile(user.uid);
+        setUserProfile(profile);
       } catch (error) {
-        console.error("Error loading profile:", error)
+        console.error("Error loading profile:", error);
       }
-    }
+    };
 
-    loadProfile()
-  }, [user])
+    loadProfile();
+  }, [user]);
 
   if (loading) {
-    return <ProfilePageLoading />
+    return <ProfilePageLoading />;
   }
 
   if (!user) {
-    return <ProfileNeedToLogin />
+    return <ProfileNeedToLogin />;
   }
 
   if (steps.length === 0) {
-    return <ProfilePageLoading />
+    return <ProfilePageLoading />;
   }
 
-  const currentStep = steps[currentStepIndex]
-  const progress = ((currentStepIndex + 1) / steps.length) * 100
+  const currentStep = steps[currentStepIndex];
+  const progress = ((currentStepIndex + 1) / steps.length) * 100;
 
   // Create dynamic schema for current step
   const createStepSchema = (stepConfig: FormStep) => {
-    const schemaFields: Record<string, z.ZodTypeAny> = {}
+    const schemaFields: Record<string, z.ZodTypeAny> = {};
 
     stepConfig.fields.forEach((field) => {
-      let fieldSchema: z.ZodTypeAny
+      let fieldSchema: z.ZodTypeAny;
 
       switch (field.type) {
         case "email":
-          fieldSchema = z.string().email("Please enter a valid email address")
-          break
+          fieldSchema = z.string().email("Please enter a valid email address");
+          break;
         case "tel":
-          fieldSchema = z.string().min(10, "Please enter a valid phone number")
-          break
+          fieldSchema = z.string().min(10, "Please enter a valid phone number");
+          break;
         case "number":
-          fieldSchema = z.coerce.number().min(0, "Please enter a valid number")
-          break
+          fieldSchema = z.coerce.number().min(0, "Please enter a valid number");
+          break;
         case "multiselect":
-          fieldSchema = z.array(z.string()).min(1, "Please select at least one option")
-          break
+          fieldSchema = z
+            .array(z.string())
+            .min(1, "Please select at least one option");
+          break;
         case "select":
         case "radio":
-          fieldSchema = z.string().min(1, "Please select an option")
-          break
+          fieldSchema = z.string().min(1, "Please select an option");
+          break;
         default:
-          fieldSchema = z.string().min(1, "This field is required")
+          fieldSchema = z.string().min(1, "This field is required");
       }
 
       if (!field.required) {
-        fieldSchema = fieldSchema.optional()
+        fieldSchema = fieldSchema.optional();
       }
 
-      schemaFields[field.name] = fieldSchema
-    })
+      schemaFields[field.name] = fieldSchema;
+    });
 
-    return z.object(schemaFields)
-  }
+    return z.object(schemaFields);
+  };
 
-  const stepSchema = createStepSchema(currentStep)
+  const stepSchema = createStepSchema(currentStep);
 
   // Get step statuses for progress header
-  const stepStatuses: Record<string, StepStatus> = {}
-  const stepIds = steps.map((step) => step.id)
+  const stepStatuses: Record<string, StepStatus> = {};
+  const stepIds = steps.map((step) => step.id);
 
   if (userProfile) {
     stepIds.forEach((stepId) => {
-      stepStatuses[stepId] = userProfile.stepProgress[stepId]?.status || "draft"
-    })
+      stepStatuses[stepId] =
+        userProfile.stepProgress[stepId]?.status || "draft";
+    });
   }
 
   return (
@@ -120,7 +136,9 @@ export const ProfilePage = () => {
         <Card className="max-w-2xl mx-auto">
           <CardHeader>
             <CardTitle>{currentStep.title}</CardTitle>
-            {currentStep.description && <p className="text-gray-600">{currentStep.description}</p>}
+            {currentStep.description && (
+              <p className="text-gray-600">{currentStep.description}</p>
+            )}
           </CardHeader>
           <CardContent>
             <ProfileForm
@@ -135,5 +153,5 @@ export const ProfilePage = () => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};

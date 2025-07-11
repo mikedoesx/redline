@@ -1,16 +1,14 @@
 "use client";
-import { Toaster } from "@/lib/components/ui/sonner";
-import {
-  ThemeProvider as NextThemesProvider,
-  type ThemeProviderProps,
-} from "next-themes";
 
 import { AuthProvider } from "./auth-context";
+import { ThemeProvider } from "@/lib/providers/theme-provider";
+import { ThemeProviderProps } from "next-themes";
+import { Toaster } from "@/lib/components/ui/sonner";
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
     <AuthProvider>
-      <NextThemesProvider {...props}>{children}</NextThemesProvider>
+      <ThemeProvider {...props}>{children}</ThemeProvider>
       <Toaster />
     </AuthProvider>
   );

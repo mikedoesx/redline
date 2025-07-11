@@ -1,12 +1,4 @@
-import { HomeCallToAction } from "@/lib/components/pages/home/HomeCallToAction";
-import { HomeContact } from "@/lib/components/pages/home/HomeContact";
-import { HomeFeatureBanner } from "@/lib/components/pages/home/HomeFeatureBanner";
-import { HomeFeatures } from "@/lib/components/pages/home/HomeFeatures";
-import { HomeFooter } from "@/lib/components/pages/home/HomeFooter";
-import { HomeHeader } from "@/lib/components/pages/home/HomeHeader";
-import { HomeHero } from "@/lib/components/pages/home/HomeHero";
-import { HomeMarketMobile } from "@/lib/components/pages/home/HomeMarketMobile";
-import { HomePricing } from "@/lib/components/pages/home/HomePricing";
+import { HomePage } from "@/lib/components/pages/home/HomePage";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -62,20 +54,6 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://redline.com"),
 };
 
-export default function LandingPage() {
-  return (
-    <>
-      <HomeHeader />
-      <main>
-        <HomeHero />
-        <HomeFeatureBanner />
-        <HomeFeatures />
-        <HomePricing />
-        <HomeMarketMobile />
-        <HomeCallToAction />
-        <HomeContact />
-      </main>
-      <HomeFooter />
-    </>
-  );
+export default function Home() {
+  return <HomePage />;
 }

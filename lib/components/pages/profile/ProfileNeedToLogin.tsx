@@ -1,8 +1,15 @@
-"use client"
+"use client";
 
-import { Button } from "../../ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../ui/card"
-import Link from "next/link"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../ui/card";
+
+import { Button } from "../../ui/button";
+import Link from "next/link";
 
 export const ProfileNeedToLogin = () => {
   return (
@@ -10,7 +17,9 @@ export const ProfileNeedToLogin = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle>Profile Setup Required</CardTitle>
-          <CardDescription>You need to be logged in to set up your profile.</CardDescription>
+          <CardDescription>
+            You need to be logged in to set up your profile.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Button asChild className="w-full">
@@ -22,5 +31,5 @@ export const ProfileNeedToLogin = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};

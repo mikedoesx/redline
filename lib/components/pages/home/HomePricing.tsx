@@ -83,7 +83,7 @@ export const HomePricing = () => {
 
             <CardContent className="flex flex-col">
               <div className="flex flex-col mb-6">
-                <p className="font-bold mb-4">What's included:</p>
+                <p className="font-bold mb-4">What&apos;s included:</p>
                 {plan.features.map((feature, featureIndex) => (
                   <div className="my-1" key={featureIndex}>
                     <div className="flex items-center gap-3" key={featureIndex}>

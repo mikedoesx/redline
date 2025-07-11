@@ -1,49 +1,51 @@
-"use client"
+"use client";
 
-import { useAuth } from "@/lib/providers/auth-context"
-import { getUserProfile } from "@/lib/services/user-profile"
-import { useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
+
+import { UserProfileService } from "@/lib/services/user-profile";
+import { useAuth } from "@/lib/providers/auth-context";
+import { useRouter } from "next/navigation";
 
 export function useProfileCheck() {
-  const { user, loading: authLoading } = useAuth()
-  const router = useRouter()
-  const [isCheckingProfile, setIsCheckingProfile] = useState(true)
-  const [hasCompleteProfile, setHasCompleteProfile] = useState(false)
+  const { user, loading: authLoading } = useAuth();
+  const router = useRouter();
+  const [isCheckingProfile, setIsCheckingProfile] = useState(true);
+  const [hasCompleteProfile, setHasCompleteProfile] = useState(false);
+  const userProfileService = UserProfileService.getInstance();
 
   useEffect(() => {
     const checkUserProfile = async () => {
-      if (authLoading) return
+      if (authLoading) return;
 
       if (!user) {
-        router.push("/login")
-        return
+        router.push("/login");
+        return;
       }
 
       try {
-        const userProfile = await getUserProfile(user.uid)
+        const userProfile = await userProfileService.getUserProfile(user.uid);
 
         if (!userProfile || !userProfile.isComplete) {
-          setHasCompleteProfile(false)
-          router.push("/profile")
+          setHasCompleteProfile(false);
+          router.push("/profile");
         } else {
-          setHasCompleteProfile(true)
+          setHasCompleteProfile(true);
         }
       } catch (error) {
-        console.error("Error checking user profile:", error)
-        setHasCompleteProfile(false)
-        router.push("/profile")
+        console.error("Error checking user profile:", error);
+        setHasCompleteProfile(false);
+        router.push("/profile");
       } finally {
-        setIsCheckingProfile(false)
+        setIsCheckingProfile(false);
       }
-    }
+    };
 
-    checkUserProfile()
-  }, [user, authLoading, router])
+    checkUserProfile();
+  }, [user, authLoading, router]);
 
   return {
     isCheckingProfile: authLoading || isCheckingProfile,
     hasCompleteProfile,
     user,
-  }
+  };
 }

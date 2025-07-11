@@ -59,6 +59,10 @@ body {
   }
 }
 
-a:hover {
+a {
   @apply text-primary;
+}
+
+a:hover {
+  @apply text-foreground;
 }
