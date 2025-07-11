@@ -1,13 +1,14 @@
 "use client";
 
+import { AlertCircle, Check, Clock, Eye } from "lucide-react";
+import {
+  StepStatus,
+  getStepStatusColor,
+  getStepStatusLabel,
+} from "@/lib/form-validators/form-steps";
+
 import { Badge } from "../../ui/badge";
 import { Progress } from "../../ui/progress";
-import { Check, Clock, AlertCircle, Eye } from "lucide-react";
-import {
-  getStepStatusLabel,
-  getStepStatusColor,
-  type StepStatus,
-} from "@/lib/form-validators/form-steps";
 
 interface ProfileProgressHeaderProps {
   currentStepIndex: number;
@@ -26,14 +27,14 @@ export const ProfileProgressHeader = ({
 }: ProfileProgressHeaderProps) => {
   const getStatusIcon = (status: StepStatus) => {
     switch (status) {
-      case "complete":
-      case "approved":
+      case StepStatus.complete:
+      case StepStatus.approved:
         return <Check className="h-3 w-3" />;
-      case "pending":
+      case StepStatus.pending:
         return <Clock className="h-3 w-3" />;
-      case "under-review":
+      case StepStatus.underReview:
         return <Eye className="h-3 w-3" />;
-      case "needs-rework":
+      case StepStatus.needsRework:
         return <AlertCircle className="h-3 w-3" />;
       default:
         return null;
@@ -55,7 +56,7 @@ export const ProfileProgressHeader = ({
       {stepIds.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {stepIds.map((stepId, index) => {
-            const status = stepStatuses[stepId] || "draft";
+            const status = stepStatuses[stepId] || StepStatus.draft;
 
             return (
               <Badge

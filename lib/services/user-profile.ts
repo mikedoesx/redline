@@ -1,4 +1,4 @@
-import type {
+import {
   FormStep,
   StepProgress,
   StepStatus,
@@ -19,6 +19,12 @@ import { UserTypeOptions } from "../constants/form-options";
 import { db } from "./firebase";
 import { replaceUndefinedWithNull } from "../utils";
 
+export enum UserProfileStatus {
+  incomplete = "incomplete",
+  pendingReview = "pending-review",
+  complete = "complete",
+}
+
 export const INITIAL_USER_PROFILE: UserProfile = {
   userId: "",
   firstName: "",
@@ -27,7 +33,7 @@ export const INITIAL_USER_PROFILE: UserProfile = {
   phoneNumber: "",
   userType: UserTypeOptions.FIRE_WATCH,
   stepProgress: {},
-  overallStatus: "incomplete",
+  overallStatus: UserProfileStatus.incomplete,
 };
 
 export interface UserProfile {
@@ -77,7 +83,7 @@ export interface UserProfile {
   // Step progress tracking
   stepProgress: Record<string, StepProgress>;
   currentStep?: string;
-  overallStatus: "incomplete" | "pending-review" | "complete";
+  overallStatus: UserProfileStatus;
 
   // Metadata
   createdAt?: any;
@@ -120,7 +126,7 @@ export class UserProfileService {
           ...profileData,
           isComplete: false,
           stepProgress: {},
-          overallStatus: "incomplete",
+          overallStatus: UserProfileStatus.incomplete,
           createdAt: serverTimestamp(),
         });
       }
@@ -136,7 +142,7 @@ export class UserProfileService {
     userId: string,
     stepId: string,
     data: Record<string, any>,
-    status: StepStatus = "draft",
+    status: StepStatus = StepStatus.draft,
   ): Promise<{ success: boolean }> {
     try {
       const userProfileRef = doc(db, "user-profiles", userId);
@@ -146,7 +152,7 @@ export class UserProfileService {
         stepId,
         status,
         data,
-        submittedAt: status === "pending" ? new Date() : null,
+        submittedAt: status === StepStatus.pending ? new Date() : null,
       };
 
       if (docSnap.exists()) {
@@ -174,7 +180,7 @@ export class UserProfileService {
           userId,
           ...data,
           stepProgress: { [stepId]: stepProgress },
-          overallStatus: "incomplete",
+          overallStatus: UserProfileStatus.incomplete,
           isComplete: false,
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
@@ -210,7 +216,7 @@ export class UserProfileService {
             ...currentProfile.stepProgress,
             [stepId]: {
               ...stepProgress,
-              status: "pending" as StepStatus,
+              status: StepStatus.pending as StepStatus,
               submittedAt: new Date(),
             },
           };
@@ -262,7 +268,7 @@ export class UserProfileService {
       const userProfileRef = doc(db, "user-profiles", userId);
       const updateDTO = replaceUndefinedWithNull({
         isComplete: true,
-        overallStatus: "complete",
+        overallStatus: StepStatus.complete,
         updatedAt: serverTimestamp(),
       });
       console.log(
@@ -291,7 +297,7 @@ export class UserProfileService {
       }
 
       const status = stepProgress.status;
-      if (!["approved", "complete"].includes(status)) {
+      if (![StepStatus.approved, StepStatus.complete].includes(status)) {
         return stepId; // Step is not complete
       }
     }
@@ -313,9 +319,11 @@ export class UserProfileService {
       return false; // Current step hasn't been started
     }
 
-    return ["approved", "complete", "pending"].includes(
-      currentStepProgress.status,
-    );
+    return [
+      StepStatus.approved,
+      StepStatus.complete,
+      StepStatus.pending,
+    ].includes(currentStepProgress.status);
   }
 
   getStepValidationErrors(profile: UserProfile, stepId: string): string[] {
@@ -327,7 +335,10 @@ export class UserProfileService {
       return errors;
     }
 
-    if (stepProgress.status === "needs-rework" && stepProgress.reviewNotes) {
+    if (
+      stepProgress.status === StepStatus.needsRework &&
+      stepProgress.reviewNotes
+    ) {
       errors.push(getAdminFeedbackError(stepProgress.reviewNotes));
     }
 

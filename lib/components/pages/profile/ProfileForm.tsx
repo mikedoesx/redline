@@ -12,7 +12,7 @@ import {
   type FormStep,
   getStepsForUserType,
   canEditStep,
-  type StepStatus,
+  StepStatus,
   createStepSchema,
 } from "@/lib/form-validators/form-steps";
 import {
@@ -36,6 +36,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ProfileErrors } from "@/lib/types/error-messages";
 import { ProfileSuccess } from "@/lib/types/success-messages";
 import { ButtonLabels, LoadingStates } from "@/lib/types/ui-messages";
+import { UserTypeOptions } from "@/lib/constants/form-options";
 
 interface ProfileFormProps {
   steps: FormStep[];
@@ -71,7 +72,7 @@ export const ProfileForm = ({
     [userProfile, currentStep],
   );
   const currentStepStatus = useMemo(
-    () => currentStepProgress?.status || "draft",
+    () => currentStepProgress?.status || StepStatus.draft,
     [currentStepProgress],
   );
   const canEdit = useMemo(
@@ -93,7 +94,7 @@ export const ProfileForm = ({
 
   const saveCurrentStep = async (
     data: Record<string, any>,
-    status: StepStatus = "draft",
+    status: StepStatus = StepStatus.draft,
   ) => {
     if (!user) return false;
 
@@ -116,7 +117,8 @@ export const ProfileForm = ({
               stepId: currentStep.id,
               status,
               data,
-              submittedAt: status === "pending" ? new Date() : undefined,
+              submittedAt:
+                status === StepStatus.pending ? new Date() : undefined,
             },
           },
         };
@@ -140,13 +142,13 @@ export const ProfileForm = ({
 
     // Determine status based on whether step requires review
     const status: StepStatus = currentStep.requiresReview
-      ? "pending"
-      : "approved";
+      ? StepStatus.pending
+      : StepStatus.approved;
 
     const saved = await saveCurrentStep(currentData, status);
     if (!saved) return;
 
-    if (status === "pending") {
+    if (status === StepStatus.pending) {
       toast.success(ProfileSuccess.STEP_SUBMITTED);
     } else {
       toast.success(ProfileSuccess.STEP_COMPLETED);
@@ -187,8 +189,8 @@ export const ProfileForm = ({
     try {
       // Save the final step
       const status: StepStatus = currentStep.requiresReview
-        ? "pending"
-        : "complete";
+        ? StepStatus.pending
+        : StepStatus.complete;
       const saved = await saveCurrentStep(data, status);
 
       if (!saved) {
@@ -200,7 +202,10 @@ export const ProfileForm = ({
       const allStepsComplete = steps.every((step) => {
         const stepProgress = userProfile.stepProgress[step.id];
         return (
-          stepProgress && ["approved", "complete"].includes(stepProgress.status)
+          stepProgress &&
+          [StepStatus.approved, StepStatus.complete].includes(
+            stepProgress.status,
+          )
         );
       });
 
@@ -271,7 +276,7 @@ export const ProfileForm = ({
         }
       }
     } else {
-      setSteps(getStepsForUserType("fire-watch"));
+      setSteps(getStepsForUserType(UserTypeOptions.FIRE_WATCH));
     }
   };
 
@@ -295,7 +300,7 @@ export const ProfileForm = ({
           }
         } else {
           setEmailFromAuth(user);
-          setSteps(getStepsForUserType("fire-watch"));
+          setSteps(getStepsForUserType(UserTypeOptions.FIRE_WATCH));
         }
         setInitialDataLoaded(true);
       } catch (error) {

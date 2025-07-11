@@ -12,19 +12,21 @@ import {
   SHIFT_LENGTH_LABELS,
   TIMEZONE_LABELS,
   USER_TYPE_LABELS,
+  UserTypeOptions,
 } from "@/lib/constants/form-options";
 import { PageDescriptions, PageTitles } from "@/lib/types/ui-messages";
 
 import { FormMessages } from "./validation-messages";
 import { z } from "zod";
 
-export type StepStatus =
-  | "draft"
-  | "pending"
-  | "under-review"
-  | "approved"
-  | "needs-rework"
-  | "complete";
+export enum StepStatus {
+  draft = "draft",
+  pending = "pending",
+  underReview = "under-review",
+  approved = "approved",
+  needsRework = "needs-rework",
+  complete = "complete",
+}
 
 export interface FormField {
   name: string;
@@ -569,10 +571,10 @@ const contactPreferencesStep: FormStep = {
 
 export const formStepsConfig = {
   "basic-info": basicInfoStep,
-  "fire-watch": fireWatchStep,
-  "fire-watch-client": fireWatchClientStep,
-  "fire-watch-admin": fireWatchAdminStep,
-  "ahj-official": ahjOfficialStep,
+  [UserTypeOptions.FIRE_WATCH]: fireWatchStep,
+  [UserTypeOptions.FIRE_WATCH_CLIENT]: fireWatchClientStep,
+  [UserTypeOptions.FIRE_WATCH_ADMIN]: fireWatchAdminStep,
+  [UserTypeOptions.AHJ_OFFICIAL]: ahjOfficialStep,
   "contact-preferences": contactPreferencesStep,
 };
 
@@ -580,16 +582,16 @@ export const getStepsForUserType = (userType: string): FormStep[] => {
   const steps = [basicInfoStep];
 
   switch (userType) {
-    case "fire-watch":
+    case UserTypeOptions.FIRE_WATCH:
       steps.push(fireWatchStep);
       break;
-    case "fire-watch-client":
+    case UserTypeOptions.FIRE_WATCH_CLIENT:
       steps.push(fireWatchClientStep);
       break;
-    case "fire-watch-admin":
+    case UserTypeOptions.FIRE_WATCH_ADMIN:
       steps.push(fireWatchAdminStep);
       break;
-    case "ahj-official":
+    case UserTypeOptions.AHJ_OFFICIAL:
       steps.push(ahjOfficialStep);
       break;
     default:
@@ -605,17 +607,17 @@ export const getStepsForUserType = (userType: string): FormStep[] => {
 // Helper functions for step status management
 export const getStepStatusColor = (status: StepStatus): string => {
   switch (status) {
-    case "draft":
+    case StepStatus.pending:
       return "text-muted-foreground";
-    case "pending":
+    case StepStatus.pending:
       return "text-blue-500";
-    case "under-review":
+    case StepStatus.underReview:
       return "text-yellow-500";
-    case "approved":
+    case StepStatus.approved:
       return "text-green-500";
-    case "needs-rework":
+    case StepStatus.needsRework:
       return "text-red-500";
-    case "complete":
+    case StepStatus.complete:
       return "text-green-600";
     default:
       return "text-muted-foreground";
@@ -624,17 +626,17 @@ export const getStepStatusColor = (status: StepStatus): string => {
 
 export const getStepStatusLabel = (status: StepStatus): string => {
   switch (status) {
-    case "draft":
+    case StepStatus.pending:
       return "Draft";
-    case "pending":
+    case StepStatus.pending:
       return "Pending Review";
-    case "under-review":
+    case StepStatus.underReview:
       return "Under Review";
-    case "approved":
+    case StepStatus.approved:
       return "Approved";
-    case "needs-rework":
+    case StepStatus.needsRework:
       return "Needs Rework";
-    case "complete":
+    case StepStatus.complete:
       return "Complete";
     default:
       return "Unknown";
@@ -642,9 +644,13 @@ export const getStepStatusLabel = (status: StepStatus): string => {
 };
 
 export const canEditStep = (status: StepStatus): boolean => {
-  return ["draft", "needs-rework", "pending"].includes(status);
+  return [
+    StepStatus.pending,
+    StepStatus.needsRework,
+    StepStatus.pending,
+  ].includes(status);
 };
 
 export const isStepComplete = (status: StepStatus): boolean => {
-  return ["approved", "complete"].includes(status);
+  return [StepStatus.approved, StepStatus.complete].includes(status);
 };

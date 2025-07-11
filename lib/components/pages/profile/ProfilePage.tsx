@@ -1,12 +1,13 @@
 "use client";
 
-import type { FormStep, StepStatus } from "@/lib/form-validators/form-steps";
+import { FormStep, StepStatus } from "@/lib/form-validators/form-steps";
 import { useMemo, useState } from "react";
 
 import { ProfileForm } from "./ProfileForm";
 import { ProfilePageLoading } from "./ProfilePageLoading";
 import { ProfileProgressHeader } from "./ProfileProgressHeader";
 import { ProfileView } from "./ProfileView";
+import { UserTypeOptions } from "@/lib/constants/form-options";
 import { getStepsForUserType } from "@/lib/form-validators/form-steps";
 import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 
@@ -25,7 +26,7 @@ export const ProfilePage = () => {
   const stepStatuses = useMemo(() => {
     const statuses: Record<string, StepStatus> = {};
     stepInfo.stepIds.forEach((id) => {
-      statuses[id] = profile.stepProgress[id]?.status ?? "draft";
+      statuses[id] = profile.stepProgress[id]?.status ?? StepStatus.draft;
     });
 
     return statuses;
@@ -49,7 +50,7 @@ export const ProfilePage = () => {
   // If profile is not complete, show the form
   if (!stepInfo.currentStep) {
     // Initialize with default steps if no current step
-    const defaultSteps = getStepsForUserType("fire-watch");
+    const defaultSteps = getStepsForUserType(UserTypeOptions.FIRE_WATCH);
     setSteps(defaultSteps);
     return null;
   }

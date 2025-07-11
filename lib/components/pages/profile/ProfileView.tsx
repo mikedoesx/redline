@@ -2,11 +2,7 @@
 
 import type React from "react";
 
-import { useState } from "react";
 import {
-  Edit2,
-  Save,
-  X,
   User,
   Mail,
   Phone,
@@ -17,29 +13,15 @@ import {
   Shield,
   Award,
 } from "lucide-react";
-import { Button } from "../../ui/button";
-import { Input } from "../../ui/input";
-import { Textarea } from "../../ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Badge } from "../../ui/badge";
 import { Separator } from "../../ui/separator";
-import { toast } from "sonner";
-import {
-  type UserProfile,
-  UserProfileService,
-} from "@/lib/services/user-profile";
-import { useAuth } from "@/lib/providers/auth-context";
+import { type UserProfile } from "@/lib/services/user-profile";
 import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 import { UserTypeOptions } from "@/lib/constants/form-options";
 import { EditableField } from "../../forms/EditableField";
 import { ArrayEditableField } from "../../forms/ArrayEditableField";
+import Link from "next/link";
 
 export const ProfileView = () => {
   const { profile, setProfile } = useProfileCheck();
@@ -64,10 +46,13 @@ export const ProfileView = () => {
   };
 
   const userTypeOptions = [
-    { value: "fire-watch", label: "Fire Watch Personnel" },
-    { value: "client", label: "Client" },
-    { value: "fire-watch-admin", label: "Administrator" },
-    { value: "ahj", label: "Authority Having Jurisdiction" },
+    { value: UserTypeOptions.FIRE_WATCH, label: "Fire Watch Personnel" },
+    { value: UserTypeOptions.FIRE_WATCH_CLIENT, label: "Client" },
+    { value: UserTypeOptions.FIRE_WATCH_ADMIN, label: "Administrator" },
+    {
+      value: UserTypeOptions.AHJ_OFFICIAL,
+      label: "Authority Having Jurisdiction",
+    },
   ];
 
   const availabilityOptions = [
@@ -93,13 +78,15 @@ export const ProfileView = () => {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
-      <div className="text-center mb-8">
+      <header className="text-center mb-8">
         <h1 className="text-3xl font-bold text-foreground">Profile</h1>
         <p className="text-gray-600 mt-2">Manage your profile information</p>
         <Badge variant="default" className="mt-2">
           {getUserTypeLabel(profile.userType)}
         </Badge>
-      </div>
+      </header>
+
+      <Link href="/dashboard"></Link>
 
       {/* Basic Information */}
       <Card>
