@@ -1,71 +1,208 @@
-import { z } from "zod"
-import { FormValidationMessages, FormFieldLabels, FormFieldPlaceholders } from "./validation-messages"
-import { PageTitles, PageDescriptions } from "@/lib/types/ui-messages"
 import {
-  USER_TYPE_LABELS,
-  CERTIFICATION_LABELS,
-  AVAILABILITY_LABELS,
-  INDUSTRY_TYPE_LABELS,
-  SHIFT_LENGTH_LABELS,
-  FREQUENCY_LABELS,
   ADMIN_LEVEL_LABELS,
-  SERVICE_AREA_LABELS,
-  JURISDICTION_TYPE_LABELS,
   AUTHORITY_LEVEL_LABELS,
+  AVAILABILITY_LABELS,
+  CERTIFICATION_LABELS,
   CONTACT_METHOD_LABELS,
-  TIMEZONE_LABELS,
+  FREQUENCY_LABELS,
+  INDUSTRY_TYPE_LABELS,
+  JURISDICTION_TYPE_LABELS,
   NOTIFICATION_LABELS,
-} from "@/lib/constants/form-options"
+  SERVICE_AREA_LABELS,
+  SHIFT_LENGTH_LABELS,
+  TIMEZONE_LABELS,
+  USER_TYPE_LABELS,
+} from "@/lib/constants/form-options";
+import { PageDescriptions, PageTitles } from "@/lib/types/ui-messages";
 
-export type StepStatus = "draft" | "pending" | "under-review" | "approved" | "needs-rework" | "complete"
+import { FormMessages } from "./validation-messages";
+import { z } from "zod";
+
+export type StepStatus =
+  | "draft"
+  | "pending"
+  | "under-review"
+  | "approved"
+  | "needs-rework"
+  | "complete";
 
 export interface FormField {
-  name: string
-  label: string
-  type: "text" | "email" | "tel" | "select" | "multiselect" | "textarea" | "checkbox" | "radio" | "number" | "date"
-  placeholder?: string
-  required?: boolean
-  options?: { value: string; label: string }[]
-  validation?: z.ZodSchema<any>
-  description?: string
+  name: string;
+  label: string;
+  type:
+    | "text"
+    | "email"
+    | "tel"
+    | "select"
+    | "multiselect"
+    | "textarea"
+    | "checkbox"
+    | "radio"
+    | "number"
+    | "date";
+  placeholder?: string;
+  required?: boolean;
+  options?: { value: string; label: string }[];
+  validation?: z.ZodSchema<any>;
+  description?: string;
+  isDisabled?: boolean;
   conditional?: {
-    field: string
-    value: string | string[]
-  }
+    field: string;
+    value: string | string[];
+  };
 }
 
 export interface FormStep {
-  id: string
-  title: string
-  description: string
-  fields: FormField[]
-  requiresReview: boolean // Whether this step needs admin review
-  order: number // Order in the sequence
-  dependencies?: string[] // Step IDs that must be complete before this step
-  isTemplate?: boolean // Whether this is a pre-built template
-  createdBy?: string // Admin who created this step
-  createdAt?: Date
-  updatedAt?: Date
+  id: string;
+  title: string;
+  description: string;
+  fields: FormField[];
+  requiresReview: boolean; // Whether this step needs admin review
+  order: number; // Order in the sequence
+  dependencies: string[]; // Step IDs that must be complete before this step
+  isTemplate?: boolean; // Whether this is a pre-built template
+  createdBy?: string; // Admin who created this step
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface StepProgress {
-  stepId: string
-  status: StepStatus
-  data: Record<string, any>
-  submittedAt?: Date
-  reviewedAt?: Date
-  reviewedBy?: string
-  reviewNotes?: string
-  completedAt?: Date
+  stepId: string;
+  status: StepStatus;
+  data: Record<string, any>;
+  submittedAt?: Date | null;
+  reviewedAt?: Date | null;
+  reviewedBy?: string;
+  reviewNotes?: string;
+  completedAt?: Date | null;
 }
 
 // Base validation schemas
-const phoneValidation = z.string().regex(/^\+?[\d\s\-()]+$/, FormValidationMessages.INVALID_PHONE_FORMAT)
+const phoneValidation = z
+  .string()
+  .regex(/^\+?[\d\s\-()]+$/, FormMessages.INVALID_PHONE);
 const nameValidation = z
   .string()
-  .min(2, FormValidationMessages.NAME_MIN_LENGTH)
-  .max(50, FormValidationMessages.NAME_MAX_LENGTH)
-const requiredString = z.string().min(1, FormValidationMessages.FIELD_REQUIRED)
+  .min(2, FormMessages.NAME_TOO_SHORT)
+  .max(50, FormMessages.NAME_TOO_LONG);
+const requiredString = z.string().min(1, FormMessages.REQUIRED);
+
+// Create dynamic schema for current step
+export const createStepSchema = (stepConfig: FormStep) => {
+  const schemaFields: Record<string, z.ZodTypeAny> = {};
+
+  stepConfig.fields.forEach((field) => {
+    let fieldSchema: z.ZodTypeAny;
+
+    switch (field.type) {
+      case "email":
+        fieldSchema = z.string().email(FormMessages.INVALID_EMAIL);
+        break;
+      case "tel":
+        fieldSchema = z.string().min(10, FormMessages.INVALID_PHONE);
+        break;
+      case "number":
+        fieldSchema = z.coerce.number().min(0, FormMessages.NEGATIVE_NUMBER);
+        break;
+      case "multiselect":
+        fieldSchema = z
+          .array(z.string())
+          .min(1, "Please select at least one option");
+        break;
+      case "select":
+      case "radio":
+        fieldSchema = z.string().min(1, "Please select an option");
+        break;
+      default:
+        fieldSchema = z.string().min(1, "This field is required");
+    }
+
+    if (!field.required) {
+      fieldSchema = fieldSchema.optional();
+    }
+
+    schemaFields[field.name] = fieldSchema;
+  });
+
+  return z.object(schemaFields);
+};
+
+export enum FormFieldLabels {
+  // Basic Info
+  FIRST_NAME = "First Name",
+  LAST_NAME = "Last Name",
+  EMAIL = "Email Address",
+  PHONE_NUMBER = "Phone Number",
+  USER_TYPE = "User Type",
+
+  // Fire Watch Professional
+  YEARS_EXPERIENCE = "Years of Experience",
+  CERTIFICATIONS = "Certifications",
+  AVAILABILITY = "Availability",
+  SERVICE_RADIUS = "Service Radius (miles)",
+  HOURLY_RATE = "Hourly Rate ($)",
+
+  // Client Info
+  COMPANY_NAME = "Company Name",
+  INDUSTRY_TYPE = "Industry Type",
+  FACILITY_SIZE = "Facility Size (sq ft)",
+  TYPICAL_SHIFT_LENGTH = "Typical Shift Length",
+  FREQUENCY_NEEDED = "How often do you need fire watch services?",
+
+  // Admin Info
+  ORGANIZATION_NAME = "Organization Name",
+  ADMIN_LEVEL = "Administrator Level",
+  MANAGED_STAFF = "Number of Staff Managed",
+  SERVICE_AREAS = "Service Areas",
+  YEARS_IN_MANAGEMENT = "Years in Management",
+
+  // AHJ Official
+  JURISDICTION = "Jurisdiction",
+  POSITION = "Position/Title",
+  BADGE_NUMBER = "Badge/ID Number",
+  JURISDICTION_TYPE = "Jurisdiction Type",
+  AUTHORITY_LEVEL = "Authority Level",
+  YEARS_IN_POSITION = "Years in Current Position",
+
+  // Contact Preferences
+  PREFERRED_CONTACT_METHOD = "Preferred Contact Method",
+  TIMEZONE = "Time Zone",
+  NOTIFICATIONS = "Notification Preferences",
+  EMERGENCY_CONTACT = "Emergency Contact Name",
+  EMERGENCY_CONTACT_PHONE = "Emergency Contact Phone",
+}
+
+export enum FormFieldPlaceholders {
+  // Basic Info
+  FIRST_NAME = "Enter your first name",
+  LAST_NAME = "Enter your last name",
+  EMAIL = "your.email@example.com",
+  PHONE_NUMBER = "+1 (555) 123-4567",
+
+  // Professional Info
+  YEARS_EXPERIENCE = "0",
+  SERVICE_RADIUS = "25",
+  HOURLY_RATE = "25.00",
+
+  // Client Info
+  COMPANY_NAME = "Your Company Name",
+  FACILITY_SIZE = "10000",
+
+  // Admin Info
+  ORGANIZATION_NAME = "Fire Watch Services Inc.",
+  MANAGED_STAFF = "10",
+  YEARS_IN_MANAGEMENT = "5",
+
+  // AHJ Official
+  JURISDICTION = "City of Springfield Fire Department",
+  POSITION = "Fire Marshal",
+  BADGE_NUMBER = "FM-12345",
+  YEARS_IN_POSITION = "3",
+
+  // Contact Preferences
+  EMERGENCY_CONTACT = "John Doe",
+  EMERGENCY_CONTACT_PHONE = "+1 (555) 123-4567",
+}
 
 // Step 1: Basic Information (same for all users)
 const basicInfoStep: FormStep = {
@@ -74,6 +211,7 @@ const basicInfoStep: FormStep = {
   description: PageDescriptions.BASIC_INFO,
   order: 1,
   requiresReview: false,
+  dependencies: [],
   fields: [
     {
       name: "firstName",
@@ -97,7 +235,8 @@ const basicInfoStep: FormStep = {
       type: "email",
       placeholder: FormFieldPlaceholders.EMAIL,
       required: true,
-      validation: z.string().email(FormValidationMessages.INVALID_EMAIL),
+      isDisabled: true,
+      validation: z.string().email(FormMessages.INVALID_EMAIL),
     },
     {
       name: "phoneNumber",
@@ -112,11 +251,14 @@ const basicInfoStep: FormStep = {
       label: FormFieldLabels.USER_TYPE,
       type: "select",
       required: true,
-      options: Object.entries(USER_TYPE_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(USER_TYPE_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
       validation: requiredString,
     },
   ],
-}
+};
 
 // Step 2: User Type Specific Information
 const fireWatchStep: FormStep = {
@@ -135,22 +277,28 @@ const fireWatchStep: FormStep = {
       required: true,
       validation: z
         .number()
-        .min(0, FormValidationMessages.EXPERIENCE_NEGATIVE)
-        .max(50, FormValidationMessages.EXPERIENCE_MAX),
+        .min(0, FormMessages.NEGATIVE_NUMBER)
+        .max(50, FormMessages.OVER_MAX),
     },
     {
       name: "certifications",
       label: FormFieldLabels.CERTIFICATIONS,
       type: "multiselect",
       required: true,
-      options: Object.entries(CERTIFICATION_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(CERTIFICATION_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
     },
     {
       name: "availability",
       label: FormFieldLabels.AVAILABILITY,
       type: "multiselect",
       required: true,
-      options: Object.entries(AVAILABILITY_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(AVAILABILITY_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
     },
     {
       name: "serviceRadius",
@@ -160,8 +308,8 @@ const fireWatchStep: FormStep = {
       required: true,
       validation: z
         .number()
-        .min(1, FormValidationMessages.SERVICE_RADIUS_MIN)
-        .max(500, FormValidationMessages.SERVICE_RADIUS_MAX),
+        .min(1, FormMessages.SERVICE_RADIUS_MIN)
+        .max(500, FormMessages.SERVICE_RADIUS_MAX),
     },
     {
       name: "hourlyRate",
@@ -171,11 +319,11 @@ const fireWatchStep: FormStep = {
       required: true,
       validation: z
         .number()
-        .min(15, FormValidationMessages.HOURLY_RATE_MIN)
-        .max(200, FormValidationMessages.HOURLY_RATE_MAX),
+        .min(15, FormMessages.HOURLY_RATE_MIN)
+        .max(200, FormMessages.HOURLY_RATE_MAX),
     },
   ],
-}
+};
 
 const fireWatchClientStep: FormStep = {
   id: "fire-watch-client-info",
@@ -198,7 +346,10 @@ const fireWatchClientStep: FormStep = {
       label: FormFieldLabels.INDUSTRY_TYPE,
       type: "select",
       required: true,
-      options: Object.entries(INDUSTRY_TYPE_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(INDUSTRY_TYPE_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
       validation: requiredString,
     },
     {
@@ -207,14 +358,17 @@ const fireWatchClientStep: FormStep = {
       type: "number",
       placeholder: FormFieldPlaceholders.FACILITY_SIZE,
       required: true,
-      validation: z.number().min(100, FormValidationMessages.FACILITY_SIZE_MIN),
+      validation: z.number().min(100, FormMessages.FACILITY_SIZE_MIN),
     },
     {
       name: "typicalShiftLength",
       label: FormFieldLabels.TYPICAL_SHIFT_LENGTH,
       type: "select",
       required: true,
-      options: Object.entries(SHIFT_LENGTH_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(SHIFT_LENGTH_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
       validation: requiredString,
     },
     {
@@ -222,11 +376,14 @@ const fireWatchClientStep: FormStep = {
       label: FormFieldLabels.FREQUENCY_NEEDED,
       type: "select",
       required: true,
-      options: Object.entries(FREQUENCY_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(FREQUENCY_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
       validation: requiredString,
     },
   ],
-}
+};
 
 const fireWatchAdminStep: FormStep = {
   id: "fire-watch-admin-info",
@@ -249,7 +406,10 @@ const fireWatchAdminStep: FormStep = {
       label: FormFieldLabels.ADMIN_LEVEL,
       type: "select",
       required: true,
-      options: Object.entries(ADMIN_LEVEL_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(ADMIN_LEVEL_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
       validation: requiredString,
     },
     {
@@ -258,14 +418,17 @@ const fireWatchAdminStep: FormStep = {
       type: "number",
       placeholder: FormFieldPlaceholders.MANAGED_STAFF,
       required: true,
-      validation: z.number().min(1, FormValidationMessages.MANAGED_STAFF_MIN),
+      validation: z.number().min(1, FormMessages.MANAGED_STAFF_MIN),
     },
     {
       name: "serviceAreas",
       label: FormFieldLabels.SERVICE_AREAS,
       type: "multiselect",
       required: true,
-      options: Object.entries(SERVICE_AREA_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(SERVICE_AREA_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
     },
     {
       name: "yearsInManagement",
@@ -273,10 +436,13 @@ const fireWatchAdminStep: FormStep = {
       type: "number",
       placeholder: FormFieldPlaceholders.YEARS_IN_MANAGEMENT,
       required: true,
-      validation: z.number().min(0, FormValidationMessages.YEARS_NEGATIVE).max(50, FormValidationMessages.YEARS_MAX),
+      validation: z
+        .number()
+        .min(0, FormMessages.NEGATIVE_NUMBER)
+        .max(50, FormMessages.OVER_MAX),
     },
   ],
-}
+};
 
 const ahjOfficialStep: FormStep = {
   id: "ahj-official-info",
@@ -315,7 +481,9 @@ const ahjOfficialStep: FormStep = {
       label: FormFieldLabels.JURISDICTION_TYPE,
       type: "select",
       required: true,
-      options: Object.entries(JURISDICTION_TYPE_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(JURISDICTION_TYPE_LABELS).map(
+        ([value, label]) => ({ value, label }),
+      ),
       validation: requiredString,
     },
     {
@@ -323,7 +491,10 @@ const ahjOfficialStep: FormStep = {
       label: FormFieldLabels.AUTHORITY_LEVEL,
       type: "multiselect",
       required: true,
-      options: Object.entries(AUTHORITY_LEVEL_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(AUTHORITY_LEVEL_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
     },
     {
       name: "yearsInPosition",
@@ -331,10 +502,13 @@ const ahjOfficialStep: FormStep = {
       type: "number",
       placeholder: FormFieldPlaceholders.YEARS_IN_POSITION,
       required: true,
-      validation: z.number().min(0, FormValidationMessages.YEARS_NEGATIVE).max(50, FormValidationMessages.YEARS_MAX),
+      validation: z
+        .number()
+        .min(0, FormMessages.NEGATIVE_NUMBER)
+        .max(50, FormMessages.OVER_MAX),
     },
   ],
-}
+};
 
 // Step 3: Contact & Preferences (same for all users)
 const contactPreferencesStep: FormStep = {
@@ -350,7 +524,10 @@ const contactPreferencesStep: FormStep = {
       label: FormFieldLabels.PREFERRED_CONTACT_METHOD,
       type: "radio",
       required: true,
-      options: Object.entries(CONTACT_METHOD_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(CONTACT_METHOD_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
       validation: requiredString,
     },
     {
@@ -358,14 +535,20 @@ const contactPreferencesStep: FormStep = {
       label: FormFieldLabels.TIMEZONE,
       type: "select",
       required: true,
-      options: Object.entries(TIMEZONE_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(TIMEZONE_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
       validation: requiredString,
     },
     {
       name: "notifications",
       label: FormFieldLabels.NOTIFICATIONS,
       type: "multiselect",
-      options: Object.entries(NOTIFICATION_LABELS).map(([value, label]) => ({ value, label })),
+      options: Object.entries(NOTIFICATION_LABELS).map(([value, label]) => ({
+        value,
+        label,
+      })),
     },
     {
       name: "emergencyContact",
@@ -382,7 +565,7 @@ const contactPreferencesStep: FormStep = {
       validation: phoneValidation,
     },
   ],
-}
+};
 
 export const formStepsConfig = {
   "basic-info": basicInfoStep,
@@ -391,77 +574,77 @@ export const formStepsConfig = {
   "fire-watch-admin": fireWatchAdminStep,
   "ahj-official": ahjOfficialStep,
   "contact-preferences": contactPreferencesStep,
-}
+};
 
 export const getStepsForUserType = (userType: string): FormStep[] => {
-  const steps = [basicInfoStep]
+  const steps = [basicInfoStep];
 
   switch (userType) {
     case "fire-watch":
-      steps.push(fireWatchStep)
-      break
+      steps.push(fireWatchStep);
+      break;
     case "fire-watch-client":
-      steps.push(fireWatchClientStep)
-      break
+      steps.push(fireWatchClientStep);
+      break;
     case "fire-watch-admin":
-      steps.push(fireWatchAdminStep)
-      break
+      steps.push(fireWatchAdminStep);
+      break;
     case "ahj-official":
-      steps.push(ahjOfficialStep)
-      break
+      steps.push(ahjOfficialStep);
+      break;
     default:
       // Default to fire-watch if no user type specified
-      steps.push(fireWatchStep)
-      break
+      steps.push(fireWatchStep);
+      break;
   }
 
-  steps.push(contactPreferencesStep)
-  return steps.sort((a, b) => a.order - b.order)
-}
+  steps.push(contactPreferencesStep);
+  return steps.sort((a, b) => a.order - b.order);
+};
 
 // Helper functions for step status management
 export const getStepStatusColor = (status: StepStatus): string => {
   switch (status) {
     case "draft":
-      return "text-gray-500"
+      return "text-muted-foreground";
     case "pending":
-      return "text-blue-500"
+      return "text-blue-500";
     case "under-review":
-      return "text-yellow-500"
+      return "text-yellow-500";
     case "approved":
-      return "text-green-500"
+      return "text-green-500";
     case "needs-rework":
-      return "text-red-500"
+      return "text-red-500";
     case "complete":
-      return "text-green-600"
+      return "text-green-600";
     default:
-      return "text-gray-500"
+      return "text-muted-foreground";
   }
-}
+};
 
 export const getStepStatusLabel = (status: StepStatus): string => {
   switch (status) {
     case "draft":
-      return "Draft"
+      return "Draft";
     case "pending":
-      return "Pending Review"
+      return "Pending Review";
     case "under-review":
-      return "Under Review"
+      return "Under Review";
     case "approved":
-      return "Approved"
+      return "Approved";
     case "needs-rework":
-      return "Needs Rework"
+      return "Needs Rework";
     case "complete":
-      return "Complete"
+      return "Complete";
     default:
-      return "Unknown"
+      return "Unknown";
   }
-}
+};
 
 export const canEditStep = (status: StepStatus): boolean => {
-  return ["draft", "needs-rework"].includes(status)
-}
+  return ["draft", "needs-rework", "pending"].includes(status);
+};
 
 export const isStepComplete = (status: StepStatus): boolean => {
-  return ["approved", "complete"].includes(status)
-}
+  return ["approved", "complete"].includes(status);
+};

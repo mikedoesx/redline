@@ -47,7 +47,7 @@ export function DashboardMapView() {
       <CardContent>
         {/* Map Placeholder */}
         <div className="bg-gray-100 rounded-lg h-[200px] flex items-center justify-center mb-4">
-          <div className="text-center text-gray-500">
+          <div className="text-center text-muted-foreground">
             <MapPin className="h-12 w-12 mx-auto mb-2" />
             <p>Interactive Map View</p>
             <p className="text-sm">

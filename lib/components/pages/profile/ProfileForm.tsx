@@ -1,22 +1,22 @@
 "use client";
 
+import { ChevronLeft, ChevronRight, Loader2, AlertCircle } from "lucide-react";
 import {
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  Loader2,
-  AlertCircle,
-} from "lucide-react";
-import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import {
   type FormStep,
   getStepsForUserType,
   canEditStep,
-  getStepStatusLabel,
   type StepStatus,
+  createStepSchema,
 } from "@/lib/form-validators/form-steps";
 import {
+  INITIAL_USER_PROFILE,
   type UserProfile,
   UserProfileService,
 } from "@/lib/services/user-profile";
@@ -27,25 +27,19 @@ import { Form } from "../../ui/form";
 import { ProfileNeedToLogin } from "./ProfileNeedToLogin";
 import { ProfilePageLoading } from "./ProfilePageLoading";
 import { Alert, AlertDescription } from "../../ui/alert";
-import { Badge } from "../../ui/badge";
 import type { User } from "firebase/auth";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ProfileErrorMessages } from "@/lib/types/error-messages";
-import { ProfileSuccessMessages } from "@/lib/types/success-messages";
-import {
-  LoadingMessages,
-  ButtonLabels,
-  StatusMessages,
-} from "@/lib/types/ui-messages";
+import { ProfileErrors } from "@/lib/types/error-messages";
+import { ProfileSuccess } from "@/lib/types/success-messages";
+import { ButtonLabels, LoadingStates } from "@/lib/types/ui-messages";
 
 interface ProfileFormProps {
   steps: FormStep[];
   setSteps: Dispatch<SetStateAction<FormStep[]>>;
-  stepSchema: any;
   currentStep: FormStep;
   currentStepIndex: number;
   setCurrentStepIndex: Dispatch<SetStateAction<number>>;
@@ -54,7 +48,6 @@ interface ProfileFormProps {
 export const ProfileForm = ({
   steps,
   setSteps,
-  stepSchema,
   currentStep,
   currentStepIndex,
   setCurrentStepIndex,
@@ -64,15 +57,35 @@ export const ProfileForm = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initialDataLoaded, setInitialDataLoaded] = useState(false);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] =
+    useState<UserProfile>(INITIAL_USER_PROFILE);
   const [stepErrors, setStepErrors] = useState<string[]>([]);
   const userProfileService = UserProfileService.getInstance();
 
-  const isLastStep = currentStepIndex === steps.length - 1;
-  const currentStepProgress = userProfile?.stepProgress[currentStep.id];
-  const currentStepStatus = currentStepProgress?.status || "draft";
-  const canEdit = canEditStep(currentStepStatus);
-
+  const isLastStep = useMemo(
+    () => currentStepIndex === steps.length - 1,
+    [currentStepIndex, steps.length],
+  );
+  const currentStepProgress = useMemo(
+    () => userProfile?.stepProgress[currentStep.id],
+    [userProfile, currentStep],
+  );
+  const currentStepStatus = useMemo(
+    () => currentStepProgress?.status || "draft",
+    [currentStepProgress],
+  );
+  const canEdit = useMemo(
+    () => canEditStep(currentStepStatus),
+    [currentStepStatus],
+  );
+  const stepSchema = useMemo(
+    () => createStepSchema(currentStep),
+    [currentStep],
+  );
+  const canProceedToNextStep = useMemo(
+    () => userProfileService.canProceedToNextStep(userProfile, currentStep),
+    [userProfile, currentStep?.id],
+  );
   const form = useForm({
     resolver: zodResolver(stepSchema),
     mode: "onChange",
@@ -107,18 +120,19 @@ export const ProfileForm = ({
             },
           },
         };
+        console.log("🚀 - :125 - updatedProfile:", updatedProfile);
         setUserProfile(updatedProfile);
       }
 
       return true;
     } catch (error) {
       console.error("Error saving step:", error);
-      toast.error(ProfileErrorMessages.SAVE_FAILED);
+      toast.error(ProfileErrors.SAVE_FAILED);
       return false;
     }
   };
 
-  const nextStep = async () => {
+  const goToNextStep = async () => {
     const isValid = await form.trigger();
     if (!isValid) return;
 
@@ -133,25 +147,25 @@ export const ProfileForm = ({
     if (!saved) return;
 
     if (status === "pending") {
-      toast.success(ProfileSuccessMessages.STEP_SUBMITTED_REVIEW);
+      toast.success(ProfileSuccess.STEP_SUBMITTED);
     } else {
-      toast.success(ProfileSuccessMessages.STEP_COMPLETED);
+      toast.success(ProfileSuccess.STEP_COMPLETED);
     }
 
     // Move to next step if available
     if (currentStepIndex < steps.length - 1) {
-      const nextStepId = steps[currentStepIndex + 1].id;
+      // const upcomingStep = steps[currentStepIndex + 1];
 
       // Check if we can proceed to next step
       if (
         userProfile &&
         !userProfileService.canProceedToNextStep(
           userProfile,
-          currentStep.id,
-          nextStepId,
+          currentStep,
+          // upcomingStep,
         )
       ) {
-        toast.warning(ProfileErrorMessages.WAIT_FOR_APPROVAL);
+        toast.warning(ProfileErrors.WAIT_FOR_APPROVAL);
         return;
       }
 
@@ -166,6 +180,7 @@ export const ProfileForm = ({
   };
 
   const onSubmit = async (data: any) => {
+    console.log("🚀 - :177 - onSubmit - data:", data);
     if (!user || !userProfile) return;
     setIsSubmitting(true);
 
@@ -191,15 +206,15 @@ export const ProfileForm = ({
 
       if (allStepsComplete) {
         await userProfileService.markProfileComplete(user.uid);
-        toast.success(ProfileSuccessMessages.PROFILE_COMPLETE);
+        toast.success(ProfileSuccess.COMPLETE);
         router.push("/dashboard");
       } else {
-        toast.success(ProfileSuccessMessages.FINAL_STEP_SUBMITTED);
+        toast.success(ProfileSuccess.FINAL_SUBMITTED);
         // Stay on the form to show status
       }
     } catch (error) {
       console.error("Error completing profile:", error);
-      toast.error(ProfileErrorMessages.COMPLETE_PROFILE_FAILED);
+      toast.error(ProfileErrors.COMPLETE_FAILED);
     } finally {
       setIsSubmitting(false);
     }
@@ -285,7 +300,7 @@ export const ProfileForm = ({
         setInitialDataLoaded(true);
       } catch (error) {
         console.error("Error loading user profile:", error);
-        toast.error(ProfileErrorMessages.LOAD_FAILED);
+        toast.error(ProfileErrors.LOAD_FAILED);
         setSteps(getStepsForUserType(""));
         setEmailFromAuth(user);
         setInitialDataLoaded(true);
@@ -315,7 +330,7 @@ export const ProfileForm = ({
   useEffect(() => {
     const subscription = form.watch((value, { name }) => {
       if (name === "userType" && value.userType) {
-        const newSteps = getStepsForUserType(value.userType);
+        const newSteps = getStepsForUserType(value.userType as string);
         setSteps(newSteps);
 
         // If we're past the basic info step, reset to step 1 (user type specific step)
@@ -333,7 +348,7 @@ export const ProfileForm = ({
       <div className="min-h-screen flex items-center justify-center">
         <div className="flex items-center space-x-2">
           <Loader2 className="h-4 w-4 animate-spin" />
-          <span>{LoadingMessages.LOADING_PROFILE}</span>
+          <span>{LoadingStates.LOADING_PROFILE}</span>
         </div>
       </div>
     );
@@ -349,71 +364,6 @@ export const ProfileForm = ({
 
   return (
     <div className="space-y-6">
-      {/* Step Status Indicators */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          {steps.map((step, index) => {
-            const stepProgress = userProfile?.stepProgress[step.id];
-            const status = stepProgress?.status || "draft";
-            const isCurrentStep = index === currentStepIndex;
-            const isCompleted = ["approved", "complete"].includes(status);
-            const isPending = status === "pending";
-
-            return (
-              <div key={step.id} className="flex items-center">
-                <div
-                  className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-                    isCurrentStep
-                      ? "border-blue-500 bg-blue-500 text-white"
-                      : isCompleted
-                        ? "border-green-500 bg-green-500 text-white"
-                        : isPending
-                          ? "border-yellow-500 bg-yellow-500 text-white"
-                          : "border-gray-300 bg-white text-gray-500"
-                  }`}
-                >
-                  {isCompleted ? (
-                    <Check className="w-4 h-4" />
-                  ) : isPending ? (
-                    <Clock className="w-4 h-4" />
-                  ) : (
-                    <span className="text-sm font-medium">{index + 1}</span>
-                  )}
-                </div>
-                {index < steps.length - 1 && (
-                  <div
-                    className={`w-12 h-0.5 mx-2 ${isCompleted ? "bg-green-500" : "bg-gray-300"}`}
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Current Step Status */}
-        <div className="flex items-center space-x-2">
-          <Badge
-            variant={
-              currentStepStatus === "approved" ||
-              currentStepStatus === "complete"
-                ? "default"
-                : currentStepStatus === "pending"
-                  ? "secondary"
-                  : currentStepStatus === "needs-rework"
-                    ? "destructive"
-                    : "outline"
-            }
-          >
-            {getStepStatusLabel(currentStepStatus)}
-          </Badge>
-          {currentStep.requiresReview && (
-            <span className="text-sm text-gray-500">
-              {StatusMessages.REQUIRES_REVIEW}
-            </span>
-          )}
-        </div>
-      </div>
-
       {/* Step Validation Errors */}
       {stepErrors.length > 0 && (
         <Alert variant="destructive">
@@ -429,68 +379,59 @@ export const ProfileForm = ({
       )}
 
       {/* Form */}
-      <div className="bg-white p-6 rounded-lg shadow">
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900">
-            {currentStep.title}
-          </h2>
-          <p className="text-gray-600 mt-2">{currentStep.description}</p>
-        </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {currentStep.fields.map((field) => (
+              <DynamicFormField
+                key={field.name}
+                field={field}
+                control={form.control}
+                disabled={!canEdit}
+              />
+            ))}
+          </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {currentStep.fields.map((field) => (
-                <DynamicFormField
-                  key={field.name}
-                  field={field}
-                  control={form.control}
-                  disabled={!canEdit}
-                />
-              ))}
+          {/* Navigation Buttons */}
+          <div className="flex justify-between">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={prevStep}
+              disabled={currentStepIndex === 0 || isSubmitting}
+            >
+              <ChevronLeft className="w-4 h-4 mr-2" />
+              {ButtonLabels.PREVIOUS}
+            </Button>
+
+            <div className="flex space-x-3">
+              {!isLastStep ? (
+                <Button
+                  type="button"
+                  onClick={goToNextStep}
+                  disabled={isSubmitting || !canProceedToNextStep}
+                >
+                  {currentStep.requiresReview
+                    ? ButtonLabels.SUBMIT_REVIEW
+                    : ButtonLabels.SAVE_CONTINUE}
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </Button>
+              ) : (
+                <Button type="submit" disabled={isSubmitting || !canEdit}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      {LoadingStates.COMPLETING}
+                    </>
+                  ) : (
+                    ButtonLabels.COMPLETE_SETUP
+                  )}
+                </Button>
+              )}
             </div>
-
-            {/* Navigation Buttons */}
-            <div className="flex justify-between pt-6">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={prevStep}
-                disabled={currentStepIndex === 0 || isSubmitting}
-              >
-                <ChevronLeft className="w-4 h-4 mr-2" />
-                {ButtonLabels.PREVIOUS}
-              </Button>
-
-              <div className="flex space-x-3">
-                {!isLastStep ? (
-                  <Button
-                    type="button"
-                    onClick={nextStep}
-                    disabled={isSubmitting || !canEdit}
-                  >
-                    {currentStep.requiresReview
-                      ? ButtonLabels.SUBMIT_REVIEW
-                      : ButtonLabels.SAVE_CONTINUE}
-                    <ChevronRight className="w-4 h-4 ml-2" />
-                  </Button>
-                ) : (
-                  <Button type="submit" disabled={isSubmitting || !canEdit}>
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        {LoadingMessages.COMPLETING_SETUP}
-                      </>
-                    ) : (
-                      ButtonLabels.COMPLETE_SETUP
-                    )}
-                  </Button>
-                )}
-              </div>
-            </div>
-          </form>
-        </Form>
-      </div>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };

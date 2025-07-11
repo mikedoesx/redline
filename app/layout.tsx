@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     shortcut: "/images/favicon.png",
     apple: "/images/logo180.png",
   },
-    generator: 'v0.dev'
+  generator: "v0.dev",
 };
 
 export default function RootLayout({
@@ -26,7 +26,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={inter.className + " bg-gray-50"}>
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,11 +1,12 @@
-import {
-  ProfileErrorMessages,
-  getAdminFeedbackError,
-} from "@/lib/types/error-messages";
 import type {
+  FormStep,
   StepProgress,
   StepStatus,
 } from "@/lib/form-validators/form-steps";
+import {
+  ProfileErrors,
+  getAdminFeedbackError,
+} from "@/lib/types/error-messages";
 import {
   doc,
   getDoc,
@@ -15,6 +16,18 @@ import {
 } from "firebase/firestore";
 
 import { db } from "./firebase";
+import { replaceUndefinedWithNull } from "../utils";
+
+export const INITIAL_USER_PROFILE: UserProfile = {
+  userId: "",
+  firstName: "",
+  lastName: "",
+  email: "",
+  phoneNumber: "",
+  userType: "",
+  stepProgress: {},
+  overallStatus: "incomplete",
+};
 
 export interface UserProfile {
   userId: string;
@@ -114,7 +127,7 @@ export class UserProfileService {
       return { success: true };
     } catch (error) {
       console.error("Error saving user profile:", error);
-      throw new Error(ProfileErrorMessages.SAVE_FAILED);
+      throw new Error(ProfileErrors.SAVE_FAILED);
     }
   }
 
@@ -132,7 +145,7 @@ export class UserProfileService {
         stepId,
         status,
         data,
-        submittedAt: status === "pending" ? new Date() : undefined,
+        submittedAt: status === "pending" ? new Date() : null,
       };
 
       if (docSnap.exists()) {
@@ -142,15 +155,21 @@ export class UserProfileService {
           [stepId]: stepProgress,
         };
 
-        // Also save the data to the main profile for easy access
-        await updateDoc(userProfileRef, {
+        const updateDTO = replaceUndefinedWithNull({
           ...data,
           stepProgress: updatedStepProgress,
           updatedAt: serverTimestamp(),
         });
+        console.log(
+          "🚀 - :150 - UserProfileService - saveStepProgress - updateDTO:",
+          updateDTO,
+        );
+
+        // Also save the data to the main profile for easy access
+        await updateDoc(userProfileRef, updateDTO);
       } else {
         // Create new profile with step progress
-        await setDoc(userProfileRef, {
+        const createDTO = replaceUndefinedWithNull({
           userId,
           ...data,
           stepProgress: { [stepId]: stepProgress },
@@ -159,12 +178,17 @@ export class UserProfileService {
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
         });
+        console.log(
+          "🚀 - :165 - UserProfileService - saveStepProgress - createDTO:",
+          createDTO,
+        );
+        await setDoc(userProfileRef, createDTO);
       }
 
       return { success: true };
     } catch (error) {
       console.error("Error saving step progress:", error);
-      throw new Error(ProfileErrorMessages.SAVE_STEP_FAILED);
+      throw new Error(ProfileErrors.SAVE_STEP_FAILED);
     }
   }
 
@@ -189,18 +213,23 @@ export class UserProfileService {
               submittedAt: new Date(),
             },
           };
-
-          await updateDoc(userProfileRef, {
+          const updateDTO = replaceUndefinedWithNull({
             stepProgress: updatedStepProgress,
             updatedAt: serverTimestamp(),
           });
+          console.log(
+            "🚀 - :201 - UserProfileService - submitStepForReview -updateDTO:",
+            updateDTO,
+          );
+
+          await updateDoc(userProfileRef, updateDTO);
         }
       }
 
       return { success: true };
     } catch (error) {
       console.error("Error submitting step for review:", error);
-      throw new Error(ProfileErrorMessages.SUBMIT_REVIEW_FAILED);
+      throw new Error(ProfileErrors.SUBMIT_REVIEW_FAILED);
     }
   }
 
@@ -210,29 +239,41 @@ export class UserProfileService {
       const docSnap = await getDoc(userProfileRef);
 
       if (docSnap.exists()) {
-        return docSnap.data() as UserProfile;
+        const response = replaceUndefinedWithNull(
+          docSnap.data() as UserProfile,
+        );
+        console.log(
+          "🚀 - :221 - UserProfileService - getUserProfile - response:",
+          response,
+        );
+        return response;
       }
 
       return null;
     } catch (error) {
       console.error("Error getting user profile:", error);
-      throw new Error(ProfileErrorMessages.GET_PROFILE_FAILED);
+      throw new Error(ProfileErrors.GET_FAILED);
     }
   }
 
   async markProfileComplete(userId: string) {
     try {
       const userProfileRef = doc(db, "user-profiles", userId);
-      await updateDoc(userProfileRef, {
+      const updateDTO = replaceUndefinedWithNull({
         isComplete: true,
         overallStatus: "complete",
         updatedAt: serverTimestamp(),
       });
+      console.log(
+        "🚀 - :240 - UserProfileService - markProfileComplete - updateDTO:",
+        updateDTO,
+      );
+      await updateDoc(userProfileRef, updateDTO);
 
       return { success: true };
     } catch (error) {
       console.error("Error marking profile complete:", error);
-      throw new Error(ProfileErrorMessages.MARK_COMPLETE_FAILED);
+      throw new Error(ProfileErrors.MARK_COMPLETE_FAILED);
     }
   }
 
@@ -259,17 +300,21 @@ export class UserProfileService {
 
   canProceedToNextStep(
     profile: UserProfile,
-    currentStepId: string,
-    nextStepId: string,
+    currentStep: FormStep,
+    // nextStep: FormStep,
   ): boolean {
-    const currentStepProgress = profile.stepProgress[currentStepId];
+    if (!currentStep?.id) {
+      return false;
+    }
 
+    const currentStepProgress = profile.stepProgress[currentStep.id];
     if (!currentStepProgress) {
       return false; // Current step hasn't been started
     }
 
-    // Can proceed if current step is approved or complete
-    return ["approved", "complete"].includes(currentStepProgress.status);
+    return ["approved", "complete", "pending"].includes(
+      currentStepProgress.status,
+    );
   }
 
   getStepValidationErrors(profile: UserProfile, stepId: string): string[] {
@@ -277,7 +322,7 @@ export class UserProfileService {
     const errors: string[] = [];
 
     if (!stepProgress) {
-      errors.push(ProfileErrorMessages.STEP_NOT_STARTED);
+      errors.push(ProfileErrors.STEP_NOT_STARTED);
       return errors;
     }
 

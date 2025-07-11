@@ -69,48 +69,6 @@ export const ProfilePage = () => {
   const currentStep = steps[currentStepIndex];
   const progress = ((currentStepIndex + 1) / steps.length) * 100;
 
-  // Create dynamic schema for current step
-  const createStepSchema = (stepConfig: FormStep) => {
-    const schemaFields: Record<string, z.ZodTypeAny> = {};
-
-    stepConfig.fields.forEach((field) => {
-      let fieldSchema: z.ZodTypeAny;
-
-      switch (field.type) {
-        case "email":
-          fieldSchema = z.string().email("Please enter a valid email address");
-          break;
-        case "tel":
-          fieldSchema = z.string().min(10, "Please enter a valid phone number");
-          break;
-        case "number":
-          fieldSchema = z.coerce.number().min(0, "Please enter a valid number");
-          break;
-        case "multiselect":
-          fieldSchema = z
-            .array(z.string())
-            .min(1, "Please select at least one option");
-          break;
-        case "select":
-        case "radio":
-          fieldSchema = z.string().min(1, "Please select an option");
-          break;
-        default:
-          fieldSchema = z.string().min(1, "This field is required");
-      }
-
-      if (!field.required) {
-        fieldSchema = fieldSchema.optional();
-      }
-
-      schemaFields[field.name] = fieldSchema;
-    });
-
-    return z.object(schemaFields);
-  };
-
-  const stepSchema = createStepSchema(currentStep);
-
   // Get step statuses for progress header
   const stepStatuses: Record<string, StepStatus> = {};
   const stepIds = steps.map((step) => step.id);
@@ -123,7 +81,7 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
         <ProfileProgressHeader
           currentStepIndex={currentStepIndex}
@@ -133,24 +91,29 @@ export const ProfilePage = () => {
           stepIds={stepIds}
         />
 
-        <Card className="max-w-2xl mx-auto">
-          <CardHeader>
-            <CardTitle>{currentStep.title}</CardTitle>
-            {currentStep.description && (
-              <p className="text-gray-600">{currentStep.description}</p>
-            )}
-          </CardHeader>
-          <CardContent>
-            <ProfileForm
-              steps={steps}
-              setSteps={setSteps}
-              stepSchema={stepSchema}
-              currentStep={currentStep}
-              currentStepIndex={currentStepIndex}
-              setCurrentStepIndex={setCurrentStepIndex}
-            />
-          </CardContent>
-        </Card>
+        {userProfile?.isComplete ? (
+          <div>Works!</div>
+        ) : (
+          <Card className="max-w-2xl mx-auto">
+            <CardHeader>
+              <CardTitle>{currentStep.title}</CardTitle>
+              {currentStep.description && (
+                <p className="text-muted-foreground">
+                  {currentStep.description}
+                </p>
+              )}
+            </CardHeader>
+            <CardContent>
+              <ProfileForm
+                steps={steps}
+                setSteps={setSteps}
+                currentStep={currentStep}
+                currentStepIndex={currentStepIndex}
+                setCurrentStepIndex={setCurrentStepIndex}
+              />
+            </CardContent>
+          </Card>
+        )}
       </div>
     </div>
   );

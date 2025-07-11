@@ -75,7 +75,9 @@ export function DashboardActivityFeed() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-gray-900">{activity.message}</p>
-                  <p className="text-xs text-gray-500">{activity.time}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {activity.time}
+                  </p>
                 </div>
               </div>
             ))}

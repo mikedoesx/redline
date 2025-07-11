@@ -4,75 +4,91 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
-} from "firebase/auth"
+} from "firebase/auth";
 
-import type { FirebaseError } from "firebase/app"
-import { AuthErrorMessages } from "@/lib/types/error-messages"
-import { auth } from "./firebase"
+import type { FirebaseError } from "firebase/app";
+import { AuthErrors } from "@/lib/types/error-messages";
+import { auth } from "./firebase";
 
 export class AuthService {
-  private static instance: AuthService
+  private static instance: AuthService;
 
   private constructor() {}
 
   static getInstance(): AuthService {
     if (!AuthService.instance) {
-      AuthService.instance = new AuthService()
+      AuthService.instance = new AuthService();
     }
 
-    return AuthService.instance
+    return AuthService.instance;
   }
 
-  async register(email: string, password: string): Promise<{ credential?: UserCredential; error?: string }> {
+  async register(
+    email: string,
+    password: string,
+  ): Promise<{ credential?: UserCredential; error?: string }> {
     try {
-      const credential = await createUserWithEmailAndPassword(auth, email, password)
-      return { credential }
+      const credential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      console.log("🚀 - :36 - AuthService - credential:", credential);
+      return { credential };
     } catch (e) {
-      return this.getErrorMessageFromFirebaseError(e as FirebaseError)
+      return this.getErrorMessageFromFirebaseError(e as FirebaseError);
     }
   }
 
-  async login(email: string, password: string): Promise<{ credential?: UserCredential; error?: string }> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<{ credential?: UserCredential; error?: string }> {
     try {
-      const credential = await signInWithEmailAndPassword(auth, email, password)
-      return { credential }
+      const credential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
+      console.log(`🚀 - :53 - AuthService - { credential }:`, { credential });
+      return { credential };
     } catch (e) {
-      return this.getErrorMessageFromFirebaseError(e as FirebaseError)
+      return this.getErrorMessageFromFirebaseError(e as FirebaseError);
     }
   }
 
   async logout(): Promise<void> {
-    return await signOut(auth)
+    return await signOut(auth);
   }
 
   async resetPassword(email: string): Promise<void> {
-    await sendPasswordResetEmail(auth, email)
+    await sendPasswordResetEmail(auth, email);
   }
 
   private getErrorMessageFromFirebaseError(error: FirebaseError): {
-    error: string
+    error: string;
   } {
-    console.log(error.code)
+    console.log(error.code);
     switch (error.code) {
       case "auth/invalid-credential":
         return {
-          error: AuthErrorMessages.INVALID_CREDENTIALS,
-        }
+          error: AuthErrors.INVALID_CREDENTIALS,
+        };
 
       case "auth/email-already-in-use":
         return {
-          error: AuthErrorMessages.EMAIL_ALREADY_IN_USE,
-        }
+          error: AuthErrors.EMAIL_IN_USE,
+        };
 
       case "auth/weak-password":
         return {
-          error: AuthErrorMessages.WEAK_PASSWORD,
-        }
+          error: AuthErrors.WEAK_PASSWORD,
+        };
 
       default:
         return {
-          error: AuthErrorMessages.GENERIC_LOGIN_ERROR,
-        }
+          error: AuthErrors.LOGIN_FAILED,
+        };
     }
   }
 }

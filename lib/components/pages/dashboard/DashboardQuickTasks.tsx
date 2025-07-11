@@ -96,7 +96,7 @@ export function DashboardQuickTasks() {
                 </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-gray-500 flex items-center gap-1">
+                <span className="text-xs text-muted-foreground flex items-center gap-1">
                   <Clock className="h-3 w-3" />
                   Due: {task.dueTime}
                 </span>

@@ -3,17 +3,8 @@
 import {
   ButtonLabels,
   LinkTexts,
-  LoadingMessages,
-  PageDescriptions,
-  PageTitles,
+  LoadingStates,
 } from "@/lib/types/ui-messages";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../ui/card";
 import {
   Form,
   FormControl,
@@ -23,10 +14,10 @@ import {
   FormMessage,
 } from "../../ui/form";
 
-import { AuthErrorMessages } from "@/lib/types/error-messages";
-import { AuthSuccessMessages } from "@/lib/types/success-messages";
+import { AuthErrors } from "@/lib/types/error-messages";
+import { AuthSuccess } from "@/lib/types/success-messages";
 import { Button } from "../../ui/button";
-import { FormValidationMessages } from "@/lib/form-validators/validation-messages";
+import { FormMessages } from "@/lib/form-validators/validation-messages";
 import { Input } from "../../ui/input";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
@@ -41,8 +32,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const loginSchema = z.object({
-  email: z.string().email(FormValidationMessages.INVALID_EMAIL),
-  password: z.string().min(6, FormValidationMessages.PASSWORD_MIN_LENGTH),
+  email: z.string().email(FormMessages.INVALID_EMAIL),
+  password: z.string().min(6, FormMessages.PASSWORD_TOO_SHORT),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -75,25 +66,25 @@ export const LoginForm = () => {
       const userProfile = await userProfileService.getUserProfile(user.uid);
 
       if (!userProfile || !userProfile.isComplete) {
-        toast.success(AuthSuccessMessages.WELCOME_BACK_COMPLETE_PROFILE);
+        toast.success(AuthSuccess.WELCOME_COMPLETE_PROFILE);
         router.push("/profile");
       } else {
-        toast.success(AuthSuccessMessages.WELCOME_BACK);
+        toast.success(AuthSuccess.WELCOME);
         router.push("/dashboard");
       }
     } catch (error: any) {
       console.error("Login error:", error);
 
-      let errorMessage = AuthErrorMessages.GENERIC_SIGNIN_ERROR;
+      let errorMessage = AuthErrors.SIGNIN_FAILED;
 
       if (error.code === "auth/user-not-found") {
-        errorMessage = AuthErrorMessages.USER_NOT_FOUND;
+        errorMessage = AuthErrors.USER_NOT_FOUND;
       } else if (error.code === "auth/wrong-password") {
-        errorMessage = AuthErrorMessages.WRONG_PASSWORD;
+        errorMessage = AuthErrors.WRONG_PASSWORD;
       } else if (error.code === "auth/invalid-email") {
-        errorMessage = AuthErrorMessages.INVALID_EMAIL;
+        errorMessage = AuthErrors.INVALID_EMAIL;
       } else if (error.code === "auth/too-many-requests") {
-        errorMessage = AuthErrorMessages.TOO_MANY_REQUESTS;
+        errorMessage = AuthErrors.TOO_MANY_ATTEMPTS;
       }
 
       toast.error(errorMessage);
@@ -103,81 +94,73 @@ export const LoginForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle>{PageTitles.LOGIN}</CardTitle>
-          <CardDescription>{PageDescriptions.LOGIN}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="your.email@example.com"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input
+                    type="email"
+                    placeholder="your.email@example.com"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter your password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input
+                    type="password"
+                    placeholder="Enter your password"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    {LoadingMessages.SIGNING_IN}
-                  </>
-                ) : (
-                  ButtonLabels.SIGN_IN
-                )}
-              </Button>
-            </form>
-          </Form>
+          <Button type="submit" className="w-full" disabled={isLoading}>
+            {isLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                {LoadingStates.SIGNING_IN}
+              </>
+            ) : (
+              ButtonLabels.SIGN_IN
+            )}
+          </Button>
+        </form>
+      </Form>
 
-          <div className="mt-6 text-center text-sm">
-            <span className="text-gray-600">{LinkTexts.DONT_HAVE_ACCOUNT}</span>
-            <Link href="/signup" className="text-blue-600 hover:underline">
-              {LinkTexts.SIGN_UP_LINK}
-            </Link>
-          </div>
+      <div className="mt-6 text-center text-sm">
+        <span className="text-gray-600">{LinkTexts.DONT_HAVE_ACCOUNT}</span>
+        <Link href="/signup" className="text-blue-600 hover:underline">
+          {LinkTexts.SIGN_UP}
+        </Link>
+      </div>
 
-          <div className="mt-4 text-center">
-            <Link
-              href="/forgot-password"
-              className="text-sm text-blue-600 hover:underline"
-            >
-              {LinkTexts.FORGOT_PASSWORD}
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
+      <div className="mt-4 text-center">
+        <Link
+          href="/forgot-password"
+          className="text-sm text-blue-600 hover:underline"
+        >
+          {LinkTexts.FORGOT_PASSWORD}
+        </Link>
+      </div>
+    </>
   );
 };
