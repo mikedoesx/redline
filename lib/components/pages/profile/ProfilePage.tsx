@@ -1,119 +1,79 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/lib/components/ui/card";
-import {
-  type FormStep,
-  getStepsForUserType,
-  type StepStatus,
-} from "@/lib/form-validators/form-steps";
-import { useEffect, useState } from "react";
+import type { FormStep, StepStatus } from "@/lib/form-validators/form-steps";
+import { useMemo, useState } from "react";
 
 import { ProfileForm } from "./ProfileForm";
-import { ProfileNeedToLogin } from "./ProfileNeedToLogin";
 import { ProfilePageLoading } from "./ProfilePageLoading";
 import { ProfileProgressHeader } from "./ProfileProgressHeader";
-import { useAuth } from "@/lib/providers/auth-context";
-import {
-  UserProfileService,
-  type UserProfile,
-} from "@/lib/services/user-profile";
-import { z } from "zod";
+import { ProfileView } from "./ProfileView";
+import { getStepsForUserType } from "@/lib/form-validators/form-steps";
+import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 
 export const ProfilePage = () => {
-  const { user, loading } = useAuth();
+  const { profile, isCheckingProfile, hasCompleteProfile } = useProfileCheck();
   const [steps, setSteps] = useState<FormStep[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const userProfileService = UserProfileService.getInstance();
 
-  // Initialize with default steps
-  useEffect(() => {
-    if (!steps.length) {
-      setSteps(getStepsForUserType("fire-watch"));
-    }
-  }, [steps.length]);
-
-  // Load user profile to get step statuses
-  useEffect(() => {
-    const loadProfile = async () => {
-      if (!user) return;
-
-      try {
-        const profile = await userProfileService.getUserProfile(user.uid);
-        setUserProfile(profile);
-      } catch (error) {
-        console.error("Error loading profile:", error);
-      }
+  const stepInfo = useMemo(() => {
+    return {
+      currentStep: steps[currentStepIndex],
+      progress: ((currentStepIndex + 1) / steps.length) * 100,
+      stepIds: steps.map((it) => it.id),
     };
-
-    loadProfile();
-  }, [user]);
-
-  if (loading) {
-    return <ProfilePageLoading />;
-  }
-
-  if (!user) {
-    return <ProfileNeedToLogin />;
-  }
-
-  if (steps.length === 0) {
-    return <ProfilePageLoading />;
-  }
-
-  const currentStep = steps[currentStepIndex];
-  const progress = ((currentStepIndex + 1) / steps.length) * 100;
-
-  // Get step statuses for progress header
-  const stepStatuses: Record<string, StepStatus> = {};
-  const stepIds = steps.map((step) => step.id);
-
-  if (userProfile) {
-    stepIds.forEach((stepId) => {
-      stepStatuses[stepId] =
-        userProfile.stepProgress[stepId]?.status || "draft";
+  }, [steps, currentStepIndex]);
+  const stepStatuses = useMemo(() => {
+    const statuses: Record<string, StepStatus> = {};
+    stepInfo.stepIds.forEach((id) => {
+      statuses[id] = profile.stepProgress[id]?.status ?? "draft";
     });
+
+    return statuses;
+  }, [stepInfo, profile]);
+
+  if (isCheckingProfile) {
+    return <ProfilePageLoading />;
+  }
+
+  // If profile is complete, show the profile view
+  if (hasCompleteProfile && profile) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="container mx-auto px-4 py-8">
+          <ProfileView />
+        </div>
+      </div>
+    );
+  }
+
+  // If profile is not complete, show the form
+  if (!stepInfo.currentStep) {
+    // Initialize with default steps if no current step
+    const defaultSteps = getStepsForUserType("fire-watch");
+    setSteps(defaultSteps);
+    return null;
   }
 
   return (
-    <div className="min-h-screen py-8">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gray-50">
+      <div className="container mx-auto px-4 py-8">
         <ProfileProgressHeader
-          currentStepIndex={currentStepIndex}
+          currentStepIndex={currentStepIndex + 1}
           totalSteps={steps.length}
-          progress={progress}
+          progress={stepInfo.progress}
           stepStatuses={stepStatuses}
-          stepIds={stepIds}
+          stepIds={stepInfo.stepIds}
         />
 
-        {userProfile?.isComplete ? (
-          <div>Works!</div>
-        ) : (
-          <Card className="max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle>{currentStep.title}</CardTitle>
-              {currentStep.description && (
-                <p className="text-muted-foreground">
-                  {currentStep.description}
-                </p>
-              )}
-            </CardHeader>
-            <CardContent>
-              <ProfileForm
-                steps={steps}
-                setSteps={setSteps}
-                currentStep={currentStep}
-                currentStepIndex={currentStepIndex}
-                setCurrentStepIndex={setCurrentStepIndex}
-              />
-            </CardContent>
-          </Card>
-        )}
+        <div className="mt-8">
+          <ProfileForm
+            steps={steps}
+            setSteps={setSteps}
+            currentStep={stepInfo.currentStep}
+            currentStepIndex={currentStepIndex}
+            setCurrentStepIndex={setCurrentStepIndex}
+          />
+        </div>
       </div>
     </div>
   );

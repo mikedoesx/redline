@@ -66,3 +66,11 @@ a {
 a:hover {
   @apply text-foreground;
 }
+
+a.sidebar-link {
+  @apply text-foreground;
+}
+
+a.sidebar-link:hover {
+  @apply text-primary;
+}

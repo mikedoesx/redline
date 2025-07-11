@@ -39,7 +39,7 @@ export const SignUpForm = () => {
       setIsLoading(false);
     } else {
       console.log(res);
-      router.push("/settings");
+      router.push("/profile");
       router.refresh();
     }
   };

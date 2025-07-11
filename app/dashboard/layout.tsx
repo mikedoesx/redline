@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import type React from "react"
+import { SidebarInset, SidebarProvider } from "@/lib/components/ui/sidebar";
 
-import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader"
-import { DashboardSidebar } from "@/lib/components/pages/dashboard/DashboardSidebar"
-import { Loader2 } from "lucide-react"
-import { SidebarInset, SidebarProvider } from "@/lib/components/ui/sidebar"
-import { useProfileCheck } from "@/lib/hooks/use-profile-check"
+import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader";
+import { DashboardSidebar } from "@/lib/components/pages/dashboard/DashboardSidebar";
+import { Loader2 } from "lucide-react";
+import type React from "react";
+import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
-  const { isCheckingProfile, hasCompleteProfile } = useProfileCheck()
+  const { isCheckingProfile, hasCompleteProfile } = useProfileCheck();
 
   if (isCheckingProfile) {
     return (
@@ -23,20 +23,17 @@ export default function DashboardLayout({
           <span>Loading dashboard...</span>
         </div>
       </div>
-    )
+    );
   }
 
   if (!hasCompleteProfile) {
-    return null // useProfileCheck will handle redirect
+    return null; // useProfileCheck will handle redirect
   }
 
   return (
     <SidebarProvider>
       <DashboardSidebar />
-      <SidebarInset>
-        <DashboardHeader />
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
-      </SidebarInset>
+      <div className="flex flex-1 flex-col gap-4">{children}</div>
     </SidebarProvider>
-  )
+  );
 }

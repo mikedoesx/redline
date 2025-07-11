@@ -15,6 +15,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 
+import { UserTypeOptions } from "../constants/form-options";
 import { db } from "./firebase";
 import { replaceUndefinedWithNull } from "../utils";
 
@@ -24,7 +25,7 @@ export const INITIAL_USER_PROFILE: UserProfile = {
   lastName: "",
   email: "",
   phoneNumber: "",
-  userType: "",
+  userType: UserTypeOptions.FIRE_WATCH,
   stepProgress: {},
   overallStatus: "incomplete",
 };
@@ -35,7 +36,7 @@ export interface UserProfile {
   lastName: string;
   email: string;
   phoneNumber: string;
-  userType: string;
+  userType: UserTypeOptions;
 
   // Fire Watch specific
   yearsExperience?: number;

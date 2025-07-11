@@ -1,14 +1,19 @@
 "use client";
 
+import {
+  INITIAL_USER_PROFILE,
+  UserProfile,
+  UserProfileService,
+} from "@/lib/services/user-profile";
 import { useEffect, useState } from "react";
 
-import { UserProfileService } from "@/lib/services/user-profile";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useRouter } from "next/navigation";
 
 export function useProfileCheck() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
+  const [profile, setProfile] = useState<UserProfile>(INITIAL_USER_PROFILE);
   const [isCheckingProfile, setIsCheckingProfile] = useState(true);
   const [hasCompleteProfile, setHasCompleteProfile] = useState(false);
   const userProfileService = UserProfileService.getInstance();
@@ -24,7 +29,8 @@ export function useProfileCheck() {
 
       try {
         const userProfile = await userProfileService.getUserProfile(user.uid);
-
+        console.log("🚀 - :32 - checkUserProfile - userProfile:", userProfile);
+        setProfile(userProfile ? userProfile : profile);
         if (!userProfile || !userProfile.isComplete) {
           setHasCompleteProfile(false);
           router.push("/profile");
@@ -46,6 +52,7 @@ export function useProfileCheck() {
   return {
     isCheckingProfile: authLoading || isCheckingProfile,
     hasCompleteProfile,
-    user,
+    profile,
+    setProfile,
   };
 }

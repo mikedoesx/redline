@@ -37,7 +37,7 @@ export const DashboardHeader = () => {
         </Breadcrumb>
 
         <div className="flex gap-4 items-center">
-          <Button variant="outline" onClick={() => router.push("/settings")}>
+          <Button variant="outline" onClick={() => router.push("/profile")}>
             <User2 size={16} /> User Settings
           </Button>
 

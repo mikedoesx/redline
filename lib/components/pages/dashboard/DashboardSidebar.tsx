@@ -15,6 +15,7 @@ import {
   FileText,
   GraduationCap,
   HelpCircle,
+  LayoutDashboardIcon,
   LogOut,
   MessageCircle,
   User,
@@ -38,89 +39,115 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/lib/components/ui/sidebar";
+import { usePathname, useRouter } from "next/navigation";
 
 import { AuthService } from "@/lib/services/auth";
 import Image from "next/image";
 import { useAuth } from "@/lib/providers/auth-context";
-import { useRouter } from "next/navigation";
-
-const navigationItems = [
-  {
-    title: "Operations",
-    items: [
-      {
-        title: "Time Clock",
-        url: "/dashboard/time-clock",
-        icon: Clock,
-      },
-      {
-        title: "Scheduling",
-        url: "/dashboard/scheduling",
-        icon: Calendar,
-      },
-      {
-        title: "Quick Tasks",
-        url: "/dashboard/quick-tasks",
-        icon: CheckSquare,
-      },
-    ],
-  },
-  {
-    title: "Communication",
-    items: [
-      {
-        title: "Chat",
-        url: "/dashboard/chat",
-        icon: MessageCircle,
-      },
-      {
-        title: "Updates",
-        url: "/dashboard/updates",
-        icon: Bell,
-      },
-      {
-        title: "Knowledge Base",
-        url: "/dashboard/knowledge-base",
-        icon: BookOpen,
-      },
-      {
-        title: "Help Desk",
-        url: "/dashboard/help-desk",
-        icon: HelpCircle,
-      },
-    ],
-  },
-  {
-    title: "HR & Skills",
-    items: [
-      {
-        title: "Time Off",
-        url: "/dashboard/time-off",
-        icon: CalendarIcon,
-      },
-      {
-        title: "Onboarding",
-        url: "/dashboard/onboarding",
-        icon: CalendarIcon,
-      },
-      {
-        title: "Training",
-        url: "/dashboard/training",
-        icon: GraduationCap,
-      },
-      {
-        title: "Documents",
-        url: "/dashboard/documents",
-        icon: FileText,
-      },
-    ],
-  },
-];
+import { useMemo } from "react";
 
 export function DashboardSidebar() {
-  const router = useRouter();
-  const authService = AuthService.getInstance();
   const user = useAuth();
+  const router = useRouter();
+  const pathname = usePathname();
+  const authService = AuthService.getInstance();
+
+  const navigationItems = useMemo(
+    () => [
+      {
+        items: [
+          {
+            title: "Dashboard",
+            url: "/dashboard",
+            icon: LayoutDashboardIcon,
+            active: pathname === "/dashboard",
+          },
+        ],
+      },
+      {
+        title: "Operations",
+        items: [
+          {
+            title: "Time Clock",
+            url: "/dashboard/time-clock",
+            icon: Clock,
+            active: pathname === "/dashboard/time-clock",
+          },
+          {
+            title: "Scheduling",
+            url: "/dashboard/scheduling",
+            icon: Calendar,
+            active: pathname === "/dashboard/scheduling",
+          },
+          {
+            title: "Quick Tasks",
+            url: "/dashboard/quick-tasks",
+            icon: CheckSquare,
+            active: pathname === "/dashboard/quick-tasks",
+          },
+        ],
+      },
+      {
+        title: "Communication",
+        items: [
+          {
+            title: "Chat",
+            url: "/dashboard/chat",
+            icon: MessageCircle,
+            active: pathname === "/dashboard/chat",
+          },
+          {
+            title: "Updates",
+            url: "/dashboard/updates",
+            icon: Bell,
+            active: pathname === "/dashboard/updates",
+          },
+          {
+            title: "Knowledge Base",
+            url: "/dashboard/knowledge-base",
+            icon: BookOpen,
+            active: pathname === "/dashboard/knowledge-base",
+          },
+          {
+            title: "Help Desk",
+            url: "/dashboard/help-desk",
+            icon: HelpCircle,
+            active: pathname === "/dashboard/help-desk",
+          },
+        ],
+      },
+      {
+        title: "HR & Skills",
+        items: [
+          {
+            title: "Time Off",
+            url: "/dashboard/time-off",
+            icon: CalendarIcon,
+            active: pathname === "/dashboard/time-off",
+          },
+          {
+            title: "Onboarding",
+            url: "/dashboard/onboarding",
+            icon: CalendarIcon,
+            active: pathname === "/dashboard/onboarding",
+          },
+          {
+            title: "Training",
+            url: "/dashboard/training",
+            icon: GraduationCap,
+            active: pathname === "/dashboard/training",
+          },
+          {
+            title: "Documents",
+            url: "/dashboard/documents",
+            icon: FileText,
+            active: pathname === "/dashboard/documents",
+          },
+        ],
+      },
+    ],
+    [pathname],
+  );
 
   const handleLogout = async () => {
     await authService.logout();
@@ -145,15 +172,15 @@ export function DashboardSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        {navigationItems.map((group) => (
-          <SidebarGroup key={group.title}>
+        {navigationItems.map((group, index) => (
+          <SidebarGroup key={index}>
             <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                {group.items.map((item, index) => (
+                  <SidebarMenuItem key={index}>
+                    <SidebarMenuButton asChild isActive={item.active}>
+                      <a href={item.url} className="sidebar-link">
                         <item.icon className="h-4 w-4" />
                         <span>{item.title}</span>
                       </a>
