@@ -12,6 +12,7 @@ import { UserProfile, UserProfileService } from "@/lib/services/user-profile";
 
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/providers/auth-context";
@@ -75,10 +76,10 @@ export const EditableField = ({
 
   return (
     <div className="flex items-center justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors">
-      <div className="flex items-center space-x-3 flex-1">
-        {icon && <div className="text-gray-500">{icon}</div>}
+      <div className="flex items-center space-x-2 flex-1">
+        {icon && <div className="text-muted-foreground">{icon}</div>}
         <div className="flex-1">
-          <div className="text-sm font-medium text-gray-700">{label}</div>
+          <Label>{label}</Label>
           {isEditing ? (
             <div className="mt-1">
               {type === "select" && options ? (
@@ -114,39 +115,39 @@ export const EditableField = ({
             <div className="text-foreground mt-1">{displayValue}</div>
           )}
         </div>
-      </div>
 
-      <div className="flex items-center space-x-2">
-        {isEditing ? (
-          <>
+        <div className="flex items-center space-x-2">
+          {isEditing ? (
+            <>
+              <Button
+                size="sm"
+                onClick={handleSave}
+                disabled={isLoading}
+                className="h-8 w-8 p-0"
+              >
+                <Save className="h-4 w-4" />
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={handleCancel}
+                disabled={isLoading}
+                className="h-8 w-8 p-0 bg-transparent"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
             <Button
               size="sm"
-              onClick={handleSave}
-              disabled={isLoading}
+              variant="ghost"
+              onClick={() => setIsEditing(true)}
               className="h-8 w-8 p-0"
             >
-              <Save className="h-4 w-4" />
+              <Edit2 className="h-4 w-4" />
             </Button>
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={handleCancel}
-              disabled={isLoading}
-              className="h-8 w-8 p-0 bg-transparent"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </>
-        ) : (
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setIsEditing(true)}
-            className="h-8 w-8 p-0"
-          >
-            <Edit2 className="h-4 w-4" />
-          </Button>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );

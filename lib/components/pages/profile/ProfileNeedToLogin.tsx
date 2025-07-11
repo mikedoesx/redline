@@ -13,7 +13,7 @@ import Link from "next/link";
 
 export const ProfileNeedToLogin = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle>Profile Setup Required</CardTitle>

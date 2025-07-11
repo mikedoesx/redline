@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardHeader } from "../../ui/card"
-import { Skeleton } from "../../ui/skeleton"
+import { Card, CardContent, CardHeader } from "../../ui/card";
+
+import { Skeleton } from "../../ui/skeleton";
 
 export const ProfilePageLoading = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="container mx-auto px-4">
         {/* Progress Header Skeleton */}
         <div className="mb-8">
@@ -46,5 +47,5 @@ export const ProfilePageLoading = () => {
         </Card>
       </div>
     </div>
-  )
-}
+  );
+};

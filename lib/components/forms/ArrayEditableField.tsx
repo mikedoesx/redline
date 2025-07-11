@@ -5,6 +5,7 @@ import { UserProfile, UserProfileService } from "@/lib/services/user-profile";
 
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/providers/auth-context";
@@ -81,9 +82,9 @@ export const ArrayEditableField = ({
   return (
     <div className="flex items-start justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors">
       <div className="flex items-start space-x-3 flex-1">
-        {icon && <div className="text-gray-500 mt-1">{icon}</div>}
+        {icon && <div className="text-muted-foreground mt-1">{icon}</div>}
         <div className="flex-1">
-          <div className="text-sm font-medium text-gray-700">{label}</div>
+          <Label>{label}</Label>
           {isEditing ? (
             <div className="mt-1">
               <Textarea
@@ -93,7 +94,7 @@ export const ArrayEditableField = ({
                 className="w-full"
                 rows={2}
               />
-              <div className="text-xs text-gray-500 mt-1">
+              <div className="text-xs text-muted-foreground mt-1">
                 Separate multiple items with commas
               </div>
             </div>

@@ -39,7 +39,7 @@ export const ProfilePage = () => {
   // If profile is complete, show the profile view
   if (hasCompleteProfile && profile) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen">
         <div className="container mx-auto px-4 py-8">
           <ProfileView />
         </div>
@@ -56,7 +56,7 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="">
       <div className="container mx-auto px-4 py-8">
         <ProfileProgressHeader
           currentStepIndex={currentStepIndex + 1}

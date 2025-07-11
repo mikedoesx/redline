@@ -6,7 +6,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "../../ui/breadcrumb";
-import { CogIcon, LogOutIcon, User2 } from "lucide-react";
+import { LogOutIcon, User2 } from "lucide-react";
 
 import { AuthService } from "@/lib/services/auth";
 import { Button } from "../../ui/button";
@@ -38,7 +38,7 @@ export const DashboardHeader = () => {
 
         <div className="flex gap-4 items-center">
           <Button variant="outline" onClick={() => router.push("/profile")}>
-            <User2 size={16} /> User Settings
+            <User2 size={16} /> Profile
           </Button>
 
           <Button onClick={() => logout()}>

@@ -1,38 +1,33 @@
 import { DashboardActivityFeed } from "./DashboardActivityFeed";
-import { DashboardHeader } from "./DashboardHeader";
 import { DashboardLaborChart } from "./DashboardLaborChart";
 import { DashboardMapView } from "./DashboardMapView";
 import { DashboardQuickTasks } from "./DashboardQuickTasks";
-import { SidebarInset } from "../../ui/sidebar";
 import { StatCards } from "./DashboardStatCards";
 
 export const DashboardPage = () => {
   return (
-    <SidebarInset>
-      <DashboardHeader />
-      <main>
-        <section className="flex flex-col flex-1 gap-4 p-4">
-          <StatCards />
+    <main>
+      <section className="flex flex-col flex-1 gap-4 p-4">
+        <StatCards />
 
-          <section className="grid md:grid-cols-3 lg:grid-cols-3 gap-4">
-            <aside className="lg:col-span-1">
-              <DashboardActivityFeed />
-            </aside>
+        <section className="grid md:grid-cols-3 lg:grid-cols-3 gap-4">
+          <aside className="lg:col-span-1">
+            <DashboardActivityFeed />
+          </aside>
 
-            <aside className="lg:col-span-2">
-              <DashboardLaborChart />
-            </aside>
+          <aside className="lg:col-span-2">
+            <DashboardLaborChart />
+          </aside>
 
-            <aside className="lg:col-span-2">
-              <DashboardMapView />
-            </aside>
+          <aside className="lg:col-span-2">
+            <DashboardMapView />
+          </aside>
 
-            <aside className="lg:col-span-1">
-              <DashboardQuickTasks />
-            </aside>
-          </section>
+          <aside className="lg:col-span-1">
+            <DashboardQuickTasks />
+          </aside>
         </section>
-      </main>
-    </SidebarInset>
+      </section>
+    </main>
   );
 };

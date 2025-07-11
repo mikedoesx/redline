@@ -74,7 +74,7 @@ export function DashboardActivityFeed() {
                   <activity.icon className={`h-5 w-5 ${activity.color}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-gray-900">{activity.message}</p>
+                  <p className="text-sm text-foreground">{activity.message}</p>
                   <p className="text-xs text-muted-foreground">
                     {activity.time}
                   </p>

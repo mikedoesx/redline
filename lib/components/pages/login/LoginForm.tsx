@@ -147,7 +147,9 @@ export const LoginForm = () => {
       </Form>
 
       <div className="mt-6 text-center text-sm">
-        <span className="text-gray-600">{LinkTexts.DONT_HAVE_ACCOUNT}</span>
+        <span className="text-muted-foreground">
+          {LinkTexts.DONT_HAVE_ACCOUNT}
+        </span>
         <Link href="/signup" className="text-blue-600 hover:underline">
           {LinkTexts.SIGN_UP}
         </Link>

@@ -86,7 +86,9 @@ export function DashboardQuickTasks() {
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <h4 className="font-medium text-sm">{task.title}</h4>
-                  <p className="text-xs text-gray-600">{task.description}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {task.description}
+                  </p>
                 </div>
                 <Badge className={`text-xs ${getPriorityColor(task.priority)}`}>
                   <span className="flex items-center gap-1">

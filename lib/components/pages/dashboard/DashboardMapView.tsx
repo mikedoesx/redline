@@ -70,7 +70,9 @@ export function DashboardMapView() {
             >
               <div>
                 <p className="font-medium text-sm">{watcher.name}</p>
-                <p className="text-xs text-gray-600">{watcher.location}</p>
+                <p className="text-xs text-muted-foreground">
+                  {watcher.location}
+                </p>
               </div>
               <Badge
                 variant={watcher.status === "active" ? "default" : "secondary"}
