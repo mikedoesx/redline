@@ -1,99 +1,72 @@
-import { Box, Container, Flex, Grid, Heading, Text } from "@radix-ui/themes";
 import { Calendar, Clock, Shield, Users2 } from "lucide-react";
 
+import { HomeListItem } from "./HomeListItem";
+import { HomeSectionHeader } from "./HomeSectionHeader";
 import Image from "next/image";
 
 export const HomeFeatures = () => {
+  const featureList = [
+    {
+      Icon: Shield,
+      iconBackgroundColor: "bg-primary",
+      iconColor: "text-white",
+      titleTextColor: "text-foreground",
+      descriptionTextColor: "text-muted-foreground",
+      titleText: "Certification Tracking",
+      descriptionText:
+        "Automatically track and manage fire safety certifications, ensuring all personnel are compliant with regulations.",
+    },
+    {
+      Icon: Calendar,
+      iconBackgroundColor: "bg-primary",
+      iconColor: "text-white",
+      titleTextColor: "text-foreground",
+      descriptionTextColor: "text-muted-foreground",
+      titleText: "Shift Scheduling",
+      descriptionText:
+        "Create and manage complex 24/7 fire watch schedules with ease, ensuring proper coverage at all times.",
+    },
+    {
+      Icon: Users2,
+      iconBackgroundColor: "bg-primary",
+      iconColor: "text-white",
+      titleTextColor: "text-foreground",
+      descriptionTextColor: "text-muted-foreground",
+      titleText: "Personnel Management",
+      descriptionText:
+        "Comprehensive tools for recruiting, vetting, and managing qualified fire watch personnel.",
+    },
+    {
+      Icon: Clock,
+      iconBackgroundColor: "bg-primary",
+      iconColor: "text-white",
+      titleTextColor: "text-foreground",
+      descriptionTextColor: "text-muted-foreground",
+      titleText: "Time & Attendance",
+      descriptionText:
+        "Track time on site with GPS verification, ensuring accountability and accurate billing for fire watch services.",
+    },
+  ];
+
   return (
-    <Container
+    <section
       id="features"
       className="w-full px-4 py-12 md:py-24 lg:py-32 bg-muted"
     >
-      <Flex
-        direction="column"
-        align="center"
-        justify="center"
-        className="space-y-4 text-center"
-      >
-        <Box className="space-y-2">
-          <Heading size="8" className="mb-4 font-bold tracking-tighter">
-            Specialized for Fire Watch Management
-          </Heading>
-          <Text size="5" className="max-w-[900px] text-muted-foreground">
-            Our platform provides all the tools you need to manage fire watch
-            personnel efficiently, ensuring safety compliance and operational
-            excellence.
-          </Text>
-        </Box>
-      </Flex>
+      <HomeSectionHeader
+        subtitleClass="text-muted-foreground"
+        sectionTitle="Specialized for Fire Watch Management"
+        subtitle="Our platform provides all the tools you need to manage fire watch
+          personnel efficiently, ensuring safety compliance and operational
+          excellence."
+      />
 
-      <Grid
-        columns={{ initial: "1", lg: "2" }}
-        gap="6"
-        align="center"
-        className="mx-auto max-w-5xl py-12"
-      >
-        <Flex direction="column" gap="6">
-          <Flex gap="4" align="center">
-            <Box className="p-3 bg-red-100 rounded-lg">
-              <Shield className="h-5 w-5 text-red-600" />
-            </Box>
-            <Box>
-              <Heading size="5" className="font-bold">
-                Certification Tracking
-              </Heading>
-              <Text className="text-muted-foreground">
-                Automatically track and manage fire safety certifications,
-                ensuring all personnel are compliant with regulations.
-              </Text>
-            </Box>
-          </Flex>
-
-          <Flex gap="4" align="center">
-            <Box className="p-3 bg-red-100 rounded-lg">
-              <Calendar className="h-5 w-5 text-red-600" />
-            </Box>
-            <Box>
-              <Heading size="5" className="font-bold">
-                Shift Scheduling
-              </Heading>
-              <Text className="text-muted-foreground">
-                Create and manage complex 24/7 fire watch schedules with ease,
-                ensuring proper coverage at all times.
-              </Text>
-            </Box>
-          </Flex>
-
-          <Flex gap="4" align="center">
-            <Box className="p-3 bg-red-100 rounded-lg">
-              <Users2 className="h-5 w-5 text-red-600" />
-            </Box>
-            <Box>
-              <Heading size="5" className="font-bold">
-                Personnel Management
-              </Heading>
-              <Text className="text-muted-foreground">
-                Comprehensive tools for recruiting, vetting, and managing
-                qualified fire watch personnel.
-              </Text>
-            </Box>
-          </Flex>
-
-          <Flex gap="4" align="center">
-            <Box className="p-3 bg-red-100 rounded-lg">
-              <Clock className="h-5 w-5 text-red-600" />
-            </Box>
-            <Box>
-              <Heading size="5" className="font-bold">
-                Time & Attendance
-              </Heading>
-              <Text className="text-muted-foreground">
-                Track time on site with GPS verification, ensuring
-                accountability and accurate billing for fire watch services.
-              </Text>
-            </Box>
-          </Flex>
-        </Flex>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center mx-auto max-w-5xl py-12">
+        <div className="flex flex-col gap-6">
+          {featureList.map((it) => (
+            <HomeListItem key={it.titleText} {...it} />
+          ))}
+        </div>
 
         <Image
           src="/images/extinguisher.png"
@@ -102,7 +75,7 @@ export const HomeFeatures = () => {
           alt="Fire Watch Management Features"
           className="mx-auto aspect-square overflow-hidden rounded-xl object-cover"
         />
-      </Grid>
-    </Container>
+      </div>
+    </section>
   );
 };

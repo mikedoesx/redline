@@ -5,7 +5,6 @@ import { HomeFeatures } from "@/lib/components/pages/home/HomeFeatures";
 import { HomeFooter } from "@/lib/components/pages/home/HomeFooter";
 import { HomeHeader } from "@/lib/components/pages/home/HomeHeader";
 import { HomeHero } from "@/lib/components/pages/home/HomeHero";
-import { HomeIntegrations } from "@/lib/components/pages/home/HomeIntegrations";
 import { HomeMarketMobile } from "@/lib/components/pages/home/HomeMarketMobile";
 import { HomePricing } from "@/lib/components/pages/home/HomePricing";
 import { Metadata } from "next";
@@ -70,11 +69,10 @@ export default function LandingPage() {
       <main>
         <HomeHero />
         <HomeFeatureBanner />
-        <HomePricing />
         <HomeFeatures />
+        <HomePricing />
         <HomeMarketMobile />
         <HomeCallToAction />
-        <HomeIntegrations />
         <HomeContact />
       </main>
       <HomeFooter />

@@ -6,10 +6,11 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
 } from "../../ui/breadcrumb";
-import { Button, Flex, Separator } from "@radix-ui/themes";
-import { CogIcon, LogOutIcon } from "lucide-react";
+import { CogIcon, LogOutIcon, User2 } from "lucide-react";
 
 import { AuthService } from "@/lib/services/auth";
+import { Button } from "../../ui/button";
+import { Separator } from "../../ui/separator";
 import { SidebarTrigger } from "../../ui/sidebar";
 import { useRouter } from "next/navigation";
 
@@ -26,7 +27,7 @@ export const DashboardHeader = () => {
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-2 h-4" />
-      <Flex justify="between" align="center" className="w-full">
+      <section className="w-full flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
@@ -35,17 +36,17 @@ export const DashboardHeader = () => {
           </BreadcrumbList>
         </Breadcrumb>
 
-        <Flex gap="4" align="center">
-          <Button variant="ghost" onClick={() => router.push("/settings")}>
-            <CogIcon />
+        <div className="flex gap-4 items-center">
+          <Button variant="outline" onClick={() => router.push("/settings")}>
+            <User2 size={16} /> User Settings
           </Button>
 
           <Button onClick={() => logout()}>
             <LogOutIcon size={16} />
             Sign out
           </Button>
-        </Flex>
-      </Flex>
+        </div>
+      </section>
     </header>
   );
 };

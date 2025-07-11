@@ -1,13 +1,11 @@
-import { Box, Flex, Grid } from "@radix-ui/themes";
-
-import { DashboardActivityFeed } from "@/lib/components/pages/dashboard/DashboardActivityFeed";
-import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader";
-import { DashboardLaborChart } from "@/lib/components/pages/dashboard/DashboardLaborChart";
-import { DashboardMapView } from "@/lib/components/pages/dashboard/DashboardMapView";
-import { DashboardQuickTasks } from "@/lib/components/pages/dashboard/DashboardQuickTasks";
-import { Metadata } from "next";
-import { SidebarInset } from "@/lib/components/ui/sidebar";
-import { StatCards } from "@/lib/components/pages/dashboard/DashboardStatCards";
+import { DashboardActivityFeed } from "@/lib/components/pages/dashboard/DashboardActivityFeed"
+import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader"
+import { DashboardLaborChart } from "@/lib/components/pages/dashboard/DashboardLaborChart"
+import { DashboardMapView } from "@/lib/components/pages/dashboard/DashboardMapView"
+import { DashboardQuickTasks } from "@/lib/components/pages/dashboard/DashboardQuickTasks"
+import type { Metadata } from "next"
+import { SidebarInset } from "@/lib/components/ui/sidebar"
+import { StatCards } from "@/lib/components/pages/dashboard/DashboardStatCards"
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -21,10 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     openGraph: {
       title: "Dashboard | REDLINE Fire Watch Staffing",
-      description:
-        "Access your REDLINE dashboard to manage staffing, reports, and site safety.",
+      description: "Access your REDLINE dashboard to manage staffing, reports, and site safety.",
     },
-  };
+  }
 }
 
 export default function DashboardPage() {
@@ -32,28 +29,28 @@ export default function DashboardPage() {
     <SidebarInset>
       <DashboardHeader />
       <main>
-        <Flex flexBasis="1" direction="column" gap="4" p="4">
+        <section className="flex flex-col flex-1 gap-4 p-4">
           <StatCards />
 
-          <Grid gap="4" columns={{ md: "2", lg: "3" }}>
-            <Box className="lg:col-span-1">
+          <section className="grid md:grid-cols-3 lg:grid-cols-3 gap-4">
+            <aside className="lg:col-span-1">
               <DashboardActivityFeed />
-            </Box>
+            </aside>
 
-            <Box className="lg:col-span-2">
+            <aside className="lg:col-span-2">
               <DashboardLaborChart />
-            </Box>
+            </aside>
 
-            <Box className="lg:col-span-2">
+            <aside className="lg:col-span-2">
               <DashboardMapView />
-            </Box>
+            </aside>
 
-            <Box className="lg:col-span-1">
+            <aside className="lg:col-span-1">
               <DashboardQuickTasks />
-            </Box>
-          </Grid>
-        </Flex>
+            </aside>
+          </section>
+        </section>
       </main>
     </SidebarInset>
-  );
+  )
 }

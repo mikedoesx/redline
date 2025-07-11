@@ -13,7 +13,7 @@ export function StatCards() {
       value: "3",
       description: "Critical alerts requiring attention",
       icon: AlertTriangle,
-      color: "text-red-600",
+      color: "text-primary",
       bgColor: "bg-red-50",
     },
     {

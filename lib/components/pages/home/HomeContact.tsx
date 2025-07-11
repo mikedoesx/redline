@@ -1,22 +1,19 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Grid,
-  Heading,
-  Text,
-  TextArea,
-  TextField,
-} from "@radix-ui/themes";
+import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Mail, MapPin, Phone } from "lucide-react";
 
+import { Button } from "../../ui/button";
+import { HomeListItem } from "./HomeListItem";
+import { HomeSectionHeader } from "./HomeSectionHeader";
+import { Input } from "../../ui/input";
+import { Label } from "../../ui/label";
 import type React from "react";
+import { Textarea } from "../../ui/textarea";
 import { useState } from "react";
 
 export const HomeContact = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,7 +21,36 @@ export const HomeContact = () => {
     phone: "",
     message: "",
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const list = [
+    {
+      Icon: Phone,
+      iconBackgroundColor: "bg-primary",
+      iconColor: "text-white",
+      titleTextColor: "text-foreground",
+      descriptionTextColor: "text-foreground",
+      titleText: "Phone",
+      descriptionText: "+1 (555) 123-4567",
+    },
+    {
+      Icon: Mail,
+      iconBackgroundColor: "bg-primary",
+      iconColor: "text-white",
+      titleTextColor: "text-foreground",
+      descriptionTextColor: "text-foreground",
+      titleText: "Email",
+      descriptionText: "contact@redlinestaff.com",
+    },
+    {
+      Icon: MapPin,
+      iconBackgroundColor: "bg-primary",
+      iconColor: "text-white",
+      titleTextColor: "text-foreground",
+      descriptionTextColor: "text-foreground",
+      titleText: "Address",
+      descriptionText: `123 Safety Street, Fire Watch City, FW 12345`,
+    },
+  ];
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -58,196 +84,117 @@ export const HomeContact = () => {
   };
 
   return (
-    <Container id="contact" className="py-16 md:py-24 bg-red-100">
-      <Flex direction="column" align="center" className="text-center mb-12">
-        <Heading size="8" className="mb-4">
-          Get in Touch
-        </Heading>
-        <Text size="5" className="max-w-2xl">
-          Ready to streamline your fire watch operations? Contact our team to
-          learn how REDLINE &trade; can transform your staffing management.
-        </Text>
-      </Flex>
+    <section id="contact" className="px-4 py-12 md:py-24 lg:py-32 bg-muted">
+      <HomeSectionHeader
+        subtitleClass="text-foreground"
+        sectionTitle="Get in Touch"
+        subtitle="Ready to streamline your fire watch operations? Contact our team to learn how REDLINE: Fire Watch&trade; can transform your staffing management."
+      />
 
-      <Grid columns={{ initial: "1", lg: "2" }} gap="8">
+      <div className="container mx-auto grid grid-cols-1 items-center lg:mx-auto lg:grid-cols-2 gap-8">
         {/* Contact Information */}
-        <Flex direction="column" className="space-y-8">
-          <Box>
-            <Heading size="6" className="mb-6">
-              Contact Information
-            </Heading>
-            <Flex direction="column" className="space-y-6">
-              <Flex align="center" gap="4">
-                <Box className="p-3 bg-white rounded-lg">
-                  <Phone className="h-6 w-6 text-red-600" />
-                </Box>
-                <Box>
-                  <Text as="div" weight="medium" size="3">
-                    Phone
-                  </Text>
-                  <Text as="div" size="3">
-                    +1 (555) 123-4567
-                  </Text>
-                </Box>
-              </Flex>
+        <div className="flex flex-col space-y-8">
+          <div>
+            <div className="flex flex-col gap-6">
+              {list.map((it) => (
+                <HomeListItem key={it.titleText} {...it} />
+              ))}
+            </div>
+          </div>
 
-              <Flex align="center" gap="4">
-                <Box className="p-3 bg-white rounded-lg">
-                  <Mail className="h-6 w-6 text-red-600" />
-                </Box>
-                <Box>
-                  <Text as="div" weight="medium" size="3">
-                    Email
-                  </Text>
-                  <Text as="div" size="3">
-                    contact@redlinestaff.com
-                  </Text>
-                </Box>
-              </Flex>
+          <div className="space-y-2">
+            <div className="font-bold">Business Hours</div>
+            <div className="flex justify-between">
+              <div>Monday - Friday</div>
+              <div>8:00 AM - 6:00 PM</div>
+            </div>
+            <div className="flex justify-between">
+              <div>Saturday</div>
+              <div>9:00 AM - 4:00 PM</div>
+            </div>
+            <div className="flex justify-between">
+              <div>Sunday</div>
+              <div>Emergency Only</div>
+            </div>
+          </div>
+        </div>
 
-              <Flex align="center" gap="4">
-                <Box className="p-3 bg-white rounded-lg">
-                  <MapPin className="h-6 w-6 text-red-600" />
-                </Box>
-                <Box>
-                  <Text as="div" weight="medium" size="3">
-                    Address
-                  </Text>
-                  <Text as="div" size="3">
-                    123 Safety Street
-                    <br />
-                    Fire Watch City, FW 12345
-                  </Text>
-                </Box>
-              </Flex>
-            </Flex>
-          </Box>
+        <Card>
+          <CardHeader>
+            <CardTitle>Send us a message</CardTitle>
+          </CardHeader>
 
-          <Box>
-            <Heading size="5" className="mb-4">
-              Business Hours
-            </Heading>
-            <Flex direction="column" className="space-y-2">
-              <Flex justify="between">
-                <Text size="3">Monday - Friday</Text>
-                <Text size="3">8:00 AM - 6:00 PM</Text>
-              </Flex>
-              <Flex justify="between">
-                <Text size="3">Saturday</Text>
-                <Text size="3">9:00 AM - 4:00 PM</Text>
-              </Flex>
-              <Flex justify="between">
-                <Text size="3">Sunday</Text>
-                <Text size="3">Emergency Only</Text>
-              </Flex>
-            </Flex>
-          </Box>
-        </Flex>
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label>Full Name *</Label>
+                  <Input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="John Doe"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label>Email Address *</Label>
+                  <Input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="john@company.com"
+                    required
+                  />
+                </div>
+              </div>
 
-        {/* Contact Form */}
-        <Box className="bg-white p-8 rounded-lg shadow-sm border">
-          <Heading size="6" className="mb-6">
-            Send us a message
-          </Heading>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <Grid columns={{ initial: "1", sm: "2" }} gap="4">
-              <Box>
-                <Text
-                  as="label"
-                  size="2"
-                  weight="medium"
-                  className="mb-2 block"
-                >
-                  Full Name *
-                </Text>
-                <TextField.Root
-                  name="name"
-                  value={formData.name}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <Label>Company</Label>
+                  <Input
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    placeholder="Your Company"
+                  />
+                </div>
+                <div>
+                  <Label>Phone Number</Label>
+                  <Input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    placeholder="+1 (555) 123-4567"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label>Message *</Label>
+                <Textarea
+                  name="message"
+                  value={formData.message}
                   onChange={handleInputChange}
-                  placeholder="John Doe"
+                  placeholder="Tell us about your fire watch staffing needs..."
                   required
+                  rows={5}
                 />
-              </Box>
-              <Box>
-                <Text
-                  as="label"
-                  size="2"
-                  weight="medium"
-                  className="mb-2 block"
-                >
-                  Email Address *
-                </Text>
-                <TextField.Root
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="john@company.com"
-                  required
-                />
-              </Box>
-            </Grid>
+              </div>
 
-            <Grid columns={{ initial: "1", sm: "2" }} gap="4">
-              <Box>
-                <Text
-                  as="label"
-                  size="2"
-                  weight="medium"
-                  className="mb-2 block"
-                >
-                  Company
-                </Text>
-                <TextField.Root
-                  name="company"
-                  value={formData.company}
-                  onChange={handleInputChange}
-                  placeholder="Your Company"
-                />
-              </Box>
-              <Box>
-                <Text
-                  as="label"
-                  size="2"
-                  weight="medium"
-                  className="mb-2 block"
-                >
-                  Phone Number
-                </Text>
-                <TextField.Root
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="+1 (555) 123-4567"
-                />
-              </Box>
-            </Grid>
-
-            <Box>
-              <Text as="label" size="2" weight="medium" className="mb-2 block">
-                Message *
-              </Text>
-              <TextArea
-                name="message"
-                value={formData.message}
-                onChange={handleInputChange}
-                placeholder="Tell us about your fire watch staffing needs..."
-                required
-                rows={5}
-              />
-            </Box>
-
-            <Button
-              type="submit"
-              style={{ width: "100%" }}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? "Sending..." : "Send Message"}
-            </Button>
-          </form>
-        </Box>
-      </Grid>
-    </Container>
+              <Button
+                type="submit"
+                style={{ width: "100%" }}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Sending..." : "Send Message"}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
   );
 };

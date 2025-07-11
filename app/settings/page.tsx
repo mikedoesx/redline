@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import type React from "react";
+import { SettingsPage } from "@/lib/components/pages/settings/SettingsPage";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -19,5 +20,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function Settings() {
-  return <main>Settings screen works!</main>;
+  return <SettingsPage />;
 }

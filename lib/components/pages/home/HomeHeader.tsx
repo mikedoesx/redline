@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Link as RadixLink,
-} from "@radix-ui/themes";
 import { Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { Button } from "../../ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
@@ -30,8 +24,8 @@ export const HomeHeader = () => {
   }
 
   return (
-    <Box className="bg-white relative p-4 border-b">
-      <Flex className="max-w-7xl mx-auto" align="center" justify="between">
+    <header className="bg-white relative p-4 border-b">
+      <div className="flex items-center justify-between max-w-7xl mx-auto">
         <Link href="/" className="flex items-center">
           <Image
             src="/images/logo220x48.png"
@@ -43,52 +37,14 @@ export const HomeHeader = () => {
 
         {/* Desktop Navigation */}
         {!isMobile && (
-          <Flex asChild gap="6">
-            <nav>
-              <RadixLink asChild>
-                <Link
-                  href="#features"
-                  className="text-sm font-medium hover:text-red-600"
-                >
-                  Features
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#integrations"
-                  className="text-sm font-medium hover:text-red-600"
-                >
-                  Integrations
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#mobile"
-                  className="text-sm font-medium hover:text-red-600"
-                >
-                  App
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#pricing"
-                  className="text-sm font-medium hover:text-red-600"
-                >
-                  Pricing
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#contact"
-                  className="text-sm font-medium hover:text-red-600"
-                >
-                  Contact Us
-                </Link>
-              </RadixLink>
-            </nav>
-          </Flex>
+          <nav className="flex gap-6">
+            <Link href="#features">Features</Link>
+            <Link href="#mobile">App</Link>
+            <Link href="#pricing">Pricing</Link>
+            <Link href="#contact">Contact Us</Link>
+          </nav>
         )}
-        <Flex gap="4" align="center">
+        <div className="flex items-center gap-4">
           <Button onClick={() => router.push("/signup")} variant="outline">
             Sign Up
           </Button>
@@ -99,61 +55,44 @@ export const HomeHeader = () => {
               {isMobileMenuOpen ? <X /> : <Menu />}
             </Button>
           )}
-        </Flex>
+        </div>
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <Container className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 px-4">
-            <Flex direction="column" gap="4" className="py-4">
-              <RadixLink asChild>
-                <Link
-                  href="#features"
-                  className="text-sm font-medium hover:text-red-600 py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Features
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#integrations"
-                  className="text-sm font-medium hover:text-red-600 py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Integrations
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#mobile"
-                  className="text-sm font-medium hover:text-red-600 py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  App
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#pricing"
-                  className="text-sm font-medium hover:text-red-600 py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Pricing
-                </Link>
-              </RadixLink>
-              <RadixLink asChild>
-                <Link
-                  href="#contact"
-                  className="text-sm font-medium hover:text-red-600 py-2"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Contact Us
-                </Link>
-              </RadixLink>
-            </Flex>
-          </Container>
+          <div className="absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 px-4">
+            <div className="flex flex-col gap-4 py-4">
+              <Link
+                href="#features"
+                className="py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Features
+              </Link>
+              <Link
+                href="#mobile"
+                className="py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                App
+              </Link>
+              <Link
+                href="#pricing"
+                className="py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Pricing
+              </Link>
+              <Link
+                href="#contact"
+                className="py-2"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact Us
+              </Link>
+            </div>
+          </div>
         )}
-      </Flex>
-    </Box>
+      </div>
+    </header>
   );
 };

@@ -1,4 +1,3 @@
-import { Box, Container, Flex, Grid, Section, Text } from "@radix-ui/themes";
 import { Clock, Shield, Users } from "lucide-react";
 
 export const HomeFeatureBanner = () => {
@@ -24,39 +23,30 @@ export const HomeFeatureBanner = () => {
   ];
 
   return (
-    <Section className="bg-black py-16 md:py-20 md:border-t-8 md:border-white">
-      <Container size="4">
-        <Grid columns={{ initial: "1", md: "3" }} gap="6" align="center">
-          {features.map((feature, index) => {
-            const IconComponent = feature.icon;
-            return (
-              <Flex
-                key={index}
-                direction="column"
-                align="center"
-                gap="4"
-                className="text-center"
-              >
-                <Box className="p-4 bg-white rounded-lg">
-                  <IconComponent className="w-8 h-8 text-red-600" />
-                </Box>
-                <Box>
-                  <Text
-                    size="5"
-                    weight="bold"
-                    className="text-red-600 mb-2 block"
-                  >
-                    {feature.name}
-                  </Text>
-                  <Text size="3" className="text-red-100 leading-relaxed">
-                    {feature.description}
-                  </Text>
-                </Box>
-              </Flex>
-            );
-          })}
-        </Grid>
-      </Container>
-    </Section>
+    <section className="bg-foreground py-16 md:py-20 md:border-t-8 md:border-white">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        {features.map((feature, index) => {
+          const IconComponent = feature.icon;
+          return (
+            <div
+              key={index}
+              className="flex flex-col items-center gap-4 text-center"
+            >
+              <div className="p-4 bg-white rounded-lg">
+                <IconComponent className="w-8 h-8 text-primary" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-primary mb-2">
+                  {feature.name}
+                </div>
+                <div className="text-accent leading-relaxed">
+                  {feature.description}
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
   );
 };

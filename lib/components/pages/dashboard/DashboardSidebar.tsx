@@ -19,7 +19,6 @@ import {
   MessageCircle,
   User,
 } from "lucide-react";
-import { Box, Text } from "@radix-ui/themes";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,8 +41,8 @@ import {
 
 import { AuthService } from "@/lib/services/auth";
 import Image from "next/image";
+import { useAuth } from "@/lib/providers/auth-context";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/lib/providers/providers";
 
 const navigationItems = [
   {
@@ -121,7 +120,7 @@ const navigationItems = [
 export function DashboardSidebar() {
   const router = useRouter();
   const authService = AuthService.getInstance();
-  const user = useUser();
+  const user = useAuth();
 
   const handleLogout = async () => {
     await authService.logout();
@@ -135,17 +134,11 @@ export function DashboardSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" onClick={() => router.push("/")}>
               <Image
-                src="/images/logo48.png"
+                src="/images/logo220x48.png"
                 alt="Redline"
-                width={48}
+                width={220}
                 height={48}
               />
-              <Box className="flex flex-col gap-0.5">
-                <Text as="div" className="font-bold text-lg">
-                  REDLINE
-                </Text>
-                <Text>Fire Watch Management</Text>
-              </Box>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

@@ -7,7 +7,7 @@ import {
 } from "@/lib/components/ui/card";
 
 import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@radix-ui/themes";
+import { Button } from "../../ui/button";
 
 export function DashboardQuickTasks() {
   const tasks = [
@@ -48,7 +48,7 @@ export function DashboardQuickTasks() {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800";
+        return "bg-accent text-red-800";
       case "medium":
         return "bg-yellow-100 text-yellow-800";
       case "low":

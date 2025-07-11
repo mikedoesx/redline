@@ -1,31 +1,42 @@
-"use client";
+"use client"
 
-import { DashboardSidebar } from "@/lib/components/pages/dashboard/DashboardSidebar";
-import type React from "react";
-import { SidebarProvider } from "@/lib/components/ui/sidebar";
-import { auth } from "@/lib/services/firebase";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import type React from "react"
+
+import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader"
+import { DashboardSidebar } from "@/lib/components/pages/dashboard/DashboardSidebar"
+import { Loader2 } from "lucide-react"
+import { SidebarInset, SidebarProvider } from "@/lib/components/ui/sidebar"
+import { useProfileCheck } from "@/lib/hooks/use-profile-check"
 
 export default function DashboardLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const router = useRouter();
+  const { isCheckingProfile, hasCompleteProfile } = useProfileCheck()
 
-  useEffect(() => {
-    if (!auth.currentUser) {
-      router.push("/login");
-    }
-  }, [router]);
+  if (isCheckingProfile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex items-center space-x-2">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>Loading dashboard...</span>
+        </div>
+      </div>
+    )
+  }
+
+  if (!hasCompleteProfile) {
+    return null // useProfileCheck will handle redirect
+  }
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <DashboardSidebar />
-        <div className="flex-1">{children}</div>
-      </div>
+      <DashboardSidebar />
+      <SidebarInset>
+        <DashboardHeader />
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+      </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

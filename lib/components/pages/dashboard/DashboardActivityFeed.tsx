@@ -32,7 +32,7 @@ export function DashboardActivityFeed() {
       message: "Temperature alert triggered in Building B",
       time: "12 minutes ago",
       icon: AlertTriangle,
-      color: "text-red-600",
+      color: "text-primary",
     },
     {
       id: 4,
