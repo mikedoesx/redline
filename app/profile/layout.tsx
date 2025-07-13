@@ -4,8 +4,7 @@ import { SidebarInset, SidebarProvider } from "@/lib/components/ui/sidebar";
 
 import { DashboardHeader } from "@/lib/components/pages/dashboard/DashboardHeader";
 import { DashboardSidebar } from "@/lib/components/pages/dashboard/DashboardSidebar";
-import { Loader2 } from "lucide-react";
-import type React from "react";
+import { PageLoading } from "@/lib/components/pages/PageLoading";
 import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 
 export default function ProfileLayout({
@@ -13,21 +12,10 @@ export default function ProfileLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isCheckingProfile, hasCompleteProfile } = useProfileCheck();
+  const { isCheckingProfile } = useProfileCheck();
 
   if (isCheckingProfile) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="flex items-center space-x-2">
-          <Loader2 className="h-4 w-4 animate-spin" />
-          <span>Loading profile...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (!hasCompleteProfile) {
-    return null; // useProfileCheck will handle redirect
+    return <PageLoading page="Profile" />;
   }
 
   return (

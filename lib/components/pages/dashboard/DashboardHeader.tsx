@@ -3,25 +3,36 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
+  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
+  BreadcrumbSeparator,
 } from "../../ui/breadcrumb";
-import { LogOutIcon, User2 } from "lucide-react";
 
-import { AuthService } from "@/lib/services/auth";
-import { Button } from "../../ui/button";
 import { Separator } from "../../ui/separator";
 import { SidebarTrigger } from "../../ui/sidebar";
-import { useRouter } from "next/navigation";
+import { StringFormatters } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 
 export const DashboardHeader = () => {
-  const router = useRouter();
-  const authService = AuthService.getInstance();
+  const pathname = usePathname();
 
-  const logout = async () => {
-    await authService.logout();
-    router.push("/login");
+  // Generate breadcrumbs from pathname
+  const generateBreadcrumbs = () => {
+    const paths = pathname.split("/").filter(Boolean);
+    const breadcrumbs: { name: string; path: string }[] = [];
+    let currentPath = "";
+
+    paths.forEach((segment) => {
+      currentPath += `/${segment}`;
+      const name = segment.charAt(0).toUpperCase() + segment.slice(1);
+      breadcrumbs.push({ name, path: currentPath });
+    });
+
+    return breadcrumbs;
   };
+
+  const breadcrumbs = generateBreadcrumbs();
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
@@ -30,22 +41,30 @@ export const DashboardHeader = () => {
       <section className="w-full flex items-center justify-between">
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem>
-              <BreadcrumbPage>Dashboard</BreadcrumbPage>
-            </BreadcrumbItem>
+            {breadcrumbs.map((breadcrumb, index) => (
+              <BreadcrumbItem key={breadcrumb.path}>
+                {index === breadcrumbs.length - 1 ? (
+                  <BreadcrumbPage>
+                    {StringFormatters.ellipisifyIfLongerThan(
+                      breadcrumb.name,
+                      16,
+                    )}
+                  </BreadcrumbPage>
+                ) : (
+                  <>
+                    <BreadcrumbLink href={breadcrumb.path}>
+                      {StringFormatters.ellipisifyIfLongerThan(
+                        breadcrumb.name,
+                        16,
+                      )}
+                    </BreadcrumbLink>
+                    <BreadcrumbSeparator />
+                  </>
+                )}
+              </BreadcrumbItem>
+            ))}
           </BreadcrumbList>
         </Breadcrumb>
-
-        <div className="flex gap-4 items-center">
-          <Button variant="outline" onClick={() => router.push("/profile")}>
-            <User2 size={16} /> Profile
-          </Button>
-
-          <Button onClick={() => logout()}>
-            <LogOutIcon size={16} />
-            Sign out
-          </Button>
-        </div>
       </section>
     </header>
   );

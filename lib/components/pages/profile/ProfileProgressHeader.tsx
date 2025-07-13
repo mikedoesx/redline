@@ -5,7 +5,7 @@ import {
   StepStatus,
   getStepStatusColor,
   getStepStatusLabel,
-} from "@/lib/form-validators/form-steps";
+} from "@/lib/constants/form-steps";
 
 import { Badge } from "../../ui/badge";
 import { Progress } from "../../ui/progress";

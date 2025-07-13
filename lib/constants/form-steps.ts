@@ -16,8 +16,20 @@ import {
 } from "@/lib/constants/form-options";
 import { PageDescriptions, PageTitles } from "@/lib/types/ui-messages";
 
-import { FormMessages } from "./validation-messages";
+import { FormMessages } from "../form-validators/validation-messages";
 import { z } from "zod";
+
+export enum TemplateStatus {
+  active = "active",
+  archive = "archive",
+  draft = "draft",
+}
+
+export const templateStatusColorMap: Record<string, string> = {
+  active: "bg-green-100 text-green-800",
+  draft: "bg-yellow-100 text-yellow-800",
+  archived: "bg-gray-100 text-gray-800",
+};
 
 export enum StepStatus {
   draft = "draft",
@@ -28,31 +40,67 @@ export enum StepStatus {
   complete = "complete",
 }
 
+const stepStatusVariantMap: Record<
+  StepStatus,
+  "secondary" | "warning" | "success" | "destructive" | "info"
+> = {
+  [StepStatus.draft]: "secondary",
+  [StepStatus.pending]: "warning",
+  [StepStatus["underReview"]]: "info",
+  [StepStatus.approved]: "success",
+  [StepStatus.needsRework]: "destructive",
+  [StepStatus.complete]: "success",
+};
+
+export enum FormFieldType {
+  text = "text",
+  email = "email",
+  tel = "tel",
+  select = "select",
+  textarea = "textarea",
+  number = "number",
+  date = "date",
+  multiselect = "multiselect",
+  checkbox = "checkbox",
+  radio = "radio",
+}
+
+export interface FormFieldOption {
+  value: string;
+  label: string;
+}
+
 export interface FormField {
   name: string;
   label: string;
-  type:
-    | "text"
-    | "email"
-    | "tel"
-    | "select"
-    | "multiselect"
-    | "textarea"
-    | "checkbox"
-    | "radio"
-    | "number"
-    | "date";
-  placeholder?: string;
-  required?: boolean;
-  options?: { value: string; label: string }[];
-  validation?: z.ZodSchema<any>;
-  description?: string;
-  isDisabled?: boolean;
-  conditional?: {
+  type: FormFieldType;
+  placeholder: string;
+  required: boolean;
+  options: FormFieldOption[];
+  description: string;
+  isDisabled: boolean;
+  conditional: {
     field: string;
     value: string | string[];
   };
+  validation?: z.ZodSchema<any>;
 }
+
+export const INITIAL_FORM_FIELD: FormField = {
+  name: "",
+  label: "",
+  type: FormFieldType.text,
+  placeholder: "",
+  required: false,
+  options: [],
+  description: "",
+  isDisabled: false,
+  conditional: {
+    field: "",
+    value: "",
+  },
+  validation: undefined,
+};
 
 export interface FormStep {
   id: string;
@@ -67,6 +115,16 @@ export interface FormStep {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+export const INITIAL_FORM_STEP: FormStep = {
+  id: "",
+  title: "",
+  description: "",
+  fields: [],
+  requiresReview: false,
+  order: 0,
+  dependencies: [],
+};
 
 export interface StepProgress {
   stepId: string;
@@ -97,22 +155,22 @@ export const createStepSchema = (stepConfig: FormStep) => {
     let fieldSchema: z.ZodTypeAny;
 
     switch (field.type) {
-      case "email":
+      case FormFieldType.email:
         fieldSchema = z.string().email(FormMessages.INVALID_EMAIL);
         break;
-      case "tel":
+      case FormFieldType.tel:
         fieldSchema = z.string().min(10, FormMessages.INVALID_PHONE);
         break;
-      case "number":
+      case FormFieldType.number:
         fieldSchema = z.coerce.number().min(0, FormMessages.NEGATIVE_NUMBER);
         break;
-      case "multiselect":
+      case FormFieldType.multiselect:
         fieldSchema = z
           .array(z.string())
           .min(1, "Please select at least one option");
         break;
-      case "select":
-      case "radio":
+      case FormFieldType.select:
+      case FormFieldType.radio:
         fieldSchema = z.string().min(1, "Please select an option");
         break;
       default:
@@ -218,46 +276,80 @@ const basicInfoStep: FormStep = {
     {
       name: "firstName",
       label: FormFieldLabels.FIRST_NAME,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.FIRST_NAME,
       required: true,
       validation: nameValidation,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "lastName",
       label: FormFieldLabels.LAST_NAME,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.LAST_NAME,
       required: true,
       validation: nameValidation,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "email",
       label: FormFieldLabels.EMAIL,
-      type: "email",
+      type: FormFieldType.email,
       placeholder: FormFieldPlaceholders.EMAIL,
       required: true,
       isDisabled: true,
       validation: z.string().email(FormMessages.INVALID_EMAIL),
+      options: [],
+      description: "",
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "phoneNumber",
       label: FormFieldLabels.PHONE_NUMBER,
-      type: "tel",
+      type: FormFieldType.tel,
       placeholder: FormFieldPlaceholders.PHONE_NUMBER,
       required: true,
       validation: phoneValidation,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "userType",
       label: FormFieldLabels.USER_TYPE,
-      type: "select",
+      type: FormFieldType.select,
       required: true,
       options: Object.entries(USER_TYPE_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
   ],
 };
@@ -274,55 +366,90 @@ const fireWatchStep: FormStep = {
     {
       name: "yearsExperience",
       label: FormFieldLabels.YEARS_EXPERIENCE,
-      type: "number",
+      type: FormFieldType.number,
       placeholder: FormFieldPlaceholders.YEARS_EXPERIENCE,
       required: true,
       validation: z
         .number()
         .min(0, FormMessages.NEGATIVE_NUMBER)
         .max(50, FormMessages.OVER_MAX),
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "certifications",
       label: FormFieldLabels.CERTIFICATIONS,
-      type: "multiselect",
+      type: FormFieldType.multiselect,
       required: true,
       options: Object.entries(CERTIFICATION_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "availability",
       label: FormFieldLabels.AVAILABILITY,
-      type: "multiselect",
+      type: FormFieldType.multiselect,
       required: true,
       options: Object.entries(AVAILABILITY_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "serviceRadius",
       label: FormFieldLabels.SERVICE_RADIUS,
-      type: "number",
+      type: FormFieldType.number,
       placeholder: FormFieldPlaceholders.SERVICE_RADIUS,
       required: true,
       validation: z
         .number()
         .min(1, FormMessages.SERVICE_RADIUS_MIN)
         .max(500, FormMessages.SERVICE_RADIUS_MAX),
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "hourlyRate",
       label: FormFieldLabels.HOURLY_RATE,
-      type: "number",
+      type: FormFieldType.number,
       placeholder: FormFieldPlaceholders.HOURLY_RATE,
       required: true,
       validation: z
         .number()
         .min(15, FormMessages.HOURLY_RATE_MIN)
         .max(200, FormMessages.HOURLY_RATE_MAX),
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
   ],
 };
@@ -338,51 +465,86 @@ const fireWatchClientStep: FormStep = {
     {
       name: "companyName",
       label: FormFieldLabels.COMPANY_NAME,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.COMPANY_NAME,
       required: true,
       validation: requiredString,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "industryType",
       label: FormFieldLabels.INDUSTRY_TYPE,
-      type: "select",
+      type: FormFieldType.select,
       required: true,
       options: Object.entries(INDUSTRY_TYPE_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "facilitySize",
       label: FormFieldLabels.FACILITY_SIZE,
-      type: "number",
+      type: FormFieldType.number,
       placeholder: FormFieldPlaceholders.FACILITY_SIZE,
       required: true,
       validation: z.number().min(100, FormMessages.FACILITY_SIZE_MIN),
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "typicalShiftLength",
       label: FormFieldLabels.TYPICAL_SHIFT_LENGTH,
-      type: "select",
+      type: FormFieldType.select,
       required: true,
       options: Object.entries(SHIFT_LENGTH_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "frequencyNeeded",
       label: FormFieldLabels.FREQUENCY_NEEDED,
-      type: "select",
+      type: FormFieldType.select,
       required: true,
       options: Object.entries(FREQUENCY_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
   ],
 };
@@ -398,50 +560,85 @@ const fireWatchAdminStep: FormStep = {
     {
       name: "organizationName",
       label: FormFieldLabels.ORGANIZATION_NAME,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.ORGANIZATION_NAME,
       required: true,
       validation: requiredString,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "adminLevel",
       label: FormFieldLabels.ADMIN_LEVEL,
-      type: "select",
+      type: FormFieldType.select,
       required: true,
       options: Object.entries(ADMIN_LEVEL_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "managedStaff",
       label: FormFieldLabels.MANAGED_STAFF,
-      type: "number",
+      type: FormFieldType.number,
       placeholder: FormFieldPlaceholders.MANAGED_STAFF,
       required: true,
       validation: z.number().min(1, FormMessages.MANAGED_STAFF_MIN),
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "serviceAreas",
       label: FormFieldLabels.SERVICE_AREAS,
-      type: "multiselect",
+      type: FormFieldType.multiselect,
       required: true,
       options: Object.entries(SERVICE_AREA_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "yearsInManagement",
       label: FormFieldLabels.YEARS_IN_MANAGEMENT,
-      type: "number",
+      type: FormFieldType.number,
       placeholder: FormFieldPlaceholders.YEARS_IN_MANAGEMENT,
       required: true,
       validation: z
         .number()
         .min(0, FormMessages.NEGATIVE_NUMBER)
         .max(50, FormMessages.OVER_MAX),
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
   ],
 };
@@ -457,57 +654,99 @@ const ahjOfficialStep: FormStep = {
     {
       name: "jurisdiction",
       label: FormFieldLabels.JURISDICTION,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.JURISDICTION,
       required: true,
       validation: requiredString,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "position",
       label: FormFieldLabels.POSITION,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.POSITION,
       required: true,
       validation: requiredString,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "badgeNumber",
       label: FormFieldLabels.BADGE_NUMBER,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.BADGE_NUMBER,
       required: true,
       validation: requiredString,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "jurisdictionType",
       label: FormFieldLabels.JURISDICTION_TYPE,
-      type: "select",
+      type: FormFieldType.select,
       required: true,
       options: Object.entries(JURISDICTION_TYPE_LABELS).map(
         ([value, label]) => ({ value, label }),
       ),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "authorityLevel",
       label: FormFieldLabels.AUTHORITY_LEVEL,
-      type: "multiselect",
+      type: FormFieldType.multiselect,
       required: true,
       options: Object.entries(AUTHORITY_LEVEL_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "yearsInPosition",
       label: FormFieldLabels.YEARS_IN_POSITION,
-      type: "number",
+      type: FormFieldType.number,
       placeholder: FormFieldPlaceholders.YEARS_IN_POSITION,
       required: true,
       validation: z
         .number()
         .min(0, FormMessages.NEGATIVE_NUMBER)
         .max(50, FormMessages.OVER_MAX),
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
   ],
 };
@@ -524,47 +763,85 @@ const contactPreferencesStep: FormStep = {
     {
       name: "preferredContactMethod",
       label: FormFieldLabels.PREFERRED_CONTACT_METHOD,
-      type: "radio",
+      type: FormFieldType.radio,
       required: true,
       options: Object.entries(CONTACT_METHOD_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "timezone",
       label: FormFieldLabels.TIMEZONE,
-      type: "select",
+      type: FormFieldType.select,
       required: true,
       options: Object.entries(TIMEZONE_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
       validation: requiredString,
+      placeholder: "",
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "notifications",
       label: FormFieldLabels.NOTIFICATIONS,
-      type: "multiselect",
+      type: FormFieldType.multiselect,
       options: Object.entries(NOTIFICATION_LABELS).map(([value, label]) => ({
         value,
         label,
       })),
+      placeholder: "",
+      required: false,
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "emergencyContact",
       label: FormFieldLabels.EMERGENCY_CONTACT,
-      type: "text",
+      type: FormFieldType.text,
       placeholder: FormFieldPlaceholders.EMERGENCY_CONTACT,
       validation: nameValidation,
+      required: false,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
     {
       name: "emergencyContactPhone",
       label: FormFieldLabels.EMERGENCY_CONTACT_PHONE,
-      type: "tel",
+      type: FormFieldType.tel,
       placeholder: FormFieldPlaceholders.EMERGENCY_CONTACT_PHONE,
       validation: phoneValidation,
+      required: false,
+      options: [],
+      description: "",
+      isDisabled: false,
+      conditional: {
+        field: "",
+        value: "",
+      },
     },
   ],
 };

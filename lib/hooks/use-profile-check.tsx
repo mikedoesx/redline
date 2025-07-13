@@ -5,18 +5,34 @@ import {
   UserProfile,
   UserProfileService,
 } from "@/lib/services/user-profile";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
+import { UserTypeOptions } from "../constants/form-options";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useRouter } from "next/navigation";
 
 export function useProfileCheck() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [profile, setProfile] = useState<UserProfile>(INITIAL_USER_PROFILE);
+  const [profile, setProfile] = useState<UserProfile | null>(
+    INITIAL_USER_PROFILE,
+  );
   const [isCheckingProfile, setIsCheckingProfile] = useState(true);
   const [hasCompleteProfile, setHasCompleteProfile] = useState(false);
   const userProfileService = UserProfileService.getInstance();
+
+  const getDisplayUserType = useMemo(() => {
+    switch (profile?.userType) {
+      case UserTypeOptions.AHJ_OFFICIAL:
+        return "AHJ";
+      case UserTypeOptions.FIRE_WATCH:
+        return "Fire Watch";
+      case UserTypeOptions.FIRE_WATCH_ADMIN:
+        return "Admin";
+      case UserTypeOptions.FIRE_WATCH_CLIENT:
+        return "Client";
+    }
+  }, [profile]);
 
   useEffect(() => {
     const checkUserProfile = async () => {
@@ -28,15 +44,21 @@ export function useProfileCheck() {
       }
 
       try {
-        const userProfile = await userProfileService.getUserProfile(user.uid);
-        console.log("🚀 - :32 - checkUserProfile - userProfile:", userProfile);
-        setProfile(userProfile ? userProfile : profile);
-        if (!userProfile || !userProfile.isComplete) {
-          setHasCompleteProfile(false);
-          router.push("/profile");
-        } else {
-          setHasCompleteProfile(true);
+        let userProfile = await userProfileService.getUserProfile(user.uid);
+
+        if (!userProfile) {
+          // Profile doesn't exist, create a new one
+          await userProfileService.saveUserProfile(user.uid, {
+            ...INITIAL_USER_PROFILE,
+            userId: user.uid,
+            email: user.email ?? "",
+          });
+
+          userProfile = await userProfileService.getUserProfile(user.uid);
         }
+
+        setProfile(userProfile);
+        setHasCompleteProfile(Boolean(userProfile?.isComplete));
       } catch (error) {
         console.error("Error checking user profile:", error);
         setHasCompleteProfile(false);
@@ -54,5 +76,6 @@ export function useProfileCheck() {
     hasCompleteProfile,
     profile,
     setProfile,
+    getDisplayUserType,
   };
 }

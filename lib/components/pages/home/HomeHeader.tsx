@@ -39,6 +39,7 @@ export const HomeHeader = () => {
         {!isMobile && (
           <nav className="flex gap-6">
             <Link href="#features">Features</Link>
+            <Link href="#locations">Locations</Link>
             <Link href="#mobile">App</Link>
             <Link href="#pricing">Pricing</Link>
             <Link href="#contact">Contact Us</Link>

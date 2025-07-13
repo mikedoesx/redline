@@ -17,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
 import { ArrayEditableField } from "../../forms/ArrayEditableField";
 import { Badge } from "../../ui/badge";
 import { EditableField } from "../../forms/EditableField";
+import { FormFieldType } from "@/lib/constants/form-steps";
 import Link from "next/link";
 import { Separator } from "../../ui/separator";
 import type { UserProfile } from "@/lib/services/user-profile";
@@ -27,7 +28,7 @@ export const ProfileView = () => {
   const { profile, setProfile } = useProfileCheck();
   const handleFieldUpdate = (field: keyof UserProfile, value: any) => {
     const updatedProfile = { ...profile, [field]: value };
-    setProfile(updatedProfile);
+    setProfile(updatedProfile as UserProfile);
   };
 
   const getUserTypeLabel = (userType: UserTypeOptions) => {
@@ -74,6 +75,10 @@ export const ProfileView = () => {
     { value: "MST", label: "Mountain Time" },
     { value: "PST", label: "Pacific Time" },
   ];
+
+  if (!profile) {
+    return null;
+  }
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
@@ -150,7 +155,7 @@ export const ProfileView = () => {
                 label="User Type"
                 value={profile.userType}
                 field="userType"
-                type="select"
+                type={FormFieldType.select}
                 options={userTypeOptions}
                 icon={<Shield className="h-4 w-4" />}
                 profile={profile}
@@ -162,7 +167,7 @@ export const ProfileView = () => {
 
         <TabsContent value="role" className="space-y-4">
           {/* Fire Watch Specific Fields */}
-          {profile.userType === UserTypeOptions.FIRE_WATCH && (
+          {profile?.userType === UserTypeOptions.FIRE_WATCH && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
@@ -423,7 +428,7 @@ export const ProfileView = () => {
                 label="Preferred Contact Method"
                 value={profile.preferredContactMethod}
                 field="preferredContactMethod"
-                type="select"
+                type={FormFieldType.select}
                 options={contactMethodOptions}
                 icon={<Mail className="h-4 w-4" />}
                 profile={profile}
@@ -434,7 +439,7 @@ export const ProfileView = () => {
                 label="Timezone"
                 value={profile.timezone}
                 field="timezone"
-                type="select"
+                type={FormFieldType.select}
                 options={timezoneOptions}
                 icon={<Clock className="h-4 w-4" />}
                 profile={profile}

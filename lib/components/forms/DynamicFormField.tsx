@@ -3,7 +3,7 @@
 import {
   FormControl,
   FormDescription,
-  FormField,
+  FormField as UIFormField,
   FormItem,
   FormLabel,
   FormMessage,
@@ -20,7 +20,7 @@ import {
 import { Badge } from "../ui/badge";
 import { Checkbox } from "../ui/checkbox";
 import type { Control } from "react-hook-form";
-import type { FormField as FormFieldType } from "@/lib/form-validators/form-steps";
+import { FormFieldType, type FormField } from "@/lib/constants/form-steps";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { X } from "lucide-react";
@@ -28,7 +28,7 @@ import { useState } from "react";
 
 interface DynamicFormFieldProps {
   control: Control<any>;
-  field: FormFieldType;
+  field: FormField;
   disabled?: boolean;
 }
 
@@ -75,7 +75,7 @@ export const DynamicFormField = ({
           />
         );
 
-      case "select":
+      case FormFieldType.select:
         return (
           <Select
             value={fieldValue || ""}
@@ -97,7 +97,7 @@ export const DynamicFormField = ({
           </Select>
         );
 
-      case "multiselect":
+      case FormFieldType.multiselect:
         const currentValues = fieldValue || [];
         return (
           <div className="space-y-3">
@@ -162,7 +162,7 @@ export const DynamicFormField = ({
           </div>
         );
 
-      case "radio":
+      case FormFieldType.radio:
         return (
           <RadioGroup
             value={fieldValue || ""}
@@ -186,7 +186,7 @@ export const DynamicFormField = ({
           </RadioGroup>
         );
 
-      case "checkbox":
+      case FormFieldType.checkbox:
         return (
           <div className="space-y-3">
             {field.options?.map((option) => (
@@ -241,7 +241,7 @@ export const DynamicFormField = ({
   };
 
   return (
-    <FormField
+    <UIFormField
       control={control}
       name={field.name}
       render={({ field: formField }) => (

@@ -5,6 +5,7 @@ import { UserProfile, UserProfileService } from "@/lib/services/user-profile";
 
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { FormFieldType } from "@/lib/constants/form-steps";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
@@ -15,7 +16,7 @@ interface EditableFieldProps {
   label: string;
   value: string | string[] | number | undefined;
   field: keyof UserProfile;
-  type?: "text" | "email" | "tel" | "number" | "textarea" | "select";
+  type?: FormFieldType;
   options?: { value: string; label: string }[];
   icon?: React.ReactNode;
   profile: UserProfile;

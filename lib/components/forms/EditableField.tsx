@@ -22,7 +22,13 @@ interface EditableFieldProps {
   label: string;
   value: string | string[] | number | undefined;
   field: keyof UserProfile;
-  type?: "text" | "email" | "tel" | "number" | "textarea" | "select";
+  type?:
+    | "text"
+    | "email"
+    | "tel"
+    | "number"
+    | "textarea"
+    | FormFieldType.select;
   options?: { value: string; label: string }[];
   icon?: React.ReactNode;
   profile: UserProfile;
@@ -82,7 +88,7 @@ export const EditableField = ({
           <Label>{label}</Label>
           {isEditing ? (
             <div className="mt-1">
-              {type === "select" && options ? (
+              {type === FormFieldType.select && options ? (
                 <Select value={editValue} onValueChange={setEditValue}>
                   <SelectTrigger className="w-full">
                     <SelectValue />

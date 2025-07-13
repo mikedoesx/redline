@@ -1,20 +1,32 @@
 "use client";
 
-import { FormStep, StepStatus } from "@/lib/form-validators/form-steps";
-import { useMemo, useState } from "react";
+import {
+  FormStep,
+  StepStatus,
+  getStepsForUserType,
+} from "@/lib/constants/form-steps";
+import { useEffect, useMemo, useState } from "react";
 
+import { PageLoading } from "../PageLoading";
 import { ProfileForm } from "./ProfileForm";
-import { ProfilePageLoading } from "./ProfilePageLoading";
 import { ProfileProgressHeader } from "./ProfileProgressHeader";
 import { ProfileView } from "./ProfileView";
 import { UserTypeOptions } from "@/lib/constants/form-options";
-import { getStepsForUserType } from "@/lib/form-validators/form-steps";
 import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 
 export const ProfilePage = () => {
   const { profile, isCheckingProfile, hasCompleteProfile } = useProfileCheck();
   const [steps, setSteps] = useState<FormStep[]>([]);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+  useEffect(() => {
+    if (steps.length === 0 && profile) {
+      const defaultSteps = getStepsForUserType(
+        profile.userType || UserTypeOptions.FIRE_WATCH,
+      );
+      setSteps(defaultSteps);
+    }
+  }, [steps.length, profile]);
 
   const stepInfo = useMemo(() => {
     return {
@@ -23,20 +35,19 @@ export const ProfilePage = () => {
       stepIds: steps.map((it) => it.id),
     };
   }, [steps, currentStepIndex]);
+
   const stepStatuses = useMemo(() => {
     const statuses: Record<string, StepStatus> = {};
     stepInfo.stepIds.forEach((id) => {
-      statuses[id] = profile.stepProgress[id]?.status ?? StepStatus.draft;
+      statuses[id] = profile?.stepProgress?.[id]?.status ?? StepStatus.draft;
     });
-
     return statuses;
-  }, [stepInfo, profile]);
+  }, [stepInfo.stepIds, profile]);
 
-  if (isCheckingProfile) {
-    return <ProfilePageLoading />;
+  if (isCheckingProfile || steps.length === 0) {
+    return <PageLoading page="Profile" />;
   }
 
-  // If profile is complete, show the profile view
   if (hasCompleteProfile && profile) {
     return (
       <div className="min-h-screen">
@@ -47,35 +58,22 @@ export const ProfilePage = () => {
     );
   }
 
-  // If profile is not complete, show the form
-  if (!stepInfo.currentStep) {
-    // Initialize with default steps if no current step
-    const defaultSteps = getStepsForUserType(UserTypeOptions.FIRE_WATCH);
-    setSteps(defaultSteps);
-    return null;
-  }
-
   return (
-    <div className="">
-      <div className="container mx-auto px-4 py-8">
-        <ProfileProgressHeader
-          currentStepIndex={currentStepIndex + 1}
-          totalSteps={steps.length}
-          progress={stepInfo.progress}
-          stepStatuses={stepStatuses}
-          stepIds={stepInfo.stepIds}
-        />
+    <div className="container mx-auto px-4 py-8">
+      <ProfileProgressHeader
+        currentStepIndex={currentStepIndex + 1}
+        totalSteps={steps.length}
+        progress={stepInfo.progress}
+        stepStatuses={stepStatuses}
+        stepIds={stepInfo.stepIds}
+      />
 
-        <div className="mt-8">
-          <ProfileForm
-            steps={steps}
-            setSteps={setSteps}
-            currentStep={stepInfo.currentStep}
-            currentStepIndex={currentStepIndex}
-            setCurrentStepIndex={setCurrentStepIndex}
-          />
-        </div>
-      </div>
+      <ProfileForm
+        steps={steps}
+        currentStep={stepInfo.currentStep}
+        currentStepIndex={currentStepIndex}
+        setCurrentStepIndex={setCurrentStepIndex}
+      />
     </div>
   );
 };

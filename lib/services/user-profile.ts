@@ -1,8 +1,4 @@
-import {
-  FormStep,
-  StepProgress,
-  StepStatus,
-} from "@/lib/form-validators/form-steps";
+import { FormStep, StepProgress, StepStatus } from "@/lib/constants/form-steps";
 import {
   ProfileErrors,
   getAdminFeedbackError,

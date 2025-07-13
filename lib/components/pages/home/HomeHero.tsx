@@ -6,13 +6,13 @@ import Image from "next/image";
 export const HomeHero = () => {
   return (
     <section className="w-full px-4 py-12 md:py-24 lg:py-24 xl:py-32">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-[80%] mx-auto">
+      <div className="container mx-auto flex items-center justify-evenly gap-6">
         <div className="flex flex-col justify-center space-y-4">
           <div className="flex flex-col space-y-2">
             <Image
               src="/images/logo220x48.png"
-              height={48}
-              width={295}
+              width={220 * 1.5}
+              height={40 * 1.5}
               alt="REDLINE: Fire Watch"
             />
 
@@ -39,14 +39,13 @@ export const HomeHero = () => {
           <HomeGetOnMobileButtons />
         </div>
 
-        <div className="relative w-full h-full">
-          <Image
-            src="/images/placeholder.jpg"
-            alt={"Placeholer image"}
-            fill
-            className="object-cover"
-          />
-        </div>
+        <Image
+          src="/images/redlineApp327x618.webp"
+          alt={"Placeholer image"}
+          width={327}
+          height={618}
+          className="hidden lg:block"
+        />
       </div>
     </section>
   );
