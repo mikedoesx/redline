@@ -92,7 +92,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-6">
       <div className="flex justify-between items-end mb-6 flex-wrap gap-2">
         <div>
           <h1 className="text-2xl font-bold">Onboarding Templates</h1>
@@ -101,7 +101,7 @@ export default function OnboardingPage() {
             the steps new users will complete when joining your platform.
           </p>
         </div>
-        <Button onClick={() => router.push("/dashboard/onboarding/new")}>
+        <Button onClick={() => router.push("/onboarding/new")}>
           + New Template
         </Button>
       </div>
@@ -183,9 +183,7 @@ export default function OnboardingPage() {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() =>
-                        router.push(`/dashboard/onboarding/${template.id}`)
-                      }
+                      onClick={() => router.push(`/onboarding/${template.id}`)}
                     >
                       Edit
                     </Button>

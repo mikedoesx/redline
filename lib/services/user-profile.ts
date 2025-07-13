@@ -38,6 +38,7 @@ export const INITIAL_USER_PROFILE: UserProfile = {
   lastName: "",
   email: "",
   phoneNumber: "",
+  imageUrl: "",
   userType: UserTypeOptions.FIRE_WATCH,
   stepProgress: {},
   overallStatus: UserProfileStatus.incomplete,
@@ -49,6 +50,7 @@ export interface UserProfile {
   lastName: string;
   email: string;
   phoneNumber: string;
+  imageUrl: string;
   userType: UserTypeOptions;
 
   // Fire Watch specific

@@ -48,10 +48,10 @@ export const ProfilePage = () => {
     return <PageLoading page="Profile" />;
   }
 
-  if (hasCompleteProfile && profile) {
+  if (profile) {
     return (
       <div className="min-h-screen">
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto p-4 md:p-6">
           <ProfileView />
         </div>
       </div>
@@ -59,7 +59,7 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto p-4 md:p-6">
       <ProfileProgressHeader
         currentStepIndex={currentStepIndex + 1}
         totalSteps={steps.length}

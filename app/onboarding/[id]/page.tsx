@@ -183,7 +183,7 @@ export default function OnboardingTemplateDetailPage() {
             size="sm"
             onClick={() => {
               const newId = `step-${Date.now()}`;
-              router.push(`/dashboard/onboarding/${templateId}/${newId}`);
+              router.push(`/onboarding/${templateId}/${newId}`);
             }}
           >
             <PlusIcon className="w-4 h-4 mr-1" /> Add Step
@@ -210,9 +210,7 @@ export default function OnboardingTemplateDetailPage() {
                       size="sm"
                       variant="outline"
                       onClick={() => {
-                        router.push(
-                          `/dashboard/onboarding/${templateId}/${step.id}`,
-                        );
+                        router.push(`/onboarding/${templateId}/${step.id}`);
                       }}
                     >
                       Edit

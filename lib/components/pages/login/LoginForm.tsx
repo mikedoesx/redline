@@ -13,6 +13,8 @@ import {
   FormLabel,
   FormMessage,
 } from "../../ui/form";
+import { appleProvider, auth, googleProvider } from "@/lib/services/firebase";
+import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 import { AuthErrors } from "@/lib/types/error-messages";
 import { AuthSuccess } from "@/lib/types/success-messages";
@@ -21,9 +23,8 @@ import { FormMessages } from "@/lib/form-validators/validation-messages";
 import { Input } from "../../ui/input";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { LoginWithGoogleButton } from "./LoginWithGoogleButton";
 import { UserProfileService } from "@/lib/services/user-profile";
-import { auth } from "@/lib/services/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -50,6 +51,30 @@ export const LoginForm = () => {
       password: "",
     },
   });
+
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      toast.success("Signed in with Google!");
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error("Google sign-in failed");
+      console.error(error);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, appleProvider);
+      const user = result.user;
+      toast.success("Signed in with Apple!");
+      router.push("/dashboard");
+    } catch (error) {
+      toast.error("Apple sign-in failed");
+      console.error(error);
+    }
+  };
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
@@ -94,9 +119,9 @@ export const LoginForm = () => {
   };
 
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <div className="space-y-2">
           <FormField
             control={form.control}
             name="email"
@@ -132,8 +157,12 @@ export const LoginForm = () => {
               </FormItem>
             )}
           />
+        </div>
 
-          <Button type="submit" className="w-full" disabled={isLoading}>
+        <div className="grid grid-cols-1 sm:grid-cols-2 items-center justify-center gap-2">
+          <LoginWithGoogleButton handleGoogleLogin={handleGoogleLogin} />
+
+          <Button type="submit" disabled={isLoading}>
             {isLoading ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -143,26 +172,13 @@ export const LoginForm = () => {
               ButtonLabels.SIGN_IN
             )}
           </Button>
-        </form>
-      </Form>
+        </div>
 
-      <div className="mt-6 text-center text-sm">
-        <span className="text-muted-foreground">
-          {LinkTexts.DONT_HAVE_ACCOUNT}
-        </span>
-        <Link href="/signup" className="text-blue-600 hover:underline">
-          {LinkTexts.SIGN_UP}
-        </Link>
-      </div>
-
-      <div className="mt-4 text-center">
-        <Link
-          href="/forgot-password"
-          className="text-sm text-blue-600 hover:underline"
-        >
-          {LinkTexts.FORGOT_PASSWORD}
-        </Link>
-      </div>
-    </>
+        <div className="mt-2 flex flex-col items-center gap-2 text-sm">
+          <Link href="/signup">{LinkTexts.DONT_HAVE_ACCOUNT}</Link>
+          <Link href="/forgot-password">{LinkTexts.FORGOT_PASSWORD}</Link>
+        </div>
+      </form>
+    </Form>
   );
 };

@@ -76,13 +76,10 @@ export const ProfileView = () => {
     { value: "PST", label: "Pacific Time" },
   ];
 
-  if (!profile) {
-    return null;
-  }
+  if (!profile) return null;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Header */}
+    <div className="space-y-6">
       <header className="flex flex-col">
         <div className="flex justify-between">
           <h1 className="text-3xl font-bold text-foreground">Profile</h1>
@@ -95,76 +92,73 @@ export const ProfileView = () => {
         </p>
       </header>
 
-      <Link href="/dashboard"></Link>
-
       <Tabs defaultValue="basic" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="basic">Basic Information</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 sticky top-0 z-10">
+          <TabsTrigger value="basic">Basic Info</TabsTrigger>
           <TabsTrigger value="role">Role Details</TabsTrigger>
-          <TabsTrigger value="contact">Contact Preferences</TabsTrigger>
+          <TabsTrigger value="contact">Contact Info</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="basic" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <User className="h-5 w-5" />
-                <span>Basic Information</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <EditableField
-                label="First Name"
-                value={profile.firstName}
-                field="firstName"
-                type={FormFieldType.text}
-                icon={<User className="h-4 w-4" />}
-                profile={profile}
-                onUpdate={handleFieldUpdate}
-              />
-              <Separator />
-              <EditableField
-                label="Last Name"
-                value={profile.lastName}
-                field="lastName"
-                type={FormFieldType.text}
-                icon={<User className="h-4 w-4" />}
-                profile={profile}
-                onUpdate={handleFieldUpdate}
-              />
-              <Separator />
-              <EditableField
-                label="Email"
-                value={profile.email}
-                field="email"
-                type={FormFieldType.email}
-                icon={<Mail className="h-4 w-4" />}
-                profile={profile}
-                onUpdate={handleFieldUpdate}
-              />
-              <Separator />
-              <EditableField
-                label="Phone Number"
-                value={profile.phoneNumber}
-                field="phoneNumber"
-                type={FormFieldType.tel}
-                icon={<Phone className="h-4 w-4" />}
-                profile={profile}
-                onUpdate={handleFieldUpdate}
-              />
-              <Separator />
-              <EditableField
-                label="User Type"
-                value={profile.userType}
-                field="userType"
-                type={FormFieldType.select}
-                options={userTypeOptions}
-                icon={<Shield className="h-4 w-4" />}
-                profile={profile}
-                onUpdate={handleFieldUpdate}
-              />
-            </CardContent>
-          </Card>
+        <TabsContent value="basic">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="col-span-1 md:col-span-2">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <User className="h-5 w-5" />
+                  <span>Basic Information</span>
+                </CardTitle>
+              </CardHeader>
+
+              <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <EditableField
+                  label="First Name"
+                  value={profile.firstName}
+                  field="firstName"
+                  type={FormFieldType.text}
+                  icon={<User className="h-4 w-4" />}
+                  profile={profile}
+                  onUpdate={handleFieldUpdate}
+                />
+                <EditableField
+                  label="Last Name"
+                  value={profile.lastName}
+                  field="lastName"
+                  type={FormFieldType.text}
+                  icon={<User className="h-4 w-4" />}
+                  profile={profile}
+                  onUpdate={handleFieldUpdate}
+                />
+                <EditableField
+                  label="Email"
+                  value={profile.email}
+                  field="email"
+                  type={FormFieldType.email}
+                  icon={<Mail className="h-4 w-4" />}
+                  profile={profile}
+                  onUpdate={handleFieldUpdate}
+                />
+                <EditableField
+                  label="Phone Number"
+                  value={profile.phoneNumber}
+                  field="phoneNumber"
+                  type={FormFieldType.tel}
+                  icon={<Phone className="h-4 w-4" />}
+                  profile={profile}
+                  onUpdate={handleFieldUpdate}
+                />
+                <EditableField
+                  label="User Type"
+                  value={profile.userType}
+                  field="userType"
+                  type={FormFieldType.select}
+                  options={userTypeOptions}
+                  icon={<Shield className="h-4 w-4" />}
+                  profile={profile}
+                  onUpdate={handleFieldUpdate}
+                />
+              </CardContent>
+            </Card>
+          </div>
         </TabsContent>
 
         <TabsContent value="role" className="space-y-4">

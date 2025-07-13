@@ -92,23 +92,23 @@ export function DashboardSidebar() {
         items: [
           {
             title: "Time Clock",
-            url: "/dashboard/time-clock",
+            url: "/time-clock",
             icon: Clock,
-            active: pathname.includes("/dashboard/time-clock"),
+            active: pathname.includes("/time-clock"),
             badge: false,
           },
           {
             title: "Scheduling",
-            url: "/dashboard/scheduling",
+            url: "/scheduling",
             icon: Calendar,
-            active: pathname === "/dashboard/scheduling",
+            active: pathname === "/scheduling",
             badge: false,
           },
           {
             title: "Quick Tasks",
-            url: "/dashboard/quick-tasks",
+            url: "/quick-tasks",
             icon: CheckSquare,
-            active: pathname === "/dashboard/quick-tasks",
+            active: pathname === "/quick-tasks",
             badge: false,
           },
         ],
@@ -118,30 +118,30 @@ export function DashboardSidebar() {
         items: [
           {
             title: "Chat",
-            url: "/dashboard/chat",
+            url: "/chat",
             icon: MessageCircle,
-            active: pathname === "/dashboard/chat",
+            active: pathname === "/chat",
             badge: false,
           },
           {
             title: "Updates",
-            url: "/dashboard/updates",
+            url: "/updates",
             icon: Bell,
-            active: pathname === "/dashboard/updates",
+            active: pathname === "/updates",
             badge: false,
           },
           {
             title: "Knowledge Base",
-            url: "/dashboard/knowledge-base",
+            url: "/knowledge-base",
             icon: BookOpen,
-            active: pathname === "/dashboard/knowledge-base",
+            active: pathname === "/knowledge-base",
             badge: false,
           },
           {
             title: "Help Desk",
-            url: "/dashboard/help-desk",
+            url: "/help-desk",
             icon: HelpCircle,
-            active: pathname === "/dashboard/help-desk",
+            active: pathname === "/help-desk",
             badge: false,
           },
         ],
@@ -151,21 +151,21 @@ export function DashboardSidebar() {
         items: [
           {
             title: "Onboarding",
-            url: "/dashboard/onboarding",
+            url: "/onboarding",
             icon: CalendarIcon,
-            active: pathname === "/dashboard/onboarding",
+            active: pathname === "/onboarding",
             badge: false,
           },
           {
             title: "Training",
-            url: "/dashboard/training",
+            url: "/training",
             icon: GraduationCap,
             active: pathname === "/dashboard/training",
             badge: false,
           },
           {
             title: "Documents",
-            url: "/dashboard/documents",
+            url: "/documents",
             icon: FileText,
             active: pathname === "/dashboard/documents",
             badge: false,
@@ -297,10 +297,7 @@ export function DashboardSidebar() {
                   className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src="/images/placeholder-user.jpg"
-                      alt="User"
-                    />
+                    <AvatarImage src={profile?.imageUrl} alt="User" />
                     <AvatarFallback className="rounded-lg">
                       <User className="h-4 w-4" />
                     </AvatarFallback>
