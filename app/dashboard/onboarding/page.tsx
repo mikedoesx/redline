@@ -8,6 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/lib/components/ui/dropdown-menu";
+import { FormTemplate, TemplateStatus } from "@/lib/constants/form-steps";
 import {
   Table,
   TableBody,
@@ -24,21 +25,10 @@ import { DateFormatters } from "@/lib/utils";
 import { Input } from "@/lib/components/ui/input";
 import { PageLoading } from "@/lib/components/pages/PageLoading";
 import { UserTypeOptions } from "@/lib/constants/form-options";
-import { templateStatusColorMap } from "@/lib/constants/form-steps";
 import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 import { useRouter } from "next/navigation";
 
 const STATUS_OPTIONS = ["all", "draft", "active", "archived"] as const;
-
-type FormTemplate = {
-  id: string;
-  name: string;
-  description: string;
-  status: "draft" | "active" | "archived";
-  createdBy: string;
-  createdAt: string;
-  updatedAt: string;
-};
 
 export default function OnboardingPage() {
   const router = useRouter();
@@ -70,16 +60,16 @@ export default function OnboardingPage() {
           id: "default-onboarding",
           name: "Default Onboarding",
           description: "Standard flow for new users",
-          status: "active",
-          createdBy: "admin@example.com",
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-        },
-        {
-          id: "archived-example",
-          name: "Old Admin Template",
-          description: "Deprecated version",
-          status: "archived",
+          status: TemplateStatus.active,
+          config: {
+            clients: [],
+            requiredByUserTypes: [
+              UserTypeOptions.AHJ_OFFICIAL,
+              UserTypeOptions.FIRE_WATCH,
+              UserTypeOptions.FIRE_WATCH_ADMIN,
+              UserTypeOptions.FIRE_WATCH_CLIENT,
+            ],
+          },
           createdBy: "admin@example.com",
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),

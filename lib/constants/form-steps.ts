@@ -25,32 +25,21 @@ export enum TemplateStatus {
   draft = "draft",
 }
 
-export const templateStatusColorMap: Record<string, string> = {
-  active: "bg-green-100 text-green-800",
-  draft: "bg-yellow-100 text-yellow-800",
-  archived: "bg-gray-100 text-gray-800",
-};
-
-export enum StepStatus {
-  draft = "draft",
-  pending = "pending",
-  underReview = "under-review",
-  approved = "approved",
-  needsRework = "needs-rework",
-  complete = "complete",
+export interface TemplateConfig {
+  clients: string[]; // some refernce to the clients using this template
+  requiredByUserTypes: UserTypeOptions[];
 }
 
-const stepStatusVariantMap: Record<
-  StepStatus,
-  "secondary" | "warning" | "success" | "destructive" | "info"
-> = {
-  [StepStatus.draft]: "secondary",
-  [StepStatus.pending]: "warning",
-  [StepStatus["underReview"]]: "info",
-  [StepStatus.approved]: "success",
-  [StepStatus.needsRework]: "destructive",
-  [StepStatus.complete]: "success",
-};
+export interface FormTemplate {
+  id: string;
+  name: string;
+  description: string;
+  status: TemplateStatus;
+  config: TemplateConfig;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 export enum FormFieldType {
   text = "text",
@@ -102,6 +91,15 @@ export const INITIAL_FORM_FIELD: FormField = {
   validation: undefined,
 };
 
+export enum StepStatus {
+  draft = "draft",
+  pending = "pending",
+  underReview = "under-review",
+  approved = "approved",
+  needsRework = "needs-rework",
+  complete = "complete",
+}
+
 export interface FormStep {
   id: string;
   title: string;
@@ -110,7 +108,6 @@ export interface FormStep {
   requiresReview: boolean; // Whether this step needs admin review
   order: number; // Order in the sequence
   dependencies: string[]; // Step IDs that must be complete before this step
-  isTemplate?: boolean; // Whether this is a pre-built template
   createdBy?: string; // Admin who created this step
   createdAt?: Date;
   updatedAt?: Date;
@@ -125,17 +122,6 @@ export const INITIAL_FORM_STEP: FormStep = {
   order: 0,
   dependencies: [],
 };
-
-export interface StepProgress {
-  stepId: string;
-  status: StepStatus;
-  data: Record<string, any>;
-  submittedAt?: Date | null;
-  reviewedAt?: Date | null;
-  reviewedBy?: string;
-  reviewNotes?: string;
-  completedAt?: Date | null;
-}
 
 // Base validation schemas
 const phoneValidation = z

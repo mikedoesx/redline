@@ -1,4 +1,4 @@
-import { FormStep, StepProgress, StepStatus } from "@/lib/constants/form-steps";
+import { FormStep, StepStatus } from "@/lib/constants/form-steps";
 import {
   ProfileErrors,
   getAdminFeedbackError,
@@ -19,6 +19,17 @@ export enum UserProfileStatus {
   incomplete = "incomplete",
   pendingReview = "pending-review",
   complete = "complete",
+}
+
+export interface StepProgress {
+  stepId: string;
+  status: StepStatus;
+  data: Record<string, any>;
+  submittedAt?: Date | null;
+  reviewedAt?: Date | null;
+  reviewedBy?: string;
+  reviewNotes?: string;
+  completedAt?: Date | null;
 }
 
 export const INITIAL_USER_PROFILE: UserProfile = {

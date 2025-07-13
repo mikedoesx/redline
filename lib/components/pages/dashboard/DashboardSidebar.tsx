@@ -12,11 +12,13 @@ import {
   CalendarIcon,
   CheckSquare,
   Clock,
+  Clock4Icon,
   FileText,
   GraduationCap,
   HelpCircle,
   LayoutDashboardIcon,
   LogOut,
+  LucideProps,
   MessageCircle,
   User,
   User2Icon,
@@ -27,6 +29,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/lib/components/ui/dropdown-menu";
+import { ForwardRefExoticComponent, RefAttributes, useMemo } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -45,17 +48,26 @@ import { AuthService } from "@/lib/services/auth";
 import { Badge } from "../../ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo } from "react";
 import { useProfileCheck } from "@/lib/hooks/use-profile-check";
+
+interface NavItem {
+  title?: string;
+  url?: string;
+  icon?: ForwardRefExoticComponent<
+    Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
+  >;
+  active?: boolean;
+  badge?: boolean;
+  items?: NavItem[];
+}
 
 export function DashboardSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  console.log("🔥 - :54 - DashboardSidebar - pathname:", pathname);
   const { profile, getDisplayUserType } = useProfileCheck();
   const authService = AuthService.getInstance();
 
-  const navigationItems = useMemo(
+  const navigationItems: NavItem[] = useMemo(
     () => [
       {
         items: [
@@ -82,7 +94,7 @@ export function DashboardSidebar() {
             title: "Time Clock",
             url: "/dashboard/time-clock",
             icon: Clock,
-            active: pathname === "/dashboard/time-clock",
+            active: pathname.includes("/dashboard/time-clock"),
             badge: false,
           },
           {
@@ -137,13 +149,6 @@ export function DashboardSidebar() {
       {
         title: "HR & Skills",
         items: [
-          {
-            title: "Time Off",
-            url: "/dashboard/time-off",
-            icon: CalendarIcon,
-            active: pathname === "/dashboard/time-off",
-            badge: false,
-          },
           {
             title: "Onboarding",
             url: "/dashboard/onboarding",
@@ -204,30 +209,76 @@ export function DashboardSidebar() {
             <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {group.items.map((item, index) => (
+                {group.items?.map((item, index) => (
                   <SidebarMenuItem key={index}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={item.active}
-                      isAlert={item.badge}
-                    >
-                      <Link
-                        href={item.url}
-                        className="sidebar-link flex justify-between items-center"
+                    {/* Render item with or without a URL */}
+                    {item.url ? (
+                      <SidebarMenuButton
+                        asChild
+                        isActive={item.active}
+                        isAlert={item.badge}
                       >
-                        <div className="flex items-center gap-2">
-                          <item.icon className="h-4 w-4" />
-                          <span className={item.active ? "font-bold" : ""}>
-                            {item.title}
-                          </span>
+                        <Link
+                          href={item.url}
+                          className="sidebar-link flex justify-between items-center"
+                        >
+                          <div className="flex items-center gap-2">
+                            {item.icon && <item.icon className="h-4 w-4" />}
+                            <span className={item.active ? "font-bold" : ""}>
+                              {item.title}
+                            </span>
+                          </div>
+                          {item.badge && profile?.overallStatus && (
+                            <Badge className="capitalize rounded-full bg-destructive">
+                              {profile?.overallStatus}
+                            </Badge>
+                          )}
+                        </Link>
+                      </SidebarMenuButton>
+                    ) : (
+                      <div className="flex flex-col gap-1 ml-1">
+                        <div className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium">
+                          <span>{item.title}</span>
                         </div>
-                        {item.badge && profile?.overallStatus && (
-                          <Badge className="capitalize rounded-full bg-destructive">
-                            {profile?.overallStatus}
-                          </Badge>
+                        {item.items && item.items?.length > 0 && (
+                          <SidebarMenu className="ml-4">
+                            {item.items.map((subItem, subIndex) => (
+                              <SidebarMenuItem key={subIndex}>
+                                <SidebarMenuButton
+                                  asChild
+                                  isActive={subItem.active}
+                                  isAlert={subItem.badge}
+                                >
+                                  <Link
+                                    href={subItem.url ?? "#"}
+                                    className="sidebar-link flex justify-between items-center text-sm"
+                                  >
+                                    <div className="flex items-center gap-2">
+                                      {subItem.icon && (
+                                        <subItem.icon className="h-4 w-4" />
+                                      )}
+                                      <span
+                                        className={
+                                          subItem.active ? "font-bold" : ""
+                                        }
+                                      >
+                                        {subItem.title}
+                                      </span>
+                                    </div>
+                                    {subItem.badge &&
+                                      profile?.overallStatus && (
+                                        <Badge className="capitalize rounded-full bg-destructive">
+                                          {profile?.overallStatus}
+                                        </Badge>
+                                      )}
+                                  </Link>
+                                </SidebarMenuButton>
+                              </SidebarMenuItem>
+                            ))}
+                          </SidebarMenu>
                         )}
-                      </Link>
-                    </SidebarMenuButton>
+                      </div>
+                    )}
                   </SidebarMenuItem>
                 ))}
               </SidebarMenu>
