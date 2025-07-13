@@ -117,6 +117,7 @@ export const ProfileView = () => {
                 label="First Name"
                 value={profile.firstName}
                 field="firstName"
+                type={FormFieldType.text}
                 icon={<User className="h-4 w-4" />}
                 profile={profile}
                 onUpdate={handleFieldUpdate}
@@ -126,6 +127,7 @@ export const ProfileView = () => {
                 label="Last Name"
                 value={profile.lastName}
                 field="lastName"
+                type={FormFieldType.text}
                 icon={<User className="h-4 w-4" />}
                 profile={profile}
                 onUpdate={handleFieldUpdate}
@@ -135,7 +137,7 @@ export const ProfileView = () => {
                 label="Email"
                 value={profile.email}
                 field="email"
-                type="email"
+                type={FormFieldType.email}
                 icon={<Mail className="h-4 w-4" />}
                 profile={profile}
                 onUpdate={handleFieldUpdate}
@@ -145,7 +147,7 @@ export const ProfileView = () => {
                 label="Phone Number"
                 value={profile.phoneNumber}
                 field="phoneNumber"
-                type="tel"
+                type={FormFieldType.tel}
                 icon={<Phone className="h-4 w-4" />}
                 profile={profile}
                 onUpdate={handleFieldUpdate}
@@ -180,7 +182,7 @@ export const ProfileView = () => {
                   label="Years of Experience"
                   value={profile.yearsExperience}
                   field="yearsExperience"
-                  type="number"
+                  type={FormFieldType.number}
                   icon={<Clock className="h-4 w-4" />}
                   profile={profile}
                   onUpdate={handleFieldUpdate}
@@ -208,7 +210,7 @@ export const ProfileView = () => {
                   label="Service Radius (miles)"
                   value={profile.serviceRadius}
                   field="serviceRadius"
-                  type="number"
+                  type={FormFieldType.number}
                   icon={<MapPin className="h-4 w-4" />}
                   profile={profile}
                   onUpdate={handleFieldUpdate}
@@ -218,7 +220,7 @@ export const ProfileView = () => {
                   label="Hourly Rate ($)"
                   value={profile.hourlyRate}
                   field="hourlyRate"
-                  type="number"
+                  type={FormFieldType.number}
                   icon={<DollarSign className="h-4 w-4" />}
                   profile={profile}
                   onUpdate={handleFieldUpdate}
@@ -259,7 +261,7 @@ export const ProfileView = () => {
                   label="Facility Size (sq ft)"
                   value={profile.facilitySize}
                   field="facilitySize"
-                  type="number"
+                  type={FormFieldType.number}
                   icon={<MapPin className="h-4 w-4" />}
                   profile={profile}
                   onUpdate={handleFieldUpdate}
@@ -318,7 +320,7 @@ export const ProfileView = () => {
                   label="Managed Staff Count"
                   value={profile.managedStaff}
                   field="managedStaff"
-                  type="number"
+                  type={FormFieldType.number}
                   icon={<User className="h-4 w-4" />}
                   profile={profile}
                   onUpdate={handleFieldUpdate}
@@ -337,7 +339,7 @@ export const ProfileView = () => {
                   label="Years in Management"
                   value={profile.yearsInManagement}
                   field="yearsInManagement"
-                  type="number"
+                  type={FormFieldType.number}
                   icon={<Clock className="h-4 w-4" />}
                   profile={profile}
                   onUpdate={handleFieldUpdate}
@@ -405,7 +407,7 @@ export const ProfileView = () => {
                   label="Years in Position"
                   value={profile.yearsInPosition}
                   field="yearsInPosition"
-                  type="number"
+                  type={FormFieldType.number}
                   icon={<Clock className="h-4 w-4" />}
                   profile={profile}
                   onUpdate={handleFieldUpdate}
@@ -468,7 +470,7 @@ export const ProfileView = () => {
                 label="Emergency Contact Phone"
                 value={profile.emergencyContactPhone}
                 field="emergencyContactPhone"
-                type="tel"
+                type={FormFieldType.tel}
                 icon={<Phone className="h-4 w-4" />}
                 profile={profile}
                 onUpdate={handleFieldUpdate}

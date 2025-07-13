@@ -7,10 +7,11 @@ export enum UserTypeOptions {
 
 export const USER_TYPE_LABELS = {
   [UserTypeOptions.FIRE_WATCH]: "Fire Watch",
-  [UserTypeOptions.FIRE_WATCH_CLIENT]: "Fire Watch Client (looking for fire watchers)",
+  [UserTypeOptions.FIRE_WATCH_CLIENT]:
+    "Fire Watch Client (looking for fire watchers)",
   [UserTypeOptions.FIRE_WATCH_ADMIN]: "Fire Watch Administrator",
   [UserTypeOptions.AHJ_OFFICIAL]: "AHJ Official",
-} as const
+} as const;
 
 export enum CertificationOptions {
   FIRE_WATCH_CERTIFIED = "fire-watch-certified",
@@ -28,7 +29,7 @@ export const CERTIFICATION_LABELS = {
   [CertificationOptions.FIRST_AID_CPR]: "First Aid/CPR",
   [CertificationOptions.FIRE_EXTINGUISHER]: "Fire Extinguisher Training",
   [CertificationOptions.HAZMAT]: "HAZMAT Certified",
-} as const
+} as const;
 
 export enum AvailabilityOptions {
   WEEKDAYS = "weekdays",
@@ -44,7 +45,7 @@ export const AVAILABILITY_LABELS = {
   [AvailabilityOptions.NIGHTS]: "Night Shifts",
   [AvailabilityOptions.HOLIDAYS]: "Holidays",
   [AvailabilityOptions.EMERGENCY]: "Emergency Calls",
-} as const
+} as const;
 
 export enum IndustryTypeOptions {
   CONSTRUCTION = "construction",
@@ -64,7 +65,7 @@ export const INDUSTRY_TYPE_LABELS = {
   [IndustryTypeOptions.RETAIL]: "Retail",
   [IndustryTypeOptions.HOSPITALITY]: "Hospitality",
   [IndustryTypeOptions.OTHER]: "Other",
-} as const
+} as const;
 
 export enum ShiftLengthOptions {
   FOUR_HOURS = "4-hours",
@@ -80,7 +81,7 @@ export const SHIFT_LENGTH_LABELS = {
   [ShiftLengthOptions.TWELVE_HOURS]: "12 Hours",
   [ShiftLengthOptions.TWENTY_FOUR_HOURS]: "24 Hours",
   [ShiftLengthOptions.VARIABLE]: "Variable",
-} as const
+} as const;
 
 export enum FrequencyOptions {
   DAILY = "daily",
@@ -96,7 +97,7 @@ export const FREQUENCY_LABELS = {
   [FrequencyOptions.MONTHLY]: "Monthly",
   [FrequencyOptions.AS_NEEDED]: "As Needed",
   [FrequencyOptions.EMERGENCY_ONLY]: "Emergency Only",
-} as const
+} as const;
 
 export enum AdminLevelOptions {
   SUPERVISOR = "supervisor",
@@ -110,7 +111,7 @@ export const ADMIN_LEVEL_LABELS = {
   [AdminLevelOptions.MANAGER]: "Manager",
   [AdminLevelOptions.DIRECTOR]: "Director",
   [AdminLevelOptions.OWNER]: "Owner",
-} as const
+} as const;
 
 export enum ServiceAreaOptions {
   SCHEDULING = "scheduling",
@@ -128,7 +129,7 @@ export const SERVICE_AREA_LABELS = {
   [ServiceAreaOptions.TRAINING]: "Training & Certification",
   [ServiceAreaOptions.QUALITY_CONTROL]: "Quality Control",
   [ServiceAreaOptions.CLIENT_RELATIONS]: "Client Relations",
-} as const
+} as const;
 
 export enum JurisdictionTypeOptions {
   MUNICIPAL = "municipal",
@@ -144,7 +145,7 @@ export const JURISDICTION_TYPE_LABELS = {
   [JurisdictionTypeOptions.STATE]: "State Fire Marshal",
   [JurisdictionTypeOptions.FEDERAL]: "Federal Agency",
   [JurisdictionTypeOptions.PRIVATE]: "Private Fire Protection",
-} as const
+} as const;
 
 export enum AuthorityLevelOptions {
   PERMITS = "permits",
@@ -160,7 +161,7 @@ export const AUTHORITY_LEVEL_LABELS = {
   [AuthorityLevelOptions.ENFORCEMENT]: "Code Enforcement",
   [AuthorityLevelOptions.PLAN_REVIEW]: "Plan Review",
   [AuthorityLevelOptions.INVESTIGATION]: "Fire Investigation",
-} as const
+} as const;
 
 export enum ContactMethodOptions {
   EMAIL = "email",
@@ -174,7 +175,7 @@ export const CONTACT_METHOD_LABELS = {
   [ContactMethodOptions.PHONE]: "Phone",
   [ContactMethodOptions.TEXT]: "Text Message",
   [ContactMethodOptions.APP]: "In-App Notifications",
-} as const
+} as const;
 
 export enum TimezoneOptions {
   EST = "EST",
@@ -192,7 +193,7 @@ export const TIMEZONE_LABELS = {
   [TimezoneOptions.PST]: "Pacific Time (PST)",
   [TimezoneOptions.AKST]: "Alaska Time (AKST)",
   [TimezoneOptions.HST]: "Hawaii Time (HST)",
-} as const
+} as const;
 
 export enum NotificationOptions {
   SHIFT_REMINDERS = "shift-reminders",
@@ -208,4 +209,4 @@ export const NOTIFICATION_LABELS = {
   [NotificationOptions.NEW_OPPORTUNITIES]: "New Opportunities",
   [NotificationOptions.SYSTEM_UPDATES]: "System Updates",
   [NotificationOptions.BILLING_ALERTS]: "Billing Alerts",
-} as const
+} as const;

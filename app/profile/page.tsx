@@ -1,5 +1,5 @@
-import type { Metadata } from "next"
-import { ProfilePage } from "@/lib/components/pages/profile/ProfilePage"
+import type { Metadata } from "next";
+import { ProfilePage } from "@/lib/components/pages/profile/ProfilePage";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
@@ -15,9 +15,9 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Profile Setup | REDLINE Fire Watch Staffing",
       description: "Create your REDLINE Fire Watch profile",
     },
-  }
+  };
 }
 
 export default function Profile() {
-  return <ProfilePage />
+  return <ProfilePage />;
 }

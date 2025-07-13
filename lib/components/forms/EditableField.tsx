@@ -11,6 +11,7 @@ import {
 import { UserProfile, UserProfileService } from "@/lib/services/user-profile";
 
 import { Button } from "../ui/button";
+import { FormFieldType } from "@/lib/constants/form-steps";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
@@ -22,13 +23,7 @@ interface EditableFieldProps {
   label: string;
   value: string | string[] | number | undefined;
   field: keyof UserProfile;
-  type?:
-    | "text"
-    | "email"
-    | "tel"
-    | "number"
-    | "textarea"
-    | FormFieldType.select;
+  type?: FormFieldType;
   options?: { value: string; label: string }[];
   icon?: React.ReactNode;
   profile: UserProfile;
@@ -39,7 +34,7 @@ export const EditableField = ({
   label,
   value,
   field,
-  type = "text",
+  type = FormFieldType.text,
   options,
   icon,
   profile,

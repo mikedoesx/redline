@@ -2,3 +2,4 @@ node_modules
 public
 .next
 .vercel
+pnpm-lock.yaml

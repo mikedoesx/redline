@@ -3,15 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next lint && next build",
-    "postbuild": "tsc --noEmit && next-sitemap",
+    "build": "next build",
+    "postbuild": "next-sitemap",
     "dev": "next dev",
     "start": "next start",
     "test:e2e": "exec playwright test",
     "analyze": "export ANALYZE=true && next build",
     "lint": "next lint",
     "format": "prettier --check .",
-    "format:write": "prettier --write ."
+    "format:write": "prettier --write .",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
