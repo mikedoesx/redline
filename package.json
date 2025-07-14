@@ -11,8 +11,7 @@
     "analyze": "export ANALYZE=true && next build",
     "lint": "next lint",
     "format": "prettier --check .",
-    "format:write": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "format:write": "prettier --write ."
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
