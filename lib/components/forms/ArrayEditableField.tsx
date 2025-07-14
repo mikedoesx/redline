@@ -1,13 +1,19 @@
 "use client";
 
 import { Edit2, Save, X } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { UserProfile, UserProfileService } from "@/lib/services/user-profile";
 
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useState } from "react";
@@ -17,9 +23,11 @@ interface EditableFieldProps {
   value: string | string[] | number | undefined;
   field: keyof UserProfile;
   type?: FormFieldType;
-  options?: { value: string; label: string }[];
+  options: { value: string; label: string }[];
   icon?: React.ReactNode;
   profile: UserProfile;
+  disabled?: boolean;
+  required?: boolean;
   onUpdate: (field: keyof UserProfile, value: any) => void;
 }
 
@@ -28,24 +36,40 @@ export const ArrayEditableField = ({
   value,
   field,
   icon,
+  options,
   profile,
+  disabled = false,
+  required = false,
   onUpdate,
 }: Omit<EditableFieldProps, "type"> & { value?: string[] }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editValue, setEditValue] = useState((value || []).join(", "));
+  const [currentValues, setCurrentValues] = useState<string[]>(value || []);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const userProfileService = UserProfileService.getInstance();
+
+  const validate = () => {
+    if (required && currentValues.length === 0) {
+      setError("Please select at least one item.");
+      return null;
+    }
+    return currentValues;
+  };
 
   const handleSave = async () => {
     if (!user) return;
 
+    const arrayValue = validate();
+    if (!arrayValue) return;
+
+    if (arrayValue.length === 0) {
+      setError("Please enter at least one item.");
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const arrayValue = editValue
-        .split(",")
-        .map((item) => item.trim())
-        .filter((item) => item);
       await userProfileService.saveUserProfile(user.uid, {
         ...profile,
         [field]: arrayValue,
@@ -53,6 +77,7 @@ export const ArrayEditableField = ({
 
       onUpdate(field, arrayValue);
       setIsEditing(false);
+      setError(null);
       toast.success(`${label} updated successfully`);
     } catch (error) {
       console.error(`Error updating ${field}:`, error);
@@ -63,8 +88,9 @@ export const ArrayEditableField = ({
   };
 
   const handleCancel = () => {
-    setEditValue((value || []).join(", "));
+    setCurrentValues(value || []);
     setIsEditing(false);
+    setError(null);
   };
 
   const displayValue =
@@ -81,23 +107,73 @@ export const ArrayEditableField = ({
     );
 
   return (
-    <div className="flex items-start justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors">
+    <div
+      className={`flex items-start justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors ${
+        required && (!value || value.length === 0) ? "bg-red-50" : ""
+      }`}
+    >
       <div className="flex items-start space-x-3 flex-1">
         {icon && <div className="text-muted-foreground mt-1">{icon}</div>}
         <div className="flex-1">
-          <Label>{label}</Label>
+          <Label>
+            {label} {required && <span className="text-red-500">*</span>}
+          </Label>
           {isEditing ? (
-            <div className="mt-1">
-              <Textarea
-                value={editValue}
-                onChange={(e) => setEditValue(e.target.value)}
-                placeholder="Enter items separated by commas"
-                className="w-full"
-                rows={2}
-              />
-              <div className="text-xs text-muted-foreground mt-1">
-                Separate multiple items with commas
-              </div>
+            <div className="mt-1 space-y-1">
+              <Select
+                onValueChange={(val) => {
+                  if (!currentValues.includes(val)) {
+                    const newVals = [...currentValues, val];
+                    setCurrentValues(newVals);
+                  }
+                }}
+                disabled={disabled}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select options" />
+                </SelectTrigger>
+                <SelectContent>
+                  {options?.map((opt) => (
+                    <SelectItem
+                      key={opt.value}
+                      value={opt.value}
+                      disabled={currentValues.includes(opt.value)}
+                    >
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {currentValues.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {currentValues.map((val) => {
+                    const opt = options?.find((o) => o.value === val);
+                    return (
+                      <Badge
+                        key={val}
+                        variant="secondary"
+                        className="flex items-center gap-1"
+                      >
+                        {opt?.label || val}
+                        {!disabled && (
+                          <X
+                            className="h-3 w-3 cursor-pointer"
+                            onClick={() => {
+                              const updated = currentValues.filter(
+                                (v) => v !== val,
+                              );
+                              setCurrentValues(updated);
+                            }}
+                          />
+                        )}
+                      </Badge>
+                    );
+                  })}
+                </div>
+              )}
+
+              {error && <p className="text-sm text-red-500">{error}</p>}
             </div>
           ) : (
             <div className="mt-1">{displayValue}</div>
@@ -111,7 +187,7 @@ export const ArrayEditableField = ({
             <Button
               size="sm"
               onClick={handleSave}
-              disabled={isLoading}
+              disabled={isLoading || disabled}
               className="h-8 w-8 p-0"
             >
               <Save className="h-4 w-4" />
@@ -127,14 +203,16 @@ export const ArrayEditableField = ({
             </Button>
           </>
         ) : (
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setIsEditing(true)}
-            className="h-8 w-8 p-0"
-          >
-            <Edit2 className="h-4 w-4" />
-          </Button>
+          !disabled && (
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => setIsEditing(true)}
+              className="h-8 w-8 p-0"
+            >
+              <Edit2 className="h-4 w-4" />
+            </Button>
+          )
         )}
       </div>
     </div>

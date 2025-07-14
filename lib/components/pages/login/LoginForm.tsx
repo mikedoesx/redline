@@ -54,29 +54,35 @@ export const LoginForm = () => {
 
   const handleGoogleLogin = async () => {
     try {
+      setIsLoading(true);
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       toast.success("Signed in with Google!");
       router.push("/dashboard");
+      setIsLoading(false);
     } catch (error) {
       toast.error("Google sign-in failed");
       console.error(error);
+      setIsLoading(false);
     }
   };
 
   const handleAppleLogin = async () => {
     try {
+      setIsLoading(true);
       const result = await signInWithPopup(auth, appleProvider);
       const user = result.user;
       toast.success("Signed in with Apple!");
       router.push("/dashboard");
+      setIsLoading(false);
     } catch (error) {
       toast.error("Apple sign-in failed");
       console.error(error);
+      setIsLoading(false);
     }
   };
 
-  const onSubmit = async (data: LoginFormData) => {
+  const onSignInWithEmail = async (data: LoginFormData) => {
     setIsLoading(true);
 
     try {
@@ -92,10 +98,8 @@ export const LoginForm = () => {
 
       if (!userProfile || !userProfile.isComplete) {
         toast.success(AuthSuccess.WELCOME_COMPLETE_PROFILE);
-        router.push("/profile");
-      } else {
-        toast.success(AuthSuccess.WELCOME);
         router.push("/dashboard");
+        setIsLoading(false);
       }
     } catch (error: any) {
       console.error("Login error:", error);
@@ -113,14 +117,16 @@ export const LoginForm = () => {
       }
 
       toast.error(errorMessage);
-    } finally {
       setIsLoading(false);
     }
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <form
+        onSubmit={form.handleSubmit(onSignInWithEmail)}
+        className="space-y-4"
+      >
         <div className="space-y-2">
           <FormField
             control={form.control}

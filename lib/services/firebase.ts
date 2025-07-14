@@ -17,6 +17,6 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 export const db = getFirestore(app);
-export const analytics = getAnalytics(app);
+// export const analytics = getAnalytics(app);
 export const googleProvider = new GoogleAuthProvider();
 export const appleProvider = new OAuthProvider("apple.com");

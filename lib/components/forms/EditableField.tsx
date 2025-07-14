@@ -28,6 +28,8 @@ interface EditableFieldProps {
   icon?: React.ReactNode;
   profile: UserProfile;
   onUpdate: (field: keyof UserProfile, value: any) => void;
+  disabled?: boolean;
+  required?: boolean;
 }
 
 export const EditableField = ({
@@ -39,19 +41,51 @@ export const EditableField = ({
   icon,
   profile,
   onUpdate,
+  disabled = false,
+  required = false,
 }: EditableFieldProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(value?.toString() || "");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
   const userProfileService = UserProfileService.getInstance();
+
+  const validateField = (
+    field: keyof UserProfile,
+    value: any,
+  ): string | null => {
+    if (required && (!value || value === "")) {
+      return "This field is required.";
+    }
+
+    switch (field) {
+      case "firstName":
+      case "lastName":
+        return value?.trim() ? null : "This field is required.";
+      case "email":
+        return /^\S+@\S+\.\S+$/.test(value) ? null : "Invalid email format.";
+      case "phoneNumber":
+        return value?.length >= 10 ? null : "Phone number is too short.";
+      case "hourlyRate":
+        return Number(value) > 0 ? null : "Rate must be greater than 0.";
+      default:
+        return null;
+    }
+  };
 
   const handleSave = async () => {
     if (!user) return;
 
+    const updatedValue = type === "number" ? Number(editValue) : editValue;
+    const validationError = validateField(field, updatedValue);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setIsLoading(true);
     try {
-      const updatedValue = type === "number" ? Number(editValue) : editValue;
       await userProfileService.saveUserProfile(user.uid, {
         ...profile,
         [field]: updatedValue,
@@ -59,6 +93,7 @@ export const EditableField = ({
 
       onUpdate(field, updatedValue);
       setIsEditing(false);
+      setError(null);
       toast.success(`${label} updated successfully`);
     } catch (error) {
       console.error(`Error updating ${field}:`, error);
@@ -76,15 +111,25 @@ export const EditableField = ({
   const displayValue = value || "Not set";
 
   return (
-    <div className="flex items-center justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors">
+    <div
+      className={`flex items-center justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors ${
+        required && !value ? "bg-red-50" : ""
+      }`}
+    >
       <div className="flex items-center space-x-2 flex-1">
         {icon && <div className="text-muted-foreground">{icon}</div>}
         <div className="flex-1">
-          <Label>{label}</Label>
+          <Label>
+            {label} {required && <span className="text-red-500">*</span>}
+          </Label>
           {isEditing ? (
-            <div className="mt-1">
+            <div className="mt-1 space-y-1">
               {type === FormFieldType.select && options ? (
-                <Select value={editValue} onValueChange={setEditValue}>
+                <Select
+                  value={editValue}
+                  onValueChange={setEditValue}
+                  disabled={disabled}
+                >
                   <SelectTrigger className="w-full">
                     <SelectValue />
                   </SelectTrigger>
@@ -102,6 +147,7 @@ export const EditableField = ({
                   onChange={(e) => setEditValue(e.target.value)}
                   className="w-full"
                   rows={3}
+                  disabled={disabled}
                 />
               ) : (
                 <Input
@@ -109,15 +155,18 @@ export const EditableField = ({
                   value={editValue}
                   onChange={(e) => setEditValue(e.target.value)}
                   className="w-full"
+                  disabled={disabled}
                 />
               )}
+
+              {error && <p className="text-sm text-red-500">{error}</p>}
             </div>
           ) : (
             <div className="text-foreground mt-1">{displayValue}</div>
           )}
         </div>
 
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 self-start mt-2">
           {isEditing ? (
             <>
               <Button
@@ -139,14 +188,16 @@ export const EditableField = ({
               </Button>
             </>
           ) : (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setIsEditing(true)}
-              className="h-8 w-8 p-0"
-            >
-              <Edit2 className="h-4 w-4" />
-            </Button>
+            !disabled && (
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsEditing(true)}
+                className="h-8 w-8 p-0"
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
+            )
           )}
         </div>
       </div>

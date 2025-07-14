@@ -1,8 +1,8 @@
+import { AppFooter } from "../../AppFooter";
 import { HomeCallToAction } from "./HomeCallToAction";
 import { HomeContact } from "./HomeContact";
 import { HomeFeatureBanner } from "./HomeFeatureBanner";
 import { HomeFeatures } from "./HomeFeatures";
-import { HomeFooter } from "./HomeFooter";
 import { HomeHeader } from "./HomeHeader";
 import { HomeHero } from "./HomeHero";
 import { HomeMarketMobile } from "./HomeMarketMobile";
@@ -21,7 +21,7 @@ export const HomePage = () => {
         <HomeCallToAction />
         <HomeContact />
       </main>
-      <HomeFooter />
+      <AppFooter />
     </>
   );
 };

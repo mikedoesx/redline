@@ -1,10 +1,20 @@
+"use client";
+
 import { DashboardActivityFeed } from "./DashboardActivityFeed";
+import { DashboardCompleteProfilePage } from "./DashboardCompleteProfilePage";
 import { DashboardLaborChart } from "./DashboardLaborChart";
 import { DashboardMapView } from "./DashboardMapView";
 import { DashboardQuickTasks } from "./DashboardQuickTasks";
 import { StatCards } from "./DashboardStatCards";
+import { useProfileCheck } from "@/lib/hooks/use-profile-check";
 
 export const DashboardPage = () => {
+  const { hasCompleteProfile } = useProfileCheck();
+
+  if (!hasCompleteProfile) {
+    return <DashboardCompleteProfilePage />;
+  }
+
   return (
     <main>
       <section className="flex flex-col flex-1 gap-4 p-4">

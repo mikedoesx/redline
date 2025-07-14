@@ -3,7 +3,7 @@ import { Facebook, Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export const HomeFooter = () => {
+export const AppFooter = () => {
   return (
     <div className="w-full border-t bg-background px-4 pt-6 md:pt-24">
       <div className="container mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
