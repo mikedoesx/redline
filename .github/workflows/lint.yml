@@ -20,3 +20,5 @@ jobs:
         run: pnpm run format
       - name: Lint checks
         run: pnpm run lint
+      - name: Type checks
+        run: pnpm tsc --noEmit

@@ -63,7 +63,7 @@ interface NavItem {
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { profile, getDisplayUserType } = useUserProfile();
+  const { profile, getDisplayUserType, isComplete } = useUserProfile();
   const authService = AuthService.getInstance();
 
   const navigationItems: NavItem[] = useMemo(
@@ -82,7 +82,7 @@ export function AppSidebar() {
             url: "/profile",
             icon: User2Icon,
             active: pathname === "/profile",
-            badge: !profile?.isComplete,
+            badge: !isComplete,
           },
         ],
       },
@@ -227,9 +227,9 @@ export function AppSidebar() {
                               {item.title}
                             </span>
                           </div>
-                          {item.badge && profile?.overallStatus && (
+                          {item.badge && profile?.status && (
                             <Badge className="capitalize rounded-full bg-destructive">
-                              {profile?.overallStatus}
+                              {profile?.status}
                             </Badge>
                           )}
                         </Link>
@@ -264,12 +264,11 @@ export function AppSidebar() {
                                         {subItem.title}
                                       </span>
                                     </div>
-                                    {subItem.badge &&
-                                      profile?.overallStatus && (
-                                        <Badge className="capitalize rounded-full bg-destructive">
-                                          {profile?.overallStatus}
-                                        </Badge>
-                                      )}
+                                    {subItem.badge && profile?.status && (
+                                      <Badge className="capitalize rounded-full bg-destructive">
+                                        {profile?.status}
+                                      </Badge>
+                                    )}
                                   </Link>
                                 </SidebarMenuButton>
                               </SidebarMenuItem>
