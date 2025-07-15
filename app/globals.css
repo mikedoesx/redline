@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url(../lib/components/pages/login/login.module.css);
+@import url(./login/login.module.css);
 
 body {
   font-family: Arial, Helvetica, sans-serif;

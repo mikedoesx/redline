@@ -1,22 +1,22 @@
 import {
-  ADMIN_LEVEL_LABELS,
-  AUTHORITY_LEVEL_LABELS,
-  AVAILABILITY_LABELS,
-  CERTIFICATION_LABELS,
-  CONTACT_METHOD_LABELS,
-  FREQUENCY_LABELS,
-  INDUSTRY_TYPE_LABELS,
-  JURISDICTION_TYPE_LABELS,
-  NOTIFICATION_LABELS,
-  SERVICE_AREA_LABELS,
-  SHIFT_LENGTH_LABELS,
-  TIMEZONE_LABELS,
-  USER_TYPE_LABELS,
-  UserTypeOptions,
+  ADMIN_LEVEL_FIELD_OPTIONS,
+  AUTHORITY_LEVEL_FIELD_OPTIONS,
+  AVAILABILITY_FIELD_OPTIONS,
+  CERTIFICATION_FIELD_OPTIONS,
+  CONTACT_METHOD_FIELD_OPTIONS,
+  FREQUENCY_FIELD_OPTIONS,
+  INDUSTRY_TYPE_FIELD_OPTIONS,
+  JURISDICTION_TYPE_FIELD_OPTIONS,
+  NOTIFICATION_FIELD_OPTIONS,
+  SERVICE_AREA_FIELD_OPTIONS,
+  SHIFT_LENGTH_FIELD_OPTIONS,
+  TIMEZONE_FIELD_OPTIONS,
+  USER_TYPE_FIELD_OPTIONS,
 } from "@/lib/constants/form-options";
 import { PageDescriptions, PageTitles } from "@/lib/types/ui-messages";
 
-import { FormMessages } from "../form-validators/validation-messages";
+import { FormMessages } from "./validation-messages";
+import { UserRole } from "../types/user-profile";
 import { z } from "zod";
 
 export enum TemplateStatus {
@@ -27,7 +27,7 @@ export enum TemplateStatus {
 
 export interface TemplateConfig {
   clients: string[]; // some refernce to the clients using this template
-  requiredByUserTypes: UserTypeOptions[];
+  requiredByUserRoles: UserRole[];
 }
 
 export interface FormTemplate {
@@ -108,6 +108,7 @@ export interface FormStep {
   requiresReview: boolean; // Whether this step needs admin review
   order: number; // Order in the sequence
   dependencies: string[]; // Step IDs that must be complete before this step
+  status: StepStatus;
   createdBy?: string; // Admin who created this step
   createdAt?: Date;
   updatedAt?: Date;
@@ -120,6 +121,7 @@ export const INITIAL_FORM_STEP: FormStep = {
   fields: [],
   requiresReview: false,
   order: 0,
+  status: StepStatus.draft,
   dependencies: [],
 };
 
@@ -132,46 +134,6 @@ const nameValidation = z
   .min(2, FormMessages.NAME_TOO_SHORT)
   .max(50, FormMessages.NAME_TOO_LONG);
 const requiredString = z.string().min(1, FormMessages.REQUIRED);
-
-// Create dynamic schema for current step
-export const createStepSchema = (stepConfig: FormStep) => {
-  const schemaFields: Record<string, z.ZodTypeAny> = {};
-
-  stepConfig.fields.forEach((field) => {
-    let fieldSchema: z.ZodTypeAny;
-
-    switch (field.type) {
-      case FormFieldType.email:
-        fieldSchema = z.string().email(FormMessages.INVALID_EMAIL);
-        break;
-      case FormFieldType.tel:
-        fieldSchema = z.string().min(10, FormMessages.INVALID_PHONE);
-        break;
-      case FormFieldType.number:
-        fieldSchema = z.coerce.number().min(0, FormMessages.NEGATIVE_NUMBER);
-        break;
-      case FormFieldType.multiselect:
-        fieldSchema = z
-          .array(z.string())
-          .min(1, "Please select at least one option");
-        break;
-      case FormFieldType.select:
-      case FormFieldType.radio:
-        fieldSchema = z.string().min(1, "Please select an option");
-        break;
-      default:
-        fieldSchema = z.string().min(1, "This field is required");
-    }
-
-    if (!field.required) {
-      fieldSchema = fieldSchema.optional();
-    }
-
-    schemaFields[field.name] = fieldSchema;
-  });
-
-  return z.object(schemaFields);
-};
 
 export enum FormFieldLabels {
   // Basic Info
@@ -250,14 +212,14 @@ export enum FormFieldPlaceholders {
   EMERGENCY_CONTACT_PHONE = "+1 (555) 123-4567",
 }
 
-// Step 1: Basic Information (same for all users)
 const basicInfoStep: FormStep = {
-  id: "basic-info",
+  id: "basic",
   title: PageTitles.BASIC_INFO,
   description: PageDescriptions.BASIC_INFO,
   order: 1,
   requiresReview: false,
   dependencies: [],
+  status: StepStatus.draft,
   fields: [
     {
       name: "firstName",
@@ -324,10 +286,12 @@ const basicInfoStep: FormStep = {
       label: FormFieldLabels.USER_TYPE,
       type: FormFieldType.select,
       required: true,
-      options: Object.entries(USER_TYPE_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(USER_TYPE_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       validation: requiredString,
       placeholder: "",
       description: "",
@@ -340,14 +304,14 @@ const basicInfoStep: FormStep = {
   ],
 };
 
-// Step 2: User Type Specific Information
 const fireWatchStep: FormStep = {
-  id: "fire-watch-info",
+  id: "fire-watch",
   title: PageTitles.FIRE_WATCH_INFO,
   description: PageDescriptions.FIRE_WATCH_INFO,
   order: 2,
   requiresReview: true, // Requires admin review for certification verification
-  dependencies: ["basic-info"],
+  dependencies: [],
+  status: StepStatus.draft,
   fields: [
     {
       name: "yearsExperience",
@@ -372,10 +336,12 @@ const fireWatchStep: FormStep = {
       label: FormFieldLabels.CERTIFICATIONS,
       type: FormFieldType.multiselect,
       required: true,
-      options: Object.entries(CERTIFICATION_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(CERTIFICATION_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       placeholder: "",
       description: "",
       isDisabled: false,
@@ -389,10 +355,12 @@ const fireWatchStep: FormStep = {
       label: FormFieldLabels.AVAILABILITY,
       type: FormFieldType.multiselect,
       required: true,
-      options: Object.entries(AVAILABILITY_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(AVAILABILITY_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       placeholder: "",
       description: "",
       isDisabled: false,
@@ -441,12 +409,13 @@ const fireWatchStep: FormStep = {
 };
 
 const fireWatchClientStep: FormStep = {
-  id: "fire-watch-client-info",
+  id: "fire-watch-client",
   title: PageTitles.CLIENT_INFO,
   description: PageDescriptions.CLIENT_INFO,
   order: 2,
   requiresReview: false,
-  dependencies: ["basic-info"],
+  dependencies: [],
+  status: StepStatus.draft,
   fields: [
     {
       name: "companyName",
@@ -468,10 +437,12 @@ const fireWatchClientStep: FormStep = {
       label: FormFieldLabels.INDUSTRY_TYPE,
       type: FormFieldType.select,
       required: true,
-      options: Object.entries(INDUSTRY_TYPE_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(INDUSTRY_TYPE_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       validation: requiredString,
       placeholder: "",
       description: "",
@@ -501,10 +472,12 @@ const fireWatchClientStep: FormStep = {
       label: FormFieldLabels.TYPICAL_SHIFT_LENGTH,
       type: FormFieldType.select,
       required: true,
-      options: Object.entries(SHIFT_LENGTH_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(SHIFT_LENGTH_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       validation: requiredString,
       placeholder: "",
       description: "",
@@ -519,10 +492,12 @@ const fireWatchClientStep: FormStep = {
       label: FormFieldLabels.FREQUENCY_NEEDED,
       type: FormFieldType.select,
       required: true,
-      options: Object.entries(FREQUENCY_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(FREQUENCY_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       validation: requiredString,
       placeholder: "",
       description: "",
@@ -536,12 +511,13 @@ const fireWatchClientStep: FormStep = {
 };
 
 const fireWatchAdminStep: FormStep = {
-  id: "fire-watch-admin-info",
+  id: "fire-watch-admin",
   title: PageTitles.ADMIN_INFO,
   description: PageDescriptions.ADMIN_INFO,
   order: 2,
   requiresReview: true, // Requires admin review for permission verification
-  dependencies: ["basic-info"],
+  dependencies: [],
+  status: StepStatus.draft,
   fields: [
     {
       name: "organizationName",
@@ -563,10 +539,12 @@ const fireWatchAdminStep: FormStep = {
       label: FormFieldLabels.ADMIN_LEVEL,
       type: FormFieldType.select,
       required: true,
-      options: Object.entries(ADMIN_LEVEL_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(ADMIN_LEVEL_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       validation: requiredString,
       placeholder: "",
       description: "",
@@ -596,10 +574,12 @@ const fireWatchAdminStep: FormStep = {
       label: FormFieldLabels.SERVICE_AREAS,
       type: FormFieldType.multiselect,
       required: true,
-      options: Object.entries(SERVICE_AREA_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(SERVICE_AREA_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       placeholder: "",
       description: "",
       isDisabled: false,
@@ -630,12 +610,13 @@ const fireWatchAdminStep: FormStep = {
 };
 
 const ahjOfficialStep: FormStep = {
-  id: "ahj-official-info",
+  id: "ahj-official",
   title: PageTitles.AHJ_INFO,
   description: PageDescriptions.AHJ_INFO,
   order: 2,
   requiresReview: true, // Requires admin review for authority verification
-  dependencies: ["basic-info"],
+  dependencies: [],
+  status: StepStatus.draft,
   fields: [
     {
       name: "jurisdiction",
@@ -687,7 +668,7 @@ const ahjOfficialStep: FormStep = {
       label: FormFieldLabels.JURISDICTION_TYPE,
       type: FormFieldType.select,
       required: true,
-      options: Object.entries(JURISDICTION_TYPE_LABELS).map(
+      options: Object.entries(JURISDICTION_TYPE_FIELD_OPTIONS).map(
         ([value, label]) => ({ value, label }),
       ),
       validation: requiredString,
@@ -704,10 +685,12 @@ const ahjOfficialStep: FormStep = {
       label: FormFieldLabels.AUTHORITY_LEVEL,
       type: FormFieldType.multiselect,
       required: true,
-      options: Object.entries(AUTHORITY_LEVEL_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(AUTHORITY_LEVEL_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       placeholder: "",
       description: "",
       isDisabled: false,
@@ -737,24 +720,26 @@ const ahjOfficialStep: FormStep = {
   ],
 };
 
-// Step 3: Contact & Preferences (same for all users)
 const contactPreferencesStep: FormStep = {
   id: "contact-preferences",
   title: PageTitles.CONTACT_PREFERENCES,
   description: PageDescriptions.CONTACT_PREFERENCES,
   order: 3,
   requiresReview: false,
-  dependencies: ["basic-info"],
+  dependencies: [],
+  status: StepStatus.draft,
   fields: [
     {
       name: "preferredContactMethod",
       label: FormFieldLabels.PREFERRED_CONTACT_METHOD,
       type: FormFieldType.radio,
       required: true,
-      options: Object.entries(CONTACT_METHOD_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(CONTACT_METHOD_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       validation: requiredString,
       placeholder: "",
       description: "",
@@ -769,7 +754,7 @@ const contactPreferencesStep: FormStep = {
       label: FormFieldLabels.TIMEZONE,
       type: FormFieldType.select,
       required: true,
-      options: Object.entries(TIMEZONE_LABELS).map(([value, label]) => ({
+      options: Object.entries(TIMEZONE_FIELD_OPTIONS).map(([value, label]) => ({
         value,
         label,
       })),
@@ -786,10 +771,12 @@ const contactPreferencesStep: FormStep = {
       name: "notifications",
       label: FormFieldLabels.NOTIFICATIONS,
       type: FormFieldType.multiselect,
-      options: Object.entries(NOTIFICATION_LABELS).map(([value, label]) => ({
-        value,
-        label,
-      })),
+      options: Object.entries(NOTIFICATION_FIELD_OPTIONS).map(
+        ([value, label]) => ({
+          value,
+          label,
+        }),
+      ),
       placeholder: "",
       required: false,
       description: "",
@@ -830,90 +817,4 @@ const contactPreferencesStep: FormStep = {
       },
     },
   ],
-};
-
-export const formStepsConfig = {
-  "basic-info": basicInfoStep,
-  [UserTypeOptions.FIRE_WATCH]: fireWatchStep,
-  [UserTypeOptions.FIRE_WATCH_CLIENT]: fireWatchClientStep,
-  [UserTypeOptions.FIRE_WATCH_ADMIN]: fireWatchAdminStep,
-  [UserTypeOptions.AHJ_OFFICIAL]: ahjOfficialStep,
-  "contact-preferences": contactPreferencesStep,
-};
-
-export const getStepsForUserType = (userType: string): FormStep[] => {
-  const steps = [basicInfoStep];
-
-  switch (userType) {
-    case UserTypeOptions.FIRE_WATCH:
-      steps.push(fireWatchStep);
-      break;
-    case UserTypeOptions.FIRE_WATCH_CLIENT:
-      steps.push(fireWatchClientStep);
-      break;
-    case UserTypeOptions.FIRE_WATCH_ADMIN:
-      steps.push(fireWatchAdminStep);
-      break;
-    case UserTypeOptions.AHJ_OFFICIAL:
-      steps.push(ahjOfficialStep);
-      break;
-    default:
-      // Default to fire-watch if no user type specified
-      steps.push(fireWatchStep);
-      break;
-  }
-
-  steps.push(contactPreferencesStep);
-  return steps.sort((a, b) => a.order - b.order);
-};
-
-// Helper functions for step status management
-export const getStepStatusColor = (status: StepStatus): string => {
-  switch (status) {
-    case StepStatus.pending:
-      return "text-muted-foreground";
-    case StepStatus.pending:
-      return "text-blue-500";
-    case StepStatus.underReview:
-      return "text-yellow-500";
-    case StepStatus.approved:
-      return "text-green-500";
-    case StepStatus.needsRework:
-      return "text-red-500";
-    case StepStatus.complete:
-      return "text-green-600";
-    default:
-      return "text-muted-foreground";
-  }
-};
-
-export const getStepStatusLabel = (status: StepStatus): string => {
-  switch (status) {
-    case StepStatus.pending:
-      return "Draft";
-    case StepStatus.pending:
-      return "Pending Review";
-    case StepStatus.underReview:
-      return "Under Review";
-    case StepStatus.approved:
-      return "Approved";
-    case StepStatus.needsRework:
-      return "Needs Rework";
-    case StepStatus.complete:
-      return "Complete";
-    default:
-      return "Unknown";
-  }
-};
-
-export const canEditStep = (status: StepStatus): boolean => {
-  return [
-    StepStatus.pending,
-    StepStatus.needsRework,
-    StepStatus.pending,
-  ].includes(status);
-};
-
-export const isStepComplete = (status: StepStatus): boolean => {
-  return [StepStatus.approved, StepStatus.complete].includes(status);
 };

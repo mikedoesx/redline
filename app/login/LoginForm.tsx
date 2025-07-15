@@ -12,23 +12,32 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../../ui/form";
+} from "@/lib/components/ui/form";
+import {
+  INITIAL_USER_PROFILE,
+  UserProfileStatus,
+  UserRole,
+} from "@/lib/types/user-profile";
+import {
+  User,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { appleProvider, auth, googleProvider } from "@/lib/services/firebase";
-import { signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 import { AuthErrors } from "@/lib/types/error-messages";
 import { AuthSuccess } from "@/lib/types/success-messages";
-import { Button } from "../../ui/button";
-import { FormMessages } from "@/lib/form-validators/validation-messages";
-import { Input } from "../../ui/input";
+import { Button } from "@/lib/components/ui/button";
+import { FormMessages } from "@/lib/constants/validation-messages";
+import { Input } from "@/lib/components/ui/input";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { LoginWithGoogleButton } from "./LoginWithGoogleButton";
-import { UserProfileService } from "@/lib/services/user-profile";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -42,7 +51,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const userProfileService = UserProfileService.getInstance();
+  const { setProfile, saveUserProfile, getUserProfile } = useUserProfile();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -56,9 +65,7 @@ export const LoginForm = () => {
     try {
       setIsLoading(true);
       const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      toast.success("Signed in with Google!");
-      router.push("/dashboard");
+      await handleLoginSuccess(result.user);
       setIsLoading(false);
     } catch (error) {
       toast.error("Google sign-in failed");
@@ -71,9 +78,7 @@ export const LoginForm = () => {
     try {
       setIsLoading(true);
       const result = await signInWithPopup(auth, appleProvider);
-      const user = result.user;
-      toast.success("Signed in with Apple!");
-      router.push("/dashboard");
+      await handleLoginSuccess(result.user);
       setIsLoading(false);
     } catch (error) {
       toast.error("Apple sign-in failed");
@@ -86,26 +91,14 @@ export const LoginForm = () => {
     setIsLoading(true);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const result = await signInWithEmailAndPassword(
         auth,
         data.email,
         data.password,
       );
-      const user = userCredential.user;
-
-      // Check if user has completed profile setup
-      const userProfile = await userProfileService.getUserProfile(user.uid);
-
-      if (!userProfile || !userProfile.isComplete) {
-        toast.success(AuthSuccess.WELCOME_COMPLETE_PROFILE);
-        router.push("/dashboard");
-        setIsLoading(false);
-      }
+      await handleLoginSuccess(result.user);
     } catch (error: any) {
-      console.error("Login error:", error);
-
       let errorMessage = AuthErrors.SIGNIN_FAILED;
-
       if (error.code === "auth/user-not-found") {
         errorMessage = AuthErrors.USER_NOT_FOUND;
       } else if (error.code === "auth/wrong-password") {
@@ -116,9 +109,40 @@ export const LoginForm = () => {
         errorMessage = AuthErrors.TOO_MANY_ATTEMPTS;
       }
 
-      toast.error(errorMessage);
-      setIsLoading(false);
+      handleLoginError(errorMessage);
     }
+  };
+
+  const handleLoginSuccess = async (user: User) => {
+    toast.success(AuthSuccess.LOGIN);
+    router.push("/dashboard");
+
+    let profile = await getUserProfile(user.uid);
+    if (!profile) {
+      await saveUserProfile(user.uid, {
+        ...INITIAL_USER_PROFILE,
+        userId: user.uid,
+        firstName: user.displayName ?? "",
+        email: user.email ?? "",
+        phoneNumber: user.phoneNumber ?? "",
+        imageUrl: user.photoURL ?? "",
+        userType: UserRole.FIRE_WATCH,
+        status: UserProfileStatus.incomplete,
+      });
+
+      profile = await getUserProfile(user.uid);
+      setProfile(profile);
+    }
+
+    setIsLoading(false);
+  };
+
+  const handleLoginError = (
+    errorMessage: string = "Login failed! Please try again later.",
+  ) => {
+    console.error("Login error:", errorMessage);
+    toast.error(errorMessage);
+    setIsLoading(false);
   };
 
   return (

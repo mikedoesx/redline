@@ -1,4 +1,4 @@
-import { AppFooter } from "../../AppFooter";
+import { AppFooter } from "@/lib/components/AppFooter";
 import { HomeCallToAction } from "./HomeCallToAction";
 import { HomeContact } from "./HomeContact";
 import { HomeFeatureBanner } from "./HomeFeatureBanner";

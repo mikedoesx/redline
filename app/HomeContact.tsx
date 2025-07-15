@@ -1,15 +1,20 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/lib/components/ui/card";
 import { Mail, MapPin, Phone } from "lucide-react";
 
-import { Button } from "../../ui/button";
+import { Button } from "@/lib/components/ui/button";
 import { HomeListItem } from "./HomeListItem";
 import { HomeSectionHeader } from "./HomeSectionHeader";
-import { Input } from "../../ui/input";
-import { Label } from "../../ui/label";
+import { Input } from "@/lib/components/ui/input";
+import { Label } from "@/lib/components/ui/label";
 import type React from "react";
-import { Textarea } from "../../ui/textarea";
+import { Textarea } from "@/lib/components/ui/textarea";
 import { useState } from "react";
 
 export const HomeContact = () => {

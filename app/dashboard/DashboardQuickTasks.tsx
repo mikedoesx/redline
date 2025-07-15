@@ -7,7 +7,7 @@ import {
 } from "@/lib/components/ui/card";
 
 import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "../../ui/button";
+import { Button } from "@/lib/components/ui/button";
 
 export function DashboardQuickTasks() {
   const tasks = [

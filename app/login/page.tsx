@@ -1,4 +1,4 @@
-import { LoginPage } from "@/lib/components/pages/login/LoginPage";
+import { LoginPage } from "./LoginPage";
 import { Metadata } from "next";
 import type React from "react";
 

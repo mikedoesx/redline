@@ -8,46 +8,45 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { UserProfile, UserProfileService } from "@/lib/services/user-profile";
 
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { Label } from "../ui/label";
+import { UserProfile } from "@/lib/types/user-profile";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useState } from "react";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
-interface EditableFieldProps {
+interface ArrayEditableFieldProps {
   label: string;
-  value: string | string[] | number | undefined;
-  field: keyof UserProfile;
+  value: string[] | undefined;
+  field: string;
   type?: FormFieldType;
   options: { value: string; label: string }[];
-  icon?: React.ReactNode;
   profile: UserProfile;
   disabled?: boolean;
   required?: boolean;
-  onUpdate: (field: keyof UserProfile, value: any) => void;
+  onUpdate: (field: string, value: any) => void;
 }
 
 export const ArrayEditableField = ({
   label,
   value,
   field,
-  icon,
   options,
   profile,
   disabled = false,
   required = false,
   onUpdate,
-}: Omit<EditableFieldProps, "type"> & { value?: string[] }) => {
+}: Omit<ArrayEditableFieldProps, "type">) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentValues, setCurrentValues] = useState<string[]>(value || []);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
-  const userProfileService = UserProfileService.getInstance();
+  const { saveUserProfile } = useUserProfile();
 
   const validate = () => {
     if (required && currentValues.length === 0) {
@@ -70,10 +69,25 @@ export const ArrayEditableField = ({
 
     setIsLoading(true);
     try {
-      await userProfileService.saveUserProfile(user.uid, {
-        ...profile,
-        [field]: arrayValue,
-      });
+      // Create a shallow copy of the profile
+      const updatedProfile = { ...profile };
+
+      // Support dot-notation like "fireWatchConfig.yearsExperience"
+      const keys = field.split(".");
+      let current: any = updatedProfile;
+
+      // Traverse and build nested structure
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (!current[key]) current[key] = {};
+        current = current[key];
+      }
+
+      // Set the value at the target key
+      current[keys[keys.length - 1]] = arrayValue;
+
+      // Save updated profile
+      await saveUserProfile(user.uid, updatedProfile);
 
       onUpdate(field, arrayValue);
       setIsEditing(false);
@@ -103,18 +117,13 @@ export const ArrayEditableField = ({
         ))}
       </div>
     ) : (
-      "Not set"
+      ""
     );
 
   return (
-    <div
-      className={`flex items-start justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors ${
-        required && (!value || value.length === 0) ? "bg-red-50" : ""
-      }`}
-    >
+    <div className={`flex items-start justify-between relative`}>
       <div className="flex items-start space-x-3 flex-1">
-        {icon && <div className="text-muted-foreground mt-1">{icon}</div>}
-        <div className="flex-1">
+        <div className={`flex-1 ${isEditing ? "mr-20" : ""}`}>
           <Label>
             {label} {required && <span className="text-red-500">*</span>}
           </Label>
@@ -176,14 +185,31 @@ export const ArrayEditableField = ({
               {error && <p className="text-sm text-red-500">{error}</p>}
             </div>
           ) : (
-            <div className="mt-1">{displayValue}</div>
+            <div className="mr-10">
+              <Select disabled={true}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select options" />
+                </SelectTrigger>
+                <SelectContent>
+                  {options?.map((opt) => (
+                    <SelectItem
+                      key={opt.value}
+                      value={opt.value}
+                      disabled={currentValues.includes(opt.value)}
+                    >
+                      {opt.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           )}
         </div>
       </div>
 
-      <div className="flex items-center space-x-2 mt-1">
+      <div className="absolute top-0 right-0 mt-7">
         {isEditing ? (
-          <>
+          <div className="flex items-center space-x-2 mt-1">
             <Button
               size="sm"
               onClick={handleSave}
@@ -201,17 +227,19 @@ export const ArrayEditableField = ({
             >
               <X className="h-4 w-4" />
             </Button>
-          </>
+          </div>
         ) : (
           !disabled && (
-            <Button
-              size="sm"
-              variant="ghost"
-              onClick={() => setIsEditing(true)}
-              className="h-8 w-8 p-0"
-            >
-              <Edit2 className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center space-x-2">
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsEditing(true)}
+                className="h-8 w-8 p-0"
+              >
+                <Edit2 className="h-4 w-4" />
+              </Button>
+            </div>
           )
         )}
       </div>

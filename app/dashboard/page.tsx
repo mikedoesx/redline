@@ -1,4 +1,4 @@
-import { DashboardPage } from "@/lib/components/pages/dashboard/DashboardPage";
+import { DashboardPage } from "./DashboardPage";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {

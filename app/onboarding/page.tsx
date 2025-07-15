@@ -23,16 +23,16 @@ import { Button } from "@/lib/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { DateFormatters } from "@/lib/utils";
 import { Input } from "@/lib/components/ui/input";
-import { PageLoading } from "@/lib/components/pages/PageLoading";
-import { UserTypeOptions } from "@/lib/constants/form-options";
-import { useProfileCheck } from "@/lib/hooks/use-profile-check";
+import { PageLoading } from "@/lib/components/AppLoading";
+import { UserRole } from "@/lib/types/user-profile";
 import { useRouter } from "next/navigation";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 const STATUS_OPTIONS = ["all", "draft", "active", "archived"] as const;
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { profile, isCheckingProfile } = useProfileCheck();
+  const { profile, isCheckingProfile, isComplete } = useUserProfile();
 
   const [statusFilter, setStatusFilter] =
     useState<(typeof STATUS_OPTIONS)[number]>("all");
@@ -43,7 +43,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (isCheckingProfile || !profile) return;
 
-    if (profile.isComplete && profile.userType === UserTypeOptions.FIRE_WATCH) {
+    if (isComplete && profile.userType === UserRole.FIRE_WATCH) {
       router.replace("/profile");
     }
   }, [profile, isCheckingProfile, router]);
@@ -64,10 +64,10 @@ export default function OnboardingPage() {
           config: {
             clients: [],
             requiredByUserTypes: [
-              UserTypeOptions.AHJ_OFFICIAL,
-              UserTypeOptions.FIRE_WATCH,
-              UserTypeOptions.FIRE_WATCH_ADMIN,
-              UserTypeOptions.FIRE_WATCH_CLIENT,
+              UserRole.AHJ_OFFICIAL,
+              UserRole.FIRE_WATCH,
+              UserRole.FIRE_WATCH_ADMIN,
+              UserRole.FIRE_WATCH_CLIENT,
             ],
           },
           createdBy: "admin@example.com",

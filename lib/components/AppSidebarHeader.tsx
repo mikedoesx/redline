@@ -7,14 +7,14 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "../../ui/breadcrumb";
+} from "@/lib/components/ui/breadcrumb";
 
-import { Separator } from "../../ui/separator";
-import { SidebarTrigger } from "../../ui/sidebar";
+import { Separator } from "@/lib/components/ui/separator";
+import { SidebarTrigger } from "@/lib/components/ui/sidebar";
 import { StringFormatters } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
-export const DashboardHeader = () => {
+export const AppSidebarHeader = () => {
   const pathname = usePathname();
 
   // Generate breadcrumbs from pathname

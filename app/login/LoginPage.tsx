@@ -4,16 +4,16 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../../ui/card";
+} from "@/lib/components/ui/card";
 
 import Image from "next/image";
-import { SignUpForm } from "./SignUpForm";
+import { LoginForm } from "./LoginForm";
 
-export const SignUpPage = () => {
+export const LoginPage = () => {
   return (
     <Card className="w-full max-w-md -mt-40">
       <CardHeader className="space-y-1 text-center">
-        <div className="flex justify-center mb-4 relative">
+        <div className="flex justify-center mb-4">
           <Image
             src="/images/logo220x48.png"
             alt="Redline Logo"
@@ -21,14 +21,15 @@ export const SignUpPage = () => {
             height={48}
           />
         </div>
-
-        <CardTitle className="text-2xl font-bold">Create an account</CardTitle>
-
-        <CardDescription>Sign up to get started</CardDescription>
+        <CardTitle className="text-2xl font-bold">
+          Sign in to your account
+        </CardTitle>
+        <CardDescription>
+          Enter your email and password to access the dashboard
+        </CardDescription>
       </CardHeader>
-
       <CardContent>
-        <SignUpForm />
+        <LoginForm />
       </CardContent>
     </Card>
   );

@@ -7,27 +7,27 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
-import { UserProfile, UserProfileService } from "@/lib/services/user-profile";
+} from "@/lib/components/ui/select";
 
 import { Button } from "../ui/button";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { UserProfile } from "@/lib/types/user-profile";
 import { toast } from "sonner";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useState } from "react";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 interface EditableFieldProps {
   label: string;
   value: string | string[] | number | undefined;
-  field: keyof UserProfile;
+  field: string;
   type?: FormFieldType;
   options?: { value: string; label: string }[];
-  icon?: React.ReactNode;
   profile: UserProfile;
-  onUpdate: (field: keyof UserProfile, value: any) => void;
+  onUpdate: (field: string, value: any) => void;
   disabled?: boolean;
   required?: boolean;
 }
@@ -38,7 +38,6 @@ export const EditableField = ({
   field,
   type = FormFieldType.text,
   options,
-  icon,
   profile,
   onUpdate,
   disabled = false,
@@ -49,12 +48,9 @@ export const EditableField = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
-  const userProfileService = UserProfileService.getInstance();
+  const { saveUserProfile } = useUserProfile();
 
-  const validateField = (
-    field: keyof UserProfile,
-    value: any,
-  ): string | null => {
+  const validateField = (field: string, value: any): string | null => {
     if (required && (!value || value === "")) {
       return "This field is required.";
     }
@@ -86,10 +82,23 @@ export const EditableField = ({
 
     setIsLoading(true);
     try {
-      await userProfileService.saveUserProfile(user.uid, {
-        ...profile,
-        [field]: updatedValue,
-      });
+      // Clone the profile
+      const updatedProfile = { ...profile };
+
+      // Split and traverse the path
+      const keys = field.split(".");
+      let current: any = updatedProfile;
+      for (let i = 0; i < keys.length - 1; i++) {
+        const key = keys[i];
+        if (!current[key]) current[key] = {};
+        current = current[key];
+      }
+
+      // Set the new value
+      current[keys[keys.length - 1]] = updatedValue;
+
+      // Save
+      await saveUserProfile(user.uid, updatedProfile);
 
       onUpdate(field, updatedValue);
       setIsEditing(false);
@@ -108,16 +117,11 @@ export const EditableField = ({
     setIsEditing(false);
   };
 
-  const displayValue = value || "Not set";
+  const displayValue = value || "";
 
   return (
-    <div
-      className={`flex items-center justify-between py-3 px-4 hover:bg-gray-50 rounded-lg transition-colors ${
-        required && !value ? "bg-red-50" : ""
-      }`}
-    >
+    <div className={`flex items-center justify-between`}>
       <div className="flex items-center space-x-2 flex-1">
-        {icon && <div className="text-muted-foreground">{icon}</div>}
         <div className="flex-1">
           <Label>
             {label} {required && <span className="text-red-500">*</span>}
@@ -131,7 +135,7 @@ export const EditableField = ({
                   disabled={disabled}
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue />
+                    <SelectValue placeholder="Select options" />
                   </SelectTrigger>
                   <SelectContent>
                     {options.map((option) => (
@@ -162,11 +166,16 @@ export const EditableField = ({
               {error && <p className="text-sm text-red-500">{error}</p>}
             </div>
           ) : (
-            <div className="text-foreground mt-1">{displayValue}</div>
+            <Input
+              type={type}
+              value={displayValue}
+              className="w-full"
+              disabled={true}
+            />
           )}
         </div>
 
-        <div className="flex items-center space-x-2 self-start mt-2">
+        <div className="flex items-center space-x-2 mt-6">
           {isEditing ? (
             <>
               <Button

@@ -1,8 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/lib/components/ui/card";
 
-import { Button } from "../../ui/button";
 import Link from "next/link";
 import { TriangleAlertIcon } from "lucide-react";
 import { useRouter } from "next/navigation";

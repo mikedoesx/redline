@@ -12,7 +12,6 @@ import {
   CalendarIcon,
   CheckSquare,
   Clock,
-  Clock4Icon,
   FileText,
   GraduationCap,
   HelpCircle,
@@ -45,10 +44,10 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 
 import { AuthService } from "@/lib/services/auth";
-import { Badge } from "../../ui/badge";
+import { Badge } from "@/lib/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { useProfileCheck } from "@/lib/hooks/use-profile-check";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 interface NavItem {
   title?: string;
@@ -61,10 +60,10 @@ interface NavItem {
   items?: NavItem[];
 }
 
-export function DashboardSidebar() {
+export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { profile, getDisplayUserType } = useProfileCheck();
+  const { profile, getDisplayUserType } = useUserProfile();
   const authService = AuthService.getInstance();
 
   const navigationItems: NavItem[] = useMemo(

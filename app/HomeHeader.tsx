@@ -3,7 +3,7 @@
 import { Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
-import { Button } from "../../ui/button";
+import { Button } from "@/lib/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { useIsMobile } from "@/lib/hooks/use-mobile";

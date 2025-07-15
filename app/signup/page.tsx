@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { SignUpPage } from "@/lib/components/pages/signup/SignUpPage";
+import { SignUpPage } from "./SignUpPage";
 
 export async function generateMetadata(): Promise<Metadata> {
   return {

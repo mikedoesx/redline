@@ -33,10 +33,10 @@ import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/lib/components/ui/button";
 import { Input } from "@/lib/components/ui/input";
 import { Label } from "@/lib/components/ui/label";
-import { PageLoading } from "@/lib/components/pages/PageLoading";
+import { PageLoading } from "@/lib/components/AppLoading";
 import { Textarea } from "@/lib/components/ui/textarea";
-import { UserTypeOptions } from "@/lib/constants/form-options";
-import { useProfileCheck } from "@/lib/hooks/use-profile-check";
+import { UserRole } from "@/lib/types/user-profile";
+import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 export const dynamic = "force-dynamic";
 
@@ -45,7 +45,7 @@ export default function OnboardingTemplateDetailPage() {
   const params = useParams();
   const templateId = params?.id as string;
 
-  const { profile, isCheckingProfile } = useProfileCheck();
+  const { profile, isCheckingProfile, isComplete } = useUserProfile();
   const [loadingTemplate, setLoadingTemplate] = useState(true);
 
   const [template, setTemplate] = useState({
@@ -59,7 +59,7 @@ export default function OnboardingTemplateDetailPage() {
   useEffect(() => {
     if (isCheckingProfile || !profile) return;
 
-    if (profile.isComplete && profile.userType === UserTypeOptions.FIRE_WATCH) {
+    if (profile && profile.userType === UserRole.FIRE_WATCH) {
       router.replace("/profile");
     }
   }, [profile, isCheckingProfile, router]);
