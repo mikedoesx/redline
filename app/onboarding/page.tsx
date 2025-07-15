@@ -63,7 +63,7 @@ export default function OnboardingPage() {
           status: TemplateStatus.active,
           config: {
             clients: [],
-            requiredByUserTypes: [
+            requiredByUserRoles: [
               UserRole.AHJ_OFFICIAL,
               UserRole.FIRE_WATCH,
               UserRole.FIRE_WATCH_ADMIN,
