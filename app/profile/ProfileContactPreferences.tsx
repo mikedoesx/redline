@@ -40,7 +40,7 @@ export const ProfileContactPreferences = ({
           <span>Contact Preferences</span>
         </h2>
         <p className="text-muted-foreground">
-          How you'd like us to reach you and when.
+          How you&apos;d like us to reach you and when.
         </p>
       </div>
 
