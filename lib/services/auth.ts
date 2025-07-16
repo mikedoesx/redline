@@ -1,12 +1,13 @@
 import {
-  UserCredential,
+  type UserCredential,
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 
-import { FirebaseError } from "firebase/app";
+import type { FirebaseError } from "firebase/app";
+import { AuthErrors } from "@/lib/types/error-messages";
 import { auth } from "./firebase";
 
 export class AuthService {
@@ -24,14 +25,15 @@ export class AuthService {
 
   async register(
     email: string,
-    password: string
+    password: string,
   ): Promise<{ credential?: UserCredential; error?: string }> {
     try {
       const credential = await createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
+      console.log("🚀 - :36 - AuthService - credential:", credential);
       return { credential };
     } catch (e) {
       return this.getErrorMessageFromFirebaseError(e as FirebaseError);
@@ -40,14 +42,15 @@ export class AuthService {
 
   async login(
     email: string,
-    password: string
+    password: string,
   ): Promise<{ credential?: UserCredential; error?: string }> {
     try {
       const credential = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
+      console.log(`🚀 - :53 - AuthService - { credential }:`, { credential });
       return { credential };
     } catch (e) {
       return this.getErrorMessageFromFirebaseError(e as FirebaseError);
@@ -69,17 +72,22 @@ export class AuthService {
     switch (error.code) {
       case "auth/invalid-credential":
         return {
-          error: "Invalid login credentials",
+          error: AuthErrors.INVALID_CREDENTIALS,
         };
 
       case "auth/email-already-in-use":
         return {
-          error: "This email is already in use.",
+          error: AuthErrors.EMAIL_IN_USE,
+        };
+
+      case "auth/weak-password":
+        return {
+          error: AuthErrors.WEAK_PASSWORD,
         };
 
       default:
         return {
-          error: "Couldn't login",
+          error: AuthErrors.LOGIN_FAILED,
         };
     }
   }

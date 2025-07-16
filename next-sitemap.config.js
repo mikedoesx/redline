@@ -5,12 +5,13 @@ module.exports = {
   sitemapSize: 5000,
   changefreq: "weekly",
   priority: 0.7,
-  exclude: ["/private-page"], // Optional: exclude pages
+  exclude: ["/profile", "/dashboard"], // Optional: exclude pages
   robotsTxtOptions: {
     policies: [
       { userAgent: "*", allow: "/" },
       // Example: disallow private pages
-      // { userAgent: "*", disallow: "/private-page" },
+      { userAgent: "*", disallow: "/profile" },
+      { userAgent: "*", disallow: "/dashboard" },
     ],
     additionalSitemaps: [
       // Add custom sitemaps here if needed

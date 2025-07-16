@@ -2,6 +2,14 @@
 User-agent: *
 Allow: /
 
+# *
+User-agent: *
+Disallow: /profile
+
+# *
+User-agent: *
+Disallow: /dashboard
+
 # Host
 Host: https://redlinefirewatch.vercel.app
 
