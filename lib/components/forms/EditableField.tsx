@@ -9,16 +9,16 @@ import {
   SelectValue,
 } from "@/lib/components/ui/select";
 
+import { AppUser } from "@/lib/types/user-profile";
 import { Button } from "../ui/button";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
-import { UserProfile } from "@/lib/types/user-profile";
 import { toast } from "sonner";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useState } from "react";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 interface EditableFieldProps {
   label: string;
@@ -26,7 +26,7 @@ interface EditableFieldProps {
   field: string;
   type?: FormFieldType;
   options?: { value: string; label: string }[];
-  profile: UserProfile;
+  profile: AppUser;
   onUpdate: (field: string, value: any) => void;
   disabled?: boolean;
   required?: boolean;
@@ -48,7 +48,7 @@ export const EditableField = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
-  const { saveUserProfile } = useUserProfile();
+  const { saveAppUser } = useAppUser();
 
   const validateField = (field: string, value: any): string | null => {
     if (required && (!value || value === "")) {
@@ -98,7 +98,7 @@ export const EditableField = ({
       current[keys[keys.length - 1]] = updatedValue;
 
       // Save
-      await saveUserProfile(user.uid, updatedProfile);
+      await saveAppUser(user.uid, updatedProfile);
 
       onUpdate(field, updatedValue);
       setIsEditing(false);

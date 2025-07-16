@@ -7,7 +7,7 @@ import { AppSidebar } from "@/lib/components/AppSidebar";
 import { AppSidebarHeader } from "@/lib/components/AppSidebarHeader";
 import { PageLoading } from "@/lib/components/AppLoading";
 import type React from "react";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 
 export default function AppSidebarLayout({
   children,
@@ -16,7 +16,7 @@ export default function AppSidebarLayout({
   page: string;
   children: React.ReactNode;
 }) {
-  const { isCheckingProfile } = useUserProfile();
+  const { isCheckingProfile } = useAppUser();
 
   if (isCheckingProfile) {
     return <PageLoading page={page} />;

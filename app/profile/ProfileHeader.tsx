@@ -1,13 +1,13 @@
 "use client";
 
 import { Alert, AlertDescription, AlertTitle } from "@/lib/components/ui/alert";
-import { UserProfile, UserRole } from "@/lib/types/user-profile";
+import { AppUser, AppUserRole } from "@/lib/types/user-profile";
 
 import { Badge } from "@/lib/components/ui/badge";
 import { useMemo } from "react";
 
 interface ProfileHeaderProps {
-  profile: UserProfile;
+  profile: AppUser;
   hasCompleteProfile: boolean;
 }
 
@@ -17,13 +17,13 @@ export const ProfileHeader = ({
 }: ProfileHeaderProps) => {
   const getUserTypeLabel = useMemo(() => {
     switch (profile.userType) {
-      case UserRole.FIRE_WATCH:
+      case AppUserRole.FIRE_WATCH:
         return "Fire Watch Personnel";
-      case UserRole.FIRE_WATCH_CLIENT:
+      case AppUserRole.FIRE_WATCH_CLIENT:
         return "Client";
-      case UserRole.FIRE_WATCH_ADMIN:
+      case AppUserRole.FIRE_WATCH_ADMIN:
         return "Administrator";
-      case UserRole.AHJ_OFFICIAL:
+      case AppUserRole.AHJ_OFFICIAL:
         return "Authority Having Jurisdiction";
       default:
         return profile.userType;

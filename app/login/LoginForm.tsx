@@ -1,6 +1,11 @@
 "use client";
 
 import {
+  AppUserRole,
+  AppUserStatus,
+  INITIAL_USER_PROFILE,
+} from "@/lib/types/user-profile";
+import {
   ButtonLabels,
   LinkTexts,
   LoadingStates,
@@ -13,11 +18,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/lib/components/ui/form";
-import {
-  INITIAL_USER_PROFILE,
-  UserProfileStatus,
-  UserRole,
-} from "@/lib/types/user-profile";
 import {
   User,
   signInWithEmailAndPassword,
@@ -34,10 +34,10 @@ import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { LoginWithGoogleButton } from "./LoginWithGoogleButton";
 import { toast } from "sonner";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -51,7 +51,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  const { setProfile, saveUserProfile, getUserProfile } = useUserProfile();
+  const { setProfile, saveAppUser, getAppUser } = useAppUser();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
@@ -117,20 +117,20 @@ export const LoginForm = () => {
     toast.success(AuthSuccess.LOGIN);
     router.push("/dashboard");
 
-    let profile = await getUserProfile(user.uid);
+    let profile = await getAppUser(user.uid);
     if (!profile) {
-      await saveUserProfile(user.uid, {
+      await saveAppUser(user.uid, {
         ...INITIAL_USER_PROFILE,
-        userId: user.uid,
+        uid: user.uid,
         firstName: user.displayName ?? "",
         email: user.email ?? "",
         phoneNumber: user.phoneNumber ?? "",
         imageUrl: user.photoURL ?? "",
-        userType: UserRole.FIRE_WATCH,
-        status: UserProfileStatus.incomplete,
+        userType: AppUserRole.FIRE_WATCH,
+        status: AppUserStatus.incomplete,
       });
 
-      profile = await getUserProfile(user.uid);
+      profile = await getAppUser(user.uid);
       setProfile(profile);
     }
 

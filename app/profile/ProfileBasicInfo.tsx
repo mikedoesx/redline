@@ -6,14 +6,14 @@ import {
   US_STATE_LABELS,
 } from "@/lib/constants/form-options";
 
+import { AppUser } from "@/lib/types/user-profile";
 import { EditableField } from "@/lib/components/forms/EditableField";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { IdCardIcon } from "lucide-react";
-import { UserProfile } from "@/lib/types/user-profile";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 
 interface ProfileBasicInfoProps {
-  profile: UserProfile;
+  profile: AppUser;
   handleFieldUpdate: (field: string, value: any) => void;
 }
 
@@ -25,7 +25,7 @@ export const ProfileBasicInfo = ({
     ([value, label]) => ({ value, label }),
   );
 
-  const { isPendingReview } = useUserProfile();
+  const { isPendingReview } = useAppUser();
   const usStateOptions = Object.entries(US_STATE_LABELS).map(
     ([value, label]) => ({ value, label }),
   );

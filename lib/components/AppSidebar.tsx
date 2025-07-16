@@ -47,7 +47,7 @@ import { AuthService } from "@/lib/services/auth";
 import { Badge } from "@/lib/components/ui/badge";
 import Image from "next/image";
 import Link from "next/link";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 
 interface NavItem {
   title?: string;
@@ -63,7 +63,7 @@ interface NavItem {
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
-  const { profile, getDisplayUserType, isComplete } = useUserProfile();
+  const { profile, getDisplayUserType, isComplete } = useAppUser();
   const authService = AuthService.getInstance();
 
   const navigationItems: NavItem[] = useMemo(

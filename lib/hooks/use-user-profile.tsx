@@ -1,10 +1,10 @@
 "use client";
 
 import {
+  AppUser,
+  AppUserRole,
+  AppUserStatus,
   INITIAL_USER_PROFILE,
-  UserProfile,
-  UserProfileStatus,
-  UserRole,
 } from "@/lib/types/user-profile";
 import {
   doc,
@@ -21,65 +21,63 @@ import { replaceUndefinedWithNull } from "../utils";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useRouter } from "next/navigation";
 
-export function useUserProfile() {
+export function useAppUser() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
-  const [profile, setProfile] = useState<UserProfile | null>(
-    INITIAL_USER_PROFILE,
-  );
+  const [profile, setProfile] = useState<AppUser | null>(INITIAL_USER_PROFILE);
   const [isCheckingProfile, setIsCheckingProfile] = useState(true);
   const [hasCompleteProfile, setHasCompleteProfile] = useState(false);
 
   const isComplete = useMemo(
-    () => profile?.status === UserProfileStatus.complete,
+    () => profile?.status === AppUserStatus.complete,
     [profile?.status],
   );
   const isIncomplete = useMemo(
-    () => profile?.status === UserProfileStatus.incomplete,
+    () => profile?.status === AppUserStatus.incomplete,
     [profile?.status],
   );
   const isPendingReview = useMemo(
-    () => profile?.status === UserProfileStatus.pendingReview,
+    () => profile?.status === AppUserStatus.pendingReview,
     [profile?.status],
   );
 
   const getDisplayUserType = useMemo(() => {
     switch (profile?.userType) {
-      case UserRole.AHJ_OFFICIAL:
+      case AppUserRole.AHJ_OFFICIAL:
         return "AHJ";
-      case UserRole.FIRE_WATCH:
+      case AppUserRole.FIRE_WATCH:
         return "Fire Watch";
-      case UserRole.FIRE_WATCH_ADMIN:
+      case AppUserRole.FIRE_WATCH_ADMIN:
         return "Admin";
-      case UserRole.FIRE_WATCH_CLIENT:
+      case AppUserRole.FIRE_WATCH_CLIENT:
         return "Client";
     }
   }, [profile]);
 
-  const saveUserProfile = async (
-    userId: string,
-    profile: Partial<UserProfile>,
+  const saveAppUser = async (
+    uid: string,
+    profile: Partial<AppUser>,
   ): Promise<{ success: boolean }> => {
     try {
-      const userProfileRef = doc(db, "user-profiles", userId);
-      const profileData = {
-        ...profile,
-        userId,
-        updatedAt: serverTimestamp(),
-      };
+      // const userProfileRef = doc(db, "user-profiles", uid);
+      // const profileData = {
+      //   ...profile,
+      //   uid,
+      //   updatedAt: serverTimestamp(),
+      // };
 
-      // Check if document exists
-      const docSnap = await getDoc(userProfileRef);
+      // // Check if document exists
+      // const docSnap = await getDoc(userProfileRef);
 
-      if (docSnap.exists()) {
-        await updateDoc(userProfileRef, profileData);
-      } else {
-        await setDoc(userProfileRef, {
-          ...profileData,
-          ...INITIAL_USER_PROFILE,
-          createdAt: serverTimestamp(),
-        });
-      }
+      // if (docSnap.exists()) {
+      //   await updateDoc(userProfileRef, profileData);
+      // } else {
+      //   await setDoc(userProfileRef, {
+      //     ...profileData,
+      //     ...INITIAL_USER_PROFILE,
+      //     createdAt: serverTimestamp(),
+      //   });
+      // }
 
       return { success: true };
     } catch (error) {
@@ -88,23 +86,19 @@ export function useUserProfile() {
     }
   };
 
-  const getUserProfile = async (
-    userId: string,
-  ): Promise<UserProfile | null> => {
+  const getAppUser = async (uid: string): Promise<AppUser | null> => {
     try {
-      const userProfileRef = doc(db, "user-profiles", userId);
-      const docSnap = await getDoc(userProfileRef);
+      // const userProfileRef = doc(db, "user-profiles", uid);
+      // const docSnap = await getDoc(userProfileRef);
 
-      if (docSnap.exists()) {
-        const response = replaceUndefinedWithNull(
-          docSnap.data() as UserProfile,
-        );
-        console.log(
-          "🚀 - :221 - UserProfileService - getUserProfile - response:",
-          response,
-        );
-        return response;
-      }
+      // if (docSnap.exists()) {
+      //   const response = replaceUndefinedWithNull(docSnap.data() as AppUser);
+      //   console.log(
+      //     "🚀 - :221 - AppUserService - getAppUser - response:",
+      //     response,
+      //   );
+      //   return response;
+      // }
 
       return null;
     } catch (error) {
@@ -114,7 +108,7 @@ export function useUserProfile() {
   };
 
   useEffect(() => {
-    const checkUserProfile = async () => {
+    const checkAppUser = async () => {
       if (authLoading) return;
 
       if (!user) {
@@ -123,22 +117,22 @@ export function useUserProfile() {
       }
 
       try {
-        let userProfile = await getUserProfile(user.uid);
+        let userProfile = await getAppUser(user.uid);
 
         if (!userProfile) {
           // Profile doesn't exist, create a new one
-          await saveUserProfile(user.uid, {
+          await saveAppUser(user.uid, {
             ...INITIAL_USER_PROFILE,
-            userId: user.uid,
+            uid: user.uid,
             email: user.email ?? "",
           });
 
-          userProfile = await getUserProfile(user.uid);
+          userProfile = await getAppUser(user.uid);
         }
 
         setProfile(userProfile);
         setHasCompleteProfile(
-          Boolean(userProfile?.status === UserProfileStatus.complete),
+          Boolean(userProfile?.status === AppUserStatus.complete),
         );
       } catch (error) {
         console.error("Error checking user profile:", error);
@@ -149,7 +143,7 @@ export function useUserProfile() {
       }
     };
 
-    checkUserProfile();
+    checkAppUser();
   }, [user, authLoading, router]);
 
   return {
@@ -161,7 +155,7 @@ export function useUserProfile() {
     isComplete,
     isIncomplete,
     isPendingReview,
-    saveUserProfile,
-    getUserProfile,
+    saveAppUser,
+    getAppUser,
   };
 }

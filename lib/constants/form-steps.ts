@@ -15,8 +15,8 @@ import {
 } from "@/lib/constants/form-options";
 import { PageDescriptions, PageTitles } from "@/lib/types/ui-messages";
 
+import { AppUserRole } from "../types/user-profile";
 import { FormMessages } from "./validation-messages";
-import { UserRole } from "../types/user-profile";
 import { z } from "zod";
 
 export enum TemplateStatus {
@@ -27,7 +27,7 @@ export enum TemplateStatus {
 
 export interface TemplateConfig {
   clients: string[]; // some refernce to the clients using this template
-  requiredByUserRoles: UserRole[];
+  requiredByAppUserRoles: AppUserRole[];
 }
 
 export interface FormTemplate {

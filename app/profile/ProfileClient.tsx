@@ -6,13 +6,13 @@ import {
 } from "@/lib/constants/form-options";
 import { Card, CardContent } from "@/lib/components/ui/card";
 
+import { AppUser } from "@/lib/types/user-profile";
 import { BriefcaseBusinessIcon } from "lucide-react";
 import { EditableField } from "@/lib/components/forms/EditableField";
 import { FormFieldType } from "@/lib/constants/form-steps";
-import { UserProfile } from "@/lib/types/user-profile";
 
 interface ProfileClientProps {
-  profile: UserProfile;
+  profile: AppUser;
   handleFieldUpdate: (field: string, value: any) => void;
 }
 

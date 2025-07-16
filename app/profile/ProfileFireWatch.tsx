@@ -9,14 +9,14 @@ import {
   CardTitle,
 } from "@/lib/components/ui/card";
 
+import { AppUser } from "@/lib/types/user-profile";
 import { ArrayEditableField } from "@/lib/components/forms/ArrayEditableField";
 import { EditableField } from "@/lib/components/forms/EditableField";
 import { FireExtinguisherIcon } from "lucide-react";
 import { FormFieldType } from "@/lib/constants/form-steps";
-import { UserProfile } from "@/lib/types/user-profile";
 
 interface ProfileFireWatchProps {
-  profile: UserProfile;
+  profile: AppUser;
   handleFieldUpdate: (field: string, value: any) => void;
 }
 

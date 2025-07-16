@@ -5,14 +5,14 @@ import {
 } from "@/lib/constants/form-options";
 import { Card, CardContent } from "@/lib/components/ui/card";
 
+import { AppUser } from "@/lib/types/user-profile";
 import { ArrayEditableField } from "@/lib/components/forms/ArrayEditableField";
 import { EditableField } from "@/lib/components/forms/EditableField";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { PhoneIcon } from "lucide-react";
-import { UserProfile } from "@/lib/types/user-profile";
 
 interface ProfileContactPreferencesProps {
-  profile: UserProfile;
+  profile: AppUser;
   handleFieldUpdate: (field: string, value: any) => void;
 }
 

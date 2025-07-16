@@ -1,10 +1,10 @@
-import { UserRole } from "../types/user-profile";
+import { AppUserRole } from "../types/user-profile";
 
 export const USER_TYPE_FIELD_OPTIONS = {
-  [UserRole.FIRE_WATCH]: "Fire Watch",
-  [UserRole.FIRE_WATCH_CLIENT]: "Fire Watch Client",
-  [UserRole.FIRE_WATCH_ADMIN]: "Fire Watch Administrator",
-  [UserRole.AHJ_OFFICIAL]: "AHJ Official",
+  [AppUserRole.FIRE_WATCH]: "Fire Watch",
+  [AppUserRole.FIRE_WATCH_CLIENT]: "Fire Watch Client",
+  [AppUserRole.FIRE_WATCH_ADMIN]: "Fire Watch Administrator",
+  [AppUserRole.AHJ_OFFICIAL]: "AHJ Official",
 };
 
 export enum CertificationOptions {

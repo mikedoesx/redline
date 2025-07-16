@@ -9,15 +9,15 @@ import {
   SelectValue,
 } from "../ui/select";
 
+import { AppUser } from "@/lib/types/user-profile";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { Label } from "../ui/label";
-import { UserProfile } from "@/lib/types/user-profile";
 import { toast } from "sonner";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 import { useAuth } from "@/lib/providers/auth-context";
 import { useState } from "react";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 interface ArrayEditableFieldProps {
   label: string;
@@ -25,7 +25,7 @@ interface ArrayEditableFieldProps {
   field: string;
   type?: FormFieldType;
   options: { value: string; label: string }[];
-  profile: UserProfile;
+  profile: AppUser;
   disabled?: boolean;
   required?: boolean;
   onUpdate: (field: string, value: any) => void;
@@ -46,7 +46,7 @@ export const ArrayEditableField = ({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
-  const { saveUserProfile } = useUserProfile();
+  const { saveAppUser } = useAppUser();
 
   const validate = () => {
     if (required && currentValues.length === 0) {
@@ -87,7 +87,7 @@ export const ArrayEditableField = ({
       current[keys[keys.length - 1]] = arrayValue;
 
       // Save updated profile
-      await saveUserProfile(user.uid, updatedProfile);
+      await saveAppUser(user.uid, updatedProfile);
 
       onUpdate(field, arrayValue);
       setIsEditing(false);

@@ -1,13 +1,13 @@
 import { Card, CardContent } from "@/lib/components/ui/card";
 
+import { AppUser } from "@/lib/types/user-profile";
 import { EditableField } from "@/lib/components/forms/EditableField";
 import { FormFieldType } from "@/lib/constants/form-steps";
 import { JURISDICTION_TYPE_FIELD_OPTIONS } from "@/lib/constants/form-options";
 import { LocateFixedIcon } from "lucide-react";
-import { UserProfile } from "@/lib/types/user-profile";
 
 interface ProfileAHGOfficialProps {
-  profile: UserProfile;
+  profile: AppUser;
   handleFieldUpdate: (field: string, value: any) => void;
 }
 

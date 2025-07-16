@@ -19,20 +19,20 @@ import {
 } from "@/lib/components/ui/table";
 import { useEffect, useState } from "react";
 
+import { AppUserRole } from "@/lib/types/user-profile";
 import { Button } from "@/lib/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { DateFormatters } from "@/lib/utils";
 import { Input } from "@/lib/components/ui/input";
 import { PageLoading } from "@/lib/components/AppLoading";
-import { UserRole } from "@/lib/types/user-profile";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 import { useRouter } from "next/navigation";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
 
 const STATUS_OPTIONS = ["all", "draft", "active", "archived"] as const;
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { profile, isCheckingProfile, isComplete } = useUserProfile();
+  const { profile, isCheckingProfile, isComplete } = useAppUser();
 
   const [statusFilter, setStatusFilter] =
     useState<(typeof STATUS_OPTIONS)[number]>("all");
@@ -43,7 +43,7 @@ export default function OnboardingPage() {
   useEffect(() => {
     if (isCheckingProfile || !profile) return;
 
-    if (isComplete && profile.userType === UserRole.FIRE_WATCH) {
+    if (isComplete && profile.userType === AppUserRole.FIRE_WATCH) {
       router.replace("/profile");
     }
   }, [profile, isCheckingProfile, router]);
@@ -63,11 +63,11 @@ export default function OnboardingPage() {
           status: TemplateStatus.active,
           config: {
             clients: [],
-            requiredByUserRoles: [
-              UserRole.AHJ_OFFICIAL,
-              UserRole.FIRE_WATCH,
-              UserRole.FIRE_WATCH_ADMIN,
-              UserRole.FIRE_WATCH_CLIENT,
+            requiredByAppUserRoles: [
+              AppUserRole.AHJ_OFFICIAL,
+              AppUserRole.FIRE_WATCH,
+              AppUserRole.FIRE_WATCH_ADMIN,
+              AppUserRole.FIRE_WATCH_CLIENT,
             ],
           },
           createdBy: "admin@example.com",

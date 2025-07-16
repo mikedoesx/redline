@@ -1,28 +1,28 @@
 import { FieldValue } from "firebase/firestore";
 import { IndustryTypeOptions } from "../constants/form-options";
 
-export enum UserRole {
+export enum AppUserRole {
   FIRE_WATCH = "fire-watch",
   FIRE_WATCH_CLIENT = "fire-watch-client",
   FIRE_WATCH_ADMIN = "fire-watch-admin",
   AHJ_OFFICIAL = "ahj-official",
 }
 
-export enum UserProfileStatus {
+export enum AppUserStatus {
   incomplete = "incomplete",
   pendingReview = "pending-review",
   complete = "complete",
 }
 
-export const INITIAL_USER_PROFILE: UserProfile = {
-  userId: "",
+export const INITIAL_USER_PROFILE: AppUser = {
+  uid: "",
   firstName: "",
   lastName: "",
   email: "",
   phoneNumber: "",
   imageUrl: "",
-  userType: UserRole.FIRE_WATCH,
-  status: UserProfileStatus.incomplete,
+  userType: AppUserRole.FIRE_WATCH,
+  status: AppUserStatus.incomplete,
   address: {
     street: "",
     street2: "",
@@ -80,8 +80,8 @@ export interface AdminConfig {
   superAdmin: boolean;
 }
 
-export interface UserProfile {
-  userId: string;
+export interface AppUser {
+  uid: string;
 
   // ID
   firstName: string;
@@ -92,7 +92,7 @@ export interface UserProfile {
   imageUrl: string;
 
   // Configs
-  userType: UserRole;
+  userType: AppUserRole;
   clientConfig: ClientConfig | null;
   fireWatchConfig: FireWatchConfig | null;
   ahjConfig: AHJConfig | null;
@@ -106,7 +106,7 @@ export interface UserProfile {
   emergencyContactPhone?: string;
 
   // Metadata
-  status: UserProfileStatus;
+  status: AppUserStatus;
   createdAt?: FieldValue;
   updatedAt?: FieldValue;
 }

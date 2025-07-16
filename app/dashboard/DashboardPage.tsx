@@ -6,10 +6,10 @@ import { DashboardLaborChart } from "./DashboardLaborChart";
 import { DashboardMapView } from "./DashboardMapView";
 import { DashboardQuickTasks } from "./DashboardQuickTasks";
 import { StatCards } from "./DashboardStatCards";
-import { useUserProfile } from "@/lib/hooks/use-user-profile";
+import { useAppUser } from "@/lib/hooks/use-user-profile";
 
 export const DashboardPage = () => {
-  const { hasCompleteProfile } = useUserProfile();
+  const { hasCompleteProfile } = useAppUser();
 
   if (!hasCompleteProfile) {
     return <DashboardCompleteProfilePage />;
